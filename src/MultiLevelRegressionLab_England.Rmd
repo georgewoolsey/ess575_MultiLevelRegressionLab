@@ -1,0 +1,326 @@
+---
+title: "ESS 575: Multi-Level Regression Lab"
+author: "Team England" 
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+linkcolor: blue
+header-includes:
+  - \usepackage{caption}
+  - \captionsetup[figure]{labelformat=empty}
+editor_options: 
+  chunk_output_type: console
+knit: (function(inputFile, encoding){ 
+    out_dir <- '../';
+    rmarkdown::render(inputFile, encoding = encoding, output_file=file.path(dirname(inputFile), out_dir, 'MultiLevelRegressionLab_England.pdf')) 
+  })
+---
+
+Team England:
+
+  - Caroline Blommel
+  - Carolyn Coyle
+  - Bryn Crosby
+  - George Woolsey
+  
+cblommel@mail.colostate.edu, carolynm@mail.colostate.edu, brcrosby@rams.colostate.edu, george.woolsey@colostate.edu
+
+```{r setup, include=F}
+# knit options
+knitr::opts_chunk$set(
+  echo = TRUE
+  , warning = FALSE
+  , message = FALSE
+  , fig.height = 5
+  , fig.width = 7
+)
+```
+
+# Preliminaries
+
+## Motivation
+
+Each section of this lab has two parts -- a model *building* exercise and a model *coding* exercise.  The material covered here is important and broadly useful -- building multi-levels models is a true workhorse for understanding ecological processes because so many problems contain information at nested spatial scales, levels of organization, or categories. It will be worthwhile to dig in deeply to understand it. The big picture is to demonstrate the flexibility that you gain as a modeler by understanding basic principles of Bayesian analysis. To accomplish that, these exercises will reinforce the following:
+
+1. Diagramming and writing hierarchical models
+2. Using data to model parameters
+3. JAGS coding
+4. Creating index variables, a critically important and useful skill
+5. Posterior predictive checks
+
+## Introduction
+
+Ecological data are often collected at multiple scales or levels of organization in nested designs. Group is a catchall term for the upper level in many different types of nested hierarchies. Groups could logically be composed of populations, locations, species, treatments, life stages, and individual studies, or really, any sensible category. We have measurements within groups on individual organisms, plots, species, time periods, and so on. We may also have measurements on the groups themselves, that is, covariates that apply at the upper level of organization or spatial scale or the category that contains the measurements. Multilevel models represent the way that a quantity of interest responds to the combined influence of observations taken at the group level and within the group. 
+
+Nitrous oxide $\textrm{N} _2 \textrm{O}$, a greenhouse gas roughly 300 times more potent than carbon dioxide in forcing atmospheric warming, is emitted when synthetic nitrogenous fertilizers are added to soils. Qian and colleagues (2010) conducted a Bayesian meta-analysis of $\textrm{N} _2 \textrm{O}$ emissions (g N $\cdot$ ha^-1^ $\cdot$ d^-1^)  from agricultural soils using data from a study conducted by Carey (2007), who reviewed 164 relevant studies. Studies occurred at different locations, forming a group-level hierarchy (we will use only sites that have both nitrogen and carbon data, which reduces the number of sites to 107 in the analysis here). Soil carbon content (g $\cdot$ organic C $\cdot$ g^-1^ soil dry matter) was measured as a group-level covariate and is assumed to be measured without error. Observations of $\textrm{N} _2 \textrm{O}$ emission are also assumed to be measured without error and were paired with measurements of fertilizer addition (kg N$\cdot$ ha^-1^ $\cdot$ year^-1^). The effect of different types of fertilizer was also studied. 
+
+You are going to use these data to build increasingly complex models of $\textrm{N} _2 \textrm{O}$ emission. The initial models will ignore some important covariates as well as how the data are structured hierarchically into sites. This is ok! When writing for a multi-level model like this one, do it incrementally, starting with a separate model for each site (the no-pool model) or a model that ignores sites entirely (the pooled model).  After getting these models to work you can add complexity by drawing the intercept for each model from a distribution, before pursuing further refinements.  We **strongly sugggest** this approach because it is always best to do the simple thing first: there is less to go wrong. Also, when things do go wrong it will be clearer as to what is causing the problem.
+
+## R libraries needed for this lab
+
+You need to load the following libraries. Set the seed to 10 to compare your answers to ours.
+ 
+```{r, eval=T}
+# bread-and-butter
+library(tidyverse)
+library(lubridate)
+library(viridis)
+library(scales)
+library(latex2exp)
+# visualization
+library(cowplot)
+library(kableExtra)
+# jags and bayesian
+library(actuar)
+library(rjags)
+library(ggthemes)
+library(gridExtra)
+library(MCMCvis)
+library(HDInterval)
+library(BayesNSF)
+library(reshape2)
+#set seed
+set.seed(10)
+```
+ 
+# Pooled
+
+## Diagramming and writing the pooled model
+
+Let’s begin by ignoring the data on soil carbon and fertilizer type. In addition, we will ignore site, such that all observations are treated as independent from one another. This is what’s known as complete pooling - see Gelman and Hill, (2007), or just a pooled model. You will use a linearized power function for your deterministic model of emissions as a function of nitrogen input:
+
+$$
+\begin{aligned}
+\mu_{i} = \gamma x_{i}^{\beta}\\
+\alpha = \log \bigl(\gamma \bigr)\\
+\log \bigl(\mu_{i} \bigr) & = \alpha+\beta \bigl(\log(x_i) \bigr)\\
+g \bigl(\alpha,\beta,\log(x_i) \bigr) & = \alpha+\beta \bigl(\log(x_i) \bigr) \\
+\end{aligned}
+$$
+
+### Question 1 
+
+Interpret the coefficients $\alpha$, $\beta$, and $\gamma$ in this model.
+
+\textcolor{violet}{We are interested in modelling $\textrm{N} _2 \textrm{O}$ emission as a function of soil carbon content, fertilizer addition, and fertilizer type. We begin by ignoring the data on soil carbon and fertilizer type. In addition, we initially ignore site-level variations by pooling the data from different sites (i.e. a pooled model). In the model $\mu_{i} = \gamma x_{i}^{\beta}$, $\gamma$ is the baseline scale factor for the fertilizer addition rate ($x_{i}$) impact to $\textrm{N} _2 \textrm{O}$ emission. The exponent $\beta$ allows for the influence of fertilizer input on $\textrm{N} _2 \textrm{O}$ emission to vary with the rate of fertilizer input. Exponential regression models are used to model situations in which growth/change begins slowly and then accelerates rapidly without bound, or where decay begins rapidly and then slows down to get closer and closer to zero. The transformation $\alpha = \log(\gamma)$ allows for linear representation of the deterministic model.}
+
+### Question 2
+
+Draw a Bayesian network for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{i}$) on fertilizer addition ($x_{i}$).
+
+![DAG](https://colostate-my.sharepoint.com/personal/gwoolsey_colostate_edu/Documents/Documents/ESS575/IMG_20221018_154600.jpg)
+
+### Question 3
+
+Write out the joint distribution for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{i}$) on fertilizer addition ($x_{i}$). Start by using generic $[\,]$. Use $\sigma^{2}$ to represent the uncertainty in your model realizing that you might need moment matching when you choose a specific distribution. 
+
+$$
+\bigl[ \alpha,\beta,\sigma^2 \mid y_i\bigr] \propto \prod_{i=1}^{n} \bigl[ \log(y_{i}) \mid g\big( \alpha, \beta, \log(x_i) \big), \sigma^{2}\bigr][\alpha]\bigl[ \beta\bigr]\bigl[ \sigma \bigr]
+$$
+
+### Question 4
+
+Finish by choosing specific distributions for likelihoods and priors. You will use the math in the answer as a template to code your model in the subsequent exercises. What are assuming about the distribution of the untransformed $\mu_i$? 
+
+
+$$
+\bigl[ \alpha,\beta,\sigma^2 \mid y_i\bigr] \propto \prod_{i=1}^{n} {\sf normal} \bigr( \log(y_{i}) \mid g\big( \alpha, \beta, \log(x_i) \big), \sigma^{2}\bigr) \times {\sf normal} \bigr(\alpha \mid 0,10000\bigr)  \times {\sf normal} \bigr(\beta \mid 0,10000\bigr) \times {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl)
+$$
+
+### Question 5
+
+What is the hypothesis represented by this model?
+
+\textcolor{violet}{We are ignoring site-level variations by pooling the data from different sites (i.e. a pooled model). This means that we are assuming that the emissions response to nitrogen addition does not vary across sites. In this pooled model, we are allowing $\textrm{N} _2 \textrm{O}$ emission to increase exponentially with fertilizer application rate.}
+
+## Visualizing the pooled data
+
+It is always a good idea to look at the data. Examine the head of the data frame for emissions. Note that the columns `group.index` and `fert.index` contain indices for sites and fertilizer types. We are going to ignore these for now since the pooled model does not take these into account. Use the code below to plot $\textrm{N} _2 \textrm{O}$ emissions as a function of fertilizer input for both the logged and unlogged data. 
+
+```{r}
+# view the first few rows of data
+BayesNSF::N2OEmission %>% 
+  head()
+# data structure
+BayesNSF::N2OEmission %>% 
+  dplyr::glimpse()
+```
+
+We are going to use `ggplot` to visualize the data in this lab. If you are unfamiliar with this package, don't worry. We will provide you will all the codes you need and help your get oriented. We think you will find the plotting functions in `ggplot` very powerful and intuitive. We start by using `ggplot` to load the data frame we will plot data from. Then we add `geom_point` and use the `aes` argument (the aesthetic mappings) to define the x and y values for the points. All `ggplot` functions require you to define the aesthetic mappings as needed. Here, they are the same as setting x and y in the normal plot functions. The other big difference is that `ggplot` allows you to add successive layers to the plot using the `+` operator. You will see later on that this offers a lot of flexibility. We add the `geom_line` feature and then set the theme to `minimal`. Lastly, we use the `grid.arrange` function to position multiple plots at once. This is similar to using `mfrow` with `par`.
+
+```{r}
+# untransformed
+g1 <- ggplot(data = BayesNSF::N2OEmission) +
+  geom_point(
+    mapping = aes(y = emission, x = n.input)
+    , alpha = 3/10
+    , shape = 21
+    , colour = "black"
+    , fill = "brown"
+    , size = 3
+  ) +
+  theme_minimal()
+# log transformed
+g2 <- ggplot(data = BayesNSF::N2OEmission) +
+  geom_point(
+    mapping = aes(y = log(emission), x = log(n.input))
+    , alpha = 3/10
+    , shape = 21
+    , colour = "black"
+    , fill = "brown"
+    , size = 3
+  ) +
+  theme_minimal() 
+# plot side by side
+gridExtra::grid.arrange(g1, g2, nrow = 1)
+```
+
+## Fitting the pooled model with JAGS
+
+You will now write a simple, pooled model where you gloss over differences in sites and fertilizer types and lump everything into a set of $x$ and $y$ pairs using the R template provided below. It is imperative that you study the data statement and match the variable names in your JAGS code to the left hand side of the = in the data list.  Call the intercept `alpha`, the slope `beta` and use `sigma` to name the standard deviation in the likelihood. Also notice, that we center the nitrogen input covariate to speed convergence. You could also standardize this as well.
+
+In addition to fitting this model, we would like you to have JAGS predict the mean logged $\textrm{N} _2 \textrm{O}$ emissions and the median unlogged $\textrm{N} _2 \textrm{O}$ emissions as a function of soil fertilizer input. (Why median? Hint: think back to the distribution of the untransformed data above in question 3 above). To help you out we have provided the range of $\textrm{N} _2 \textrm{O}$ values to predict over as the third element in the `data` list. Make sure you understand how we chose these values.
+
+Note that in this problem and the ones that follow we have set up the data and the initial conditions for you.  This will save time and frustration, allowing you to concentrate on writing code for the model but you must pay attention to the names we give in the `data` and `inits` lists.  These must agree with the variable names in your model.  Please see any of the course instructors if there is anything that you don't understand about these lists.
+
+```{r}
+n.input.pred <- seq(min(BayesNSF::N2OEmission$n.input), max(BayesNSF::N2OEmission$n.input), 10)
+
+data = list(
+  n = nrow(BayesNSF::N2OEmission) # n is required in the JAGS program to index the for structure
+  , log.emission = log(BayesNSF::N2OEmission$emission)
+  , log.n.input.centered = log(BayesNSF::N2OEmission$n.input) - mean(log(BayesNSF::N2OEmission$n.input))
+  , log.n.input.centered.pred = log(n.input.pred) - mean(log(BayesNSF::N2OEmission$n.input))
+)
+
+inits = list(
+  list(alpha = 0, beta = .5, sigma = 50)
+  , list(alpha = 1, beta = 1.5, sigma = 10)
+  , list(alpha = 2, beta = .75, sigma = 20)
+)
+```
+
+## Fitting the pooled model with JAGS
+
+Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters. Produce a summary table and caterpillar plot for the parameters and tests for convergence including the effective sample size.
+
+### JAGS Model
+
+```{r, eval=FALSE}
+## JAGS Model
+model{
+  # priors
+  alpha ~ dnorm(0,.0001)
+  beta ~ dnorm(0,.0001)
+  sigma ~ dunif(0,100)
+  tau.reg <- 1/sigma^2
+
+  # likelihood
+  # note that the data have been log-transformed in R prior to running this model
+ 
+  for (i in 1:length(log.emission)) {
+    log_mu[i] <- alpha + beta * log.n.input.centered[i]
+    log.emission[i] ~ dnorm(log_mu[i], tau.reg)
+  }
+
+  # predicted emissions as derived quantities
+  for (i in 1:length(log.n.input.centered.pred)) {
+    log_mu_pred[i] <- alpha + beta * log.n.input.centered.pred[i]
+    mu_pred[i] <- exp(log_mu_pred[i])
+  }
+  
+  # priors
+  alpha ~ dnorm(0,1E-6)
+  beta ~ dnorm(0,1E-6)
+  sigma ~ dunif(0,100)
+  tau <- 1/sigma^2
+  # likelihood
+  for (i in 1:n) {
+    mu[i] <- alpha + beta * log.n.input.centered[i]
+    y[i] ~ dnorm(mu[i], tau)
+  }
+  ## quantities of interest
+    # predicted emissions
+    for (i in 1:length(log.n.input.centered.pred)) {
+      log_mu_pred[i] <- alpha + beta * log.n.input.centered.pred[i]
+      mu_pred[i] <- exp(log_mu_pred[i])
+    }
+}
+```
+
+### Implement JAGS Model
+
+```{r}
+##################################################################
+# insert JAGS model code into an R script
+##################################################################
+{ # Extra bracket needed only for R markdown files - see answers
+  sink("LizardsJAGS.R") # This is the file name for the jags code
+  cat("
+  model{
+    # priors
+    a ~ dnorm(0,1E-6)
+    b ~ dnorm(0,1E-6)
+    # likelihood
+    for (i in 1:n) {
+      p[i] <- ilogit(a + b*x[i])
+      y[i] ~ dbern(p[i])
+    }
+  }
+  ", fill = TRUE)
+  sink()
+}
+################################################################
+# implement model
+##################################################################
+# specify the initial conditions for the MCMC chain 
+inits = list(
+  list(a = runif(n = 1, min = a_min, max = a_max), b = runif(n = 1, min = b_min, max = b_max))
+  , list(a = runif(n = 1, min = a_min, max = a_max), b = runif(n = 1, min = b_min, max = b_max))
+  , list(a = runif(n = 1, min = a_min, max = a_max), b = runif(n = 1, min = b_min, max = b_max))
+)
+# specify the data that will be used by your JAGS program
+  #the execution of JAGS is about 5 times faster on double precision than on integers.
+hey_data = list(
+  n = nrow(data_df) # n is required in the JAGS program to index the for structure
+  , x = as.double(data_df$perim_area_ratio_z)
+  , y = as.double(data_df$presence)
+)
+
+# specify 3 scalars, n.adapt, n.update, and n.iter
+# n.adapt = number of iterations that JAGS will use to choose the sampler 
+  # and to assure optimum mixing of the MCMC chain
+n.adapt = 1000
+# n.update = number of iterations that will be discarded to allow the chain to 
+#   converge before iterations are stored (aka, burn-in)
+n.update = 10000
+# n.iter = number of iterations that will be stored in the 
+  # final chain as samples from the posterior distribution
+n.iter = 10000
+######################
+# Call to JAGS
+######################
+jm = rjags::jags.model(
+  file = "LizardsJAGS.R"
+  , data = hey_data
+  , inits = inits
+  , n.chains = length(inits)
+  , n.adapt = n.adapt
+)
+stats::update(jm, n.iter = n.update)
+# save the coda object (more precisely, an mcmc.list object) to R as "zm"
+zm = rjags::coda.samples(
+  model = jm
+  , variable.names = c("a", "b")
+  # , variable.names = c("a", "b", "p")
+  , n.iter = n.iter
+  , n.thin = 1
+)
+#####################
+# check output
+#####################
+# chain 1 first 6 iterations and specific columns
+zm[[1]][1:6, c("a", "b")]
+```

@@ -1,1 +1,1 @@
-# ess575_MultiLevelRegressionLab
+# ess575_JAGSProblemsLab
