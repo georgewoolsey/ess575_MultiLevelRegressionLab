@@ -24,7 +24,7 @@
           # ...then this dual product is specified in JAGS using nested for loops:
       for(i in 1:length(log.n.input.centered.pred)) {
         for(j in 1:n.sites){
-          log_mu_pred[i, j] <- alpha[j] + beta * log.n.input.centered.pred[i]
+          log_mu_site_pred[i, j] <- alpha[j] + beta * log.n.input.centered.pred[i]
         } # end j
       } # end i
   }

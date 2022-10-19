@@ -42,7 +42,7 @@ knitr::opts_chunk$set(
 
 ## Motivation
 
-Each section of this lab has two parts -- a model *building* exercise and a model *coding* exercise.  The material covered here is important and broadly useful -- building multi-levels models is a true workhorse for understanding ecological processes because so many problems contain information at nested spatial scales, levels of organization, or categories. It will be worthwhile to dig in deeply to understand it. The big picture is to demonstrate the flexibility that you gain as a modeler by understanding basic principles of Bayesian analysis. To accomplish that, these exercises will reinforce the following:
+Each section of this lab has two parts -- a model *building* exercise and a model *coding* exercise. The material covered here is important and broadly useful -- building multi-levels models is a true workhorse for understanding ecological processes because so many problems contain information at nested spatial scales, levels of organization, or categories. It will be worthwhile to dig in deeply to understand it. The big picture is to demonstrate the flexibility that you gain as a modeler by understanding basic principles of Bayesian analysis. To accomplish that, these exercises will reinforce the following:
 
 1. Diagramming and writing hierarchical models
 2. Using data to model parameters
@@ -56,7 +56,7 @@ Ecological data are often collected at multiple scales or levels of organization
 
 Nitrous oxide $\textrm{N} _2 \textrm{O}$, a greenhouse gas roughly 300 times more potent than carbon dioxide in forcing atmospheric warming, is emitted when synthetic nitrogenous fertilizers are added to soils. Qian and colleagues (2010) conducted a Bayesian meta-analysis of $\textrm{N} _2 \textrm{O}$ emissions (g N $\cdot$ ha^-1^ $\cdot$ d^-1^)  from agricultural soils using data from a study conducted by Carey (2007), who reviewed 164 relevant studies. Studies occurred at different locations, forming a group-level hierarchy (we will use only sites that have both nitrogen and carbon data, which reduces the number of sites to 107 in the analysis here). Soil carbon content (g $\cdot$ organic C $\cdot$ g^-1^ soil dry matter) was measured as a group-level covariate and is assumed to be measured without error. Observations of $\textrm{N} _2 \textrm{O}$ emission are also assumed to be measured without error and were paired with measurements of fertilizer addition (kg N$\cdot$ ha^-1^ $\cdot$ year^-1^). The effect of different types of fertilizer was also studied. 
 
-You are going to use these data to build increasingly complex models of $\textrm{N} _2 \textrm{O}$ emission. The initial models will ignore some important covariates as well as how the data are structured hierarchically into sites. This is ok! When writing for a multi-level model like this one, do it incrementally, starting with a separate model for each site (the no-pool model) or a model that ignores sites entirely (the pooled model).  After getting these models to work you can add complexity by drawing the intercept for each model from a distribution, before pursuing further refinements.  We **strongly sugggest** this approach because it is always best to do the simple thing first: there is less to go wrong. Also, when things do go wrong it will be clearer as to what is causing the problem.
+You are going to use these data to build increasingly complex models of $\textrm{N} _2 \textrm{O}$ emission. The initial models will ignore some important covariates as well as how the data are structured hierarchically into sites. This is ok! When writing for a multi-level model like this one, do it incrementally, starting with a separate model for each site (the no-pool model) or a model that ignores sites entirely (the pooled model). After getting these models to work you can add complexity by drawing the intercept for each model from a distribution, before pursuing further refinements.  We **strongly sugggest** this approach because it is always best to do the simple thing first: there is less to go wrong. Also, when things do go wrong it will be clearer as to what is causing the problem.
 
 ## R libraries needed for this lab
 
@@ -95,8 +95,8 @@ $$
 \begin{aligned}
 \mu_{i} = \gamma x_{i}^{\beta}\\
 \alpha = \log \bigl(\gamma \bigr)\\
-\log \bigl(\mu_{i} \bigr) & = \alpha+\beta \bigl(\log(x_i) \bigr)\\
-g \bigl(\alpha,\beta,\log(x_i) \bigr) & = \alpha+\beta \bigl(\log(x_i) \bigr) \\
+\log \bigl(\mu_{i} \bigr)  = \alpha+\beta \bigl(\log(x_i) \bigr)\\
+g \bigl(\alpha,\beta,\log(x_i) \bigr)  = \alpha + \beta \bigl(\log(x_i) \bigr) \\
 \end{aligned}
 $$
 
@@ -110,11 +110,13 @@ Interpret the coefficients $\alpha$, $\beta$, and $\gamma$ in this model.
 
 Draw a Bayesian network for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{i}$) on fertilizer addition ($x_{i}$).
 
-![DAG](https://colostate-my.sharepoint.com/personal/gwoolsey_colostate_edu/Documents/Documents/ESS575/IMG_20221018_154600.jpg)
+```{r, echo=FALSE, out.width="50%", out.height="50%", fig.cap="DAG", fig.a}
+knitr::include_graphics("../data/DAG1.jpg")
+```
 
 ### Question 3
 
-Write out the joint distribution for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{i}$) on fertilizer addition ($x_{i}$). Start by using generic $[\,]$. Use $\sigma^{2}$ to represent the uncertainty in your model realizing that you might need moment matching when you choose a specific distribution. 
+Write out the joint distribution for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{i}$) on fertilizer addition ($x_{i}$). Start by using generic `[ ]`. Use $\sigma^{2}$ to represent the uncertainty in your model realizing that you might need moment matching when you choose a specific distribution. 
 
 $$
 \bigl[ \alpha,\beta,\sigma^2 \mid y_i\bigr] \propto \prod_{i=1}^{n} \bigl[ \log(y_{i}) \mid g \bigl( \alpha, \beta, \log(x_i)  \bigr), \sigma^{2}\bigr][\alpha]\bigl[ \beta\bigr]\bigl[ \sigma \bigr]
@@ -179,11 +181,11 @@ gridExtra::grid.arrange(g1, g2, nrow = 1)
 
 ### Fitting the pooled model with JAGS
 
-You will now write a simple, pooled model where you gloss over differences in sites and fertilizer types and lump everything into a set of $x$ and $y$ pairs using the R template provided below. It is imperative that you study the data statement and match the variable names in your JAGS code to the left hand side of the = in the data list.  Call the intercept `alpha`, the slope `beta` and use `sigma` to name the standard deviation in the likelihood. Also notice, that we center the nitrogen input covariate to speed convergence. You could also standardize this as well.
+You will now write a simple, pooled model where you gloss over differences in sites and fertilizer types and lump everything into a set of $x$ and $y$ pairs using the R template provided below. It is imperative that you study the data statement and match the variable names in your JAGS code to the left hand side of the = in the data list. Call the intercept `alpha`, the slope `beta` and use `sigma` to name the standard deviation in the likelihood. Also notice, that we center the nitrogen input covariate to speed convergence. You could also standardize this as well.
 
 In addition to fitting this model, we would like you to have JAGS predict the mean logged $\textrm{N} _2 \textrm{O}$ emissions and the median unlogged $\textrm{N} _2 \textrm{O}$ emissions as a function of soil fertilizer input. (Why median? Hint: think back to the distribution of the untransformed data above in question 3 above). To help you out we have provided the range of $\textrm{N} _2 \textrm{O}$ values to predict over as the third element in the `data` list. Make sure you understand how we chose these values.
 
-Note that in this problem and the ones that follow we have set up the data and the initial conditions for you.  This will save time and frustration, allowing you to concentrate on writing code for the model but you must pay attention to the names we give in the `data` and `inits` lists.  These must agree with the variable names in your model.  Please see any of the course instructors if there is anything that you don't understand about these lists.
+Note that in this problem and the ones that follow we have set up the data and the initial conditions for you. This will save time and frustration, allowing you to concentrate on writing code for the model but you must pay attention to the names we give in the `data` and `inits` lists.  These must agree with the variable names in your model. Please see any of the course instructors if there is anything that you don't understand about these lists.
 
 ```{r}
 n.input.pred <- seq(min(BayesNSF::N2OEmission$n.input), max(BayesNSF::N2OEmission$n.input), 10)
@@ -324,6 +326,11 @@ MCMCvis::MCMCplot(zc_pooled, params = c("alpha", "beta", "sigma"))
 coda::heidel.diag(zc_pooled)
 ```
 
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[grep("_pth",ls())])
+gc()
+```
+
 ## Visualizing the pooled model predictions
 
 Let's overlay the predicted mean logged $\textrm{N} _2 \textrm{O}$ emissions and median unlogged $\textrm{N} _2 \textrm{O}$ emissions as a function of soil fertilizer input from the pooled model on top of the raw data. We summarize the predictions using `MCMCpstr()` twice - once to get the 95% HDPI intervals and a second time to get the posterior median for each fertilizer input value. We combine these predictions into two data frames, one for the logged $\textrm{N} _2 \textrm{O}$ emissions and one for untransformed $\textrm{N} _2 \textrm{O}$ emissions. We append our new graphical elements onto our old plots with the `+` operator. We plot the median of the posterior distribution as a black line with `geom_line()` and the 95% credible intervals as a yellow shaded region using the `geom_ribbon()` function. These data come from a different data frame than the one we used to plot the raw data so we need to add the `data` argument in the new `geom_line` and `geom_ribbon`. Again, we provide you with the code to do this to save time. You will need to modify this code to make similar plots for models you fit in later exercises.
@@ -394,10 +401,10 @@ Great! - you've got the pooled model fitted and made some predictions from it. H
 
 $$
 \begin{aligned}
-\mu_{ij} & = \gamma_{j} x_{ij}^{\beta}\\
-\alpha_{j} & = \log \bigl(\gamma_{j} \bigr)\\
-\log \bigl(\mu_{ij} \bigr) & = \alpha_{j}+\beta \bigl(\log(x_{ij}) \bigr)\\
-g \bigl(\alpha_{j},\beta,\log(x_{ij}) \bigr) & = \alpha_{j}+\beta \bigl(\log(x_{ij}) \bigr) \\
+\mu_{ij}  = \gamma_{j} x_{ij}^{\beta}\\
+\alpha_{j}  = \log \bigl(\gamma_{j} \bigr)\\
+\log \bigl(\mu_{ij} \bigr)  = \alpha_{j}+\beta \bigl(\log(x_{ij}) \bigr)\\
+g \bigl(\alpha_{j},\beta,\log(x_{ij}) \bigr)  = \alpha_{j}+\beta \bigl(\log(x_{ij}) \bigr) \\
 \end{aligned}
 $$
 
@@ -406,14 +413,16 @@ $$
 
 Draw a Bayesian network for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$). 
 
-![DAG](https://colostate-my.sharepoint.com/personal/gwoolsey_colostate_edu/Documents/Documents/ESS575/IMG_20221018_154600.jpg)
+```{r, echo=FALSE, out.width="50%", out.height="50%", fig.cap="DAG", fig.align='center'}
+knitr::include_graphics("../data/DAG2.jpg")
+```
 
 ### Question 2 
 
-Write out the joint distribution for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$). Start by using generic $[\,]$. Use $\sigma^{2}$ to represent the uncertainty in your model realizing that you might need moment matching when you choose a specific distribution.
+Write out the joint distribution for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$). Start by using generic `[ ]`. Use $\sigma^{2}$ to represent the uncertainty in your model realizing that you might need moment matching when you choose a specific distribution.
 
 $$
-\bigl[ \boldsymbol{\alpha},\beta,\sigma^2 \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n} \prod_{j=1}^{J}  \bigl[ \log(y_{ij})\mid g\big(\alpha_{j},\beta,\log(x_{ij})\big),\sigma^{2} \bigr][\alpha_{j}] \bigl[ \beta \bigr] \bigl[ \sigma  \bigr]
+\bigl[ \boldsymbol{\alpha},\beta,\sigma^2 \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n} \prod_{j=1}^{J}  \bigl[ \log(y_{ij})\mid g\big(\alpha_{j},\beta,\log(x_{ij})\big),\sigma^{2} \bigr] \bigl[\alpha_{j} \bigr] \bigl[ \beta \bigr] \bigl[ \sigma  \bigr]
 $$
 
 ### Question 3 
@@ -421,12 +430,12 @@ $$
 Finish by choosing specific distributions for likelihoods and priors. You will use the math in the answer as a template to code your model in the subsequent exercises. 
 
 $$
-\begin{align*}
+\begin{aligned}
 \bigl[ \boldsymbol{\alpha},\beta,\sigma^2 \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} {\sf normal} \bigr( \log(y_{ij}) \mid g \bigl( \alpha_{j}, \beta, \log(x_{ij})  \bigr), \sigma^{2}\bigr)\\
 \times \; {\sf normal} \bigr(\alpha_{j} \mid 0,10000\bigr) \\ 
 \times \; {\sf normal} \bigr(\beta \mid 0,10000\bigr) \\
 \times \; {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl)
-\end{align*}
+\end{aligned}
 $$
 
 ### Question 4 
@@ -456,7 +465,7 @@ g2 + facet_wrap(~group.index)
 
 ### Fitting the no-pool model with JAGS
 
-You will now write a simple, no-pool model using the R template provided below. In addition to fitting this model, we would like you to have JAGS predict the mean logged N~2~O emissions **for each site** as a function of soil fertilizer input. To help you out we have provided the range of N~2~O values to predict over as the third element in the `data` list. **Note that you must use the index trick covered in lecture to align observations in each site with the appropriate intercept**. Here are the preliminaries to set up the model:
+You will now write a simple, no-pool model using the R template provided below. In addition to fitting this model, we would like you to have JAGS predict the mean logged $\textrm{N} _2 \textrm{O}$ emissions **for each site** as a function of soil fertilizer input. To help you out we have provided the range of $\textrm{N} _2 \textrm{O}$ values to predict over as the third element in the `data` list. **Note that you must use the index trick covered in lecture to align observations in each site with the appropriate intercept**. Here are the preliminaries to set up the model:
 
 ```{r}
 n.sites <- length(unique(BayesNSF::N2OEmission$group.index))
@@ -483,7 +492,7 @@ inits = list(
 
 ### Question 5
 
-Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters.  Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
 
 
 #### JAGS Model
@@ -515,7 +524,7 @@ model{
         # ...then this dual product is specified in JAGS using nested for loops:
     for(i in 1:length(log.n.input.centered.pred)) {
       for(j in 1:n.sites){
-        log_mu_pred[i, j] <- alpha[j] + beta * log.n.input.centered.pred[i]
+        log_mu_site_pred[i, j] <- alpha[j] + beta * log.n.input.centered.pred[i]
       } # end j
     } # end i
 }
@@ -528,7 +537,7 @@ model{
 # insert JAGS model code into an R script
 ##################################################################
 { # Extra bracket needed only for R markdown files - see answers
-  sink("NO2JAGS_notpooled.R") # This is the file name for the jags code
+  sink("NO2JAGS_nopooled.R") # This is the file name for the jags code
   cat("
   model{
     # priors
@@ -555,7 +564,7 @@ model{
           # ...then this dual product is specified in JAGS using nested for loops:
       for(i in 1:length(log.n.input.centered.pred)) {
         for(j in 1:n.sites){
-          log_mu_pred[i, j] <- alpha[j] + beta * log.n.input.centered.pred[i]
+          log_mu_site_pred[i, j] <- alpha[j] + beta * log.n.input.centered.pred[i]
         } # end j
       } # end i
   }
@@ -579,7 +588,7 @@ n.iter = 10000
 # Call to JAGS
 ######################
 jm = rjags::jags.model(
-  file = "NO2JAGS_notpooled.R"
+  file = "NO2JAGS_nopooled.R"
   , data = data
   , inits = inits
   , n.chains = length(inits)
@@ -589,7 +598,7 @@ stats::update(jm, n.iter = n.update)
 # save the coda object (more precisely, an mcmc.list object) to R as "zc"
 zc_nopooled = rjags::coda.samples(
   model = jm
-  , variable.names = c("alpha", "beta", "sigma", "tau", "log_mu_pred")
+  , variable.names = c("alpha", "beta", "sigma", "tau", "log_mu_site_pred")
   # , variable.names = c("a", "b", "p")
   , n.iter = n.iter
   , n.thin = 1
@@ -613,7 +622,7 @@ MCMCvis::MCMCsummary(zc_nopooled, params = c("alpha", "beta", "sigma")) %>%
   dplyr::slice_tail(n = 6)
 
 # Caterpillar plots
-MCMCvis::MCMCplot(zc_nopooled, params = c("beta", "sigma"))
+MCMCvis::MCMCplot(zc_nopooled, params = c("beta", "sigma"), xlim = c(-0.5,1.5) )
 
 ```
 
@@ -639,19 +648,312 @@ MCMCvis::MCMCplot(
   , sz_thick = 2
   # Number specifying thickness of 95 percent CI line (thinner line).
   , sz_thin = 1
-  
 )
 
 ```
 
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[grep("_temp",ls())])
+gc()
+```
 
 ### Question 6
 
 How is the model able to estimate intercepts for sites where there is only a single x value, or even sites where there is only a single observation at all?
 
-\textcolor{violet}{So as long as a site as even as single point the intercept can be estimated for that site since $\beta$ (the slope of the logged data) is calculated across all sites. This would not work if we were fitting separate slopes and intercepts for each site in the no pool model.}
+\textcolor{violet}{The model is able to estimate intercepts for sites where there is only a single data record because, in this model, the slope ($\beta$) is calculated using data from all sites. That is, the slope is assumed to be constant across sites. If we also allowed the slope ($\beta$) to vary across sites, then the model would require more than one data point to estimate site-specifice intercept and slope.}
+
+## Visualizing the no-pool model predictions
+
+We modify the `MCMCpstr` code from the previous model to produce a data frame of the median and 95% HDPI credible intervals of $\textrm{N} _2 \textrm{O}$ emission predictions for each site. `MCMCpstr` preserves the shape of the parameter from your JAGS model, which can be very handy in certain situations. Here, `pred1` is a list whose first element is a 3D-array. This array's rows are fertilizer inputs, columns are sites, and z-values are the quantities produced by the `hdi` function, which in this case is the lower and upper credible interval. You can `str` the `pred1[[1]]` object to see this for yourself. For plotting purposes though, we would like a data frame with columns for site, fertilizer input, the posterior's median emission, and the posterior's lower and upper HDPI credible intervals. This can be made easily using the `melt` function to go from wide to long followed by the `spread` function to make separate columns for the lower and upper bounds. Then we rely on `select` and `arrange` to order the data properly and keep the relevant columns. Lastly, we use `cbind` to make the data frame we seek, taking advantage of the fact that `n.input.pred` will repeat each site, which is exactly what we want it to do. 
 
 ```{r}
-## in progress
+# HDI
+pred1 <- MCMCvis::MCMCpstr(
+  zc_nopooled
+  , params = "log_mu_site_pred"
+  , func = function(x) HDInterval::hdi(x, .95)
+)
+# median
+pred2 <- MCMCvis::MCMCpstr(
+  zc_nopooled
+  , params = "log_mu_site_pred"
+  , func = median
+)
+# create data frame
+pred1.df <- melt(pred1[[1]], as.is = TRUE, varnames = c("x", "group.index", "metric")) %>% 
+  spread(metric, value) %>%
+  arrange(group.index, x) %>%
+  dplyr::select(group.index, lower, upper)
+pred2.df <- melt(pred2[[1]], as.is = TRUE, varnames = c("x", "group.index"), value.name = "median") %>%
+  arrange(group.index, x) %>% 
+  dplyr::select(median)
+lpred.snp.df <- cbind(log.n.input.pred = log(n.input.pred), pred1.df, pred2.df)
 ```
 
+To add the predictions to the plots for each site we use `geom_line` and `geom_ribbon` again, in combination with `facet_wrap`.
+
+```{r, fig.width=9, fig.height=13}
+g2 +
+  geom_line(
+    data = lpred.snp.df
+    , mapping = aes(x = log.n.input.pred, y = median)
+  ) +
+  geom_ribbon(
+    data = lpred.snp.df
+    , mapping = aes(x = log.n.input.pred, ymin = lower, ymax = upper)
+    , alpha = 0.2
+    , fill = "yellow"
+  ) +
+  facet_wrap(~group.index)
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[stringr::str_starts(ls(), "pred")])
+remove(list = ls()[stringr::str_starts(ls(), "lpred")])
+gc()
+```
+
+
+# Random Intercepts
+
+## Diagramming and writing the random intercepts model
+
+So far you have either ignored site completely (the pooled model) or treated all the site intercepts as independent from one another (the no-pool model). Now you are going to treat the site intercepts as partially pooled, meaning you will model them as coming from a common distribution. In other words, you will treat these intercepts in your model as a group level effect (aka, random effect). Hence, this model is often called a random-intercepts model. Like in the no-pool model, the deterministic portion of this model remains a linearized power function, but two subscripts are required: $i$ which indexes the measurement within sites and $j$ which indexes site itself. However, unlike the no-pool model, assume that these intercepts are drawn from a distribution with mean $\mu_{\alpha}$ and variance $\varsigma_{\alpha}^2$.
+
+### Question 1 
+
+Draw a Bayesian network for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$). 
+
+```{r, echo=FALSE, out.width="50%", out.height="50%", fig.cap="DAG", fig.align='center'}
+knitr::include_graphics("../data/DAG3.jpg")
+```
+
+### Question 2
+
+Write out the posterior and joint distribution for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$). Start by using generic `[ ]`. Use $\sigma^{2}$ and, $\varsigma^{2}$ to represent the uncertainty in your model realizing that you might need moment matching when you choose a specific distribution.
+
+$$
+g \bigl(\alpha_{j},\beta,\log(x_{ij}) \bigr) = \alpha_{j} + \beta \bigl(\log(x_ij) \bigr)
+$$
+
+Joint:
+
+$$
+\bigl[ \alpha_{j},\beta, \mu_{\alpha}, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n} \prod_{j=1}^{J}  \bigl[ \log(y_{ij})\mid g\big(\alpha_{j}, \beta,\log(x_{ij})\big),\sigma^{2} \bigr] \bigl[\alpha_{j} \mid \mu_{\alpha}, \varsigma_{\alpha}^2 \bigr] \bigl[ \beta \bigr] \bigl[ \sigma  \bigr] \bigl[ \varsigma  \bigr]
+$$
+
+### Question 3
+
+Finish by choosing specific distributions for likelihoods and priors. You will use the math in the answer as a template to code your model in the subsequent exercises.
+
+$$
+\begin{aligned}
+\bigl[ \alpha_{j},\beta, \mu_{\alpha}, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} {\sf normal} \bigr( \log(y_{ij}) \mid g \bigl( \alpha_{j}, \beta, \log(x_{ij})  \bigr), \sigma^{2}\bigr)\\
+\times \; {\sf normal} \bigr(\alpha_{j} \mid \mu_{\alpha}, \varsigma_{\alpha}^2 \bigr) \\ 
+\times \; {\sf normal} \bigr(\beta \mid 0,10000\bigr) \\
+\times \; {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl) \\
+\times \; {\sf uniform}\bigr(\varsigma \mid 0, 100 \bigl)
+\end{aligned}
+$$
+### Fitting the random intercepts model with JAGS
+
+Now you will implement the random-intercepts model that allows the intercept $\alpha_{j}$ to vary by site, where each intercept is drawn from a common distribution. Use the `data` and initial values for JAGS provided below to allow you to concentrate on writing JAGS code for the model. 
+
+In addition to fitting this model, we would like you to have JAGS predict the mean logged $\textrm{N} _2 \textrm{O}$ emissions **for each site** as a function of soil fertilizer input, just like you did in the no-pool model. We also would like you to predict the mean logged $\textrm{N} _2 \textrm{O}$ emissions and the median unlogged $\textrm{N} _2 \textrm{O}$ emissions as a function of soil fertilizer input, just like you did in the pooled model. However, these predictions should take into account **the uncertainty associated with site**. This is equivalent to asking you to make a prediction for a new site whose intercept $\alpha_{j}$ is drawn from the same distribution as the intercepts are for the actual sites themselves. To help you out we have provided the range of $\textrm{N} _2 \textrm{O}$ values to predict over as the third element in the `data` list.
+
+```{r}
+n.input.pred <- seq(min(N2OEmission$n.input), max(N2OEmission$n.input), 10)
+n.sites <- length(unique(N2OEmission$group.index))
+
+data = list(
+  log.emission = log(N2OEmission$emission),
+  log.n.input.centered = log(N2OEmission$n.input) - mean(log(N2OEmission$n.input)),
+  log.n.input.centered.pred = log(n.input.pred) - mean(log(N2OEmission$n.input)),
+  group = N2OEmission$group.index,
+  n.sites = n.sites)
+
+inits = list(
+  list(alpha = rep(0, n.sites), beta = .5, sigma = 50, mu.alpha= 0, sigma.alpha = 10),
+  list(alpha = rep(1, n.sites), beta = 1.5, sigma = 10, mu.alpha= 2, sigma.alpha = 20),
+  list(alpha = rep(-1, n.sites), beta = .75, sigma = 20, mu.alpha= -1, sigma.alpha = 12))
+```
+
+### Question 5
+
+Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters.  Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+
+
+#### JAGS Model
+
+```{r, eval=FALSE}
+## JAGS Model
+model{
+  # priors
+  beta ~ dnorm(0,1E-6)
+  sigma ~ dunif(0,100)
+  tau_y <- 1/sigma^2
+  # alpha priors
+  mu_alpha ~ dnorm(0,1E-6)
+  varsigma ~ dunif(0,100)
+  tau_alpha <- 1/varsigma^2
+  # allow the intercept alpha to vary across sites
+    for(j in 1:n.sites){
+      alpha[j] ~ dnorm(mu_alpha, tau_alpha)
+    }
+
+  # likelihood
+  for(i in 1:length(log.emission)) {
+    log_mu[i] <- alpha[group[i]] + beta * log.n.input.centered[i]
+    log.emission[i] ~ dnorm(log_mu[i], tau_y)
+  }
+
+  ## quantities of interest
+    # predicted emissions FOR EACH SITE
+      ## from the JAGS primer: 
+        # If you have two product symbols in the conditional distribution with different indices
+          # ...and two subscripts in the quantity of interest i.e. quantity[i, j] 
+          # ...then this dual product is specified in JAGS using nested for loops:
+      for(i in 1:length(log.n.input.centered.pred)) {
+        for(j in 1:n.sites){
+          log_mu_site_pred[i, j] <- alpha[j] + beta * log.n.input.centered.pred[i]
+        } # end j
+      } # end i
+    
+    # predicted emissions ACROSS SITES
+      alpha_pred ~ dnorm(mu_alpha, tau_alpha)
+      for(i in 1:length(log.n.input.centered.pred)){
+        log_mu_pred[i] <- alpha_pred + beta * log.n.input.centered.pred[i]
+        mu_pred[i] <- exp(log_mu_pred[i])
+      }
+}
+```
+
+#### Implement JAGS Model
+
+```{r}
+##################################################################
+# insert JAGS model code into an R script
+##################################################################
+{ # Extra bracket needed only for R markdown files - see answers
+  sink("NO2JAGS_randomints.R") # This is the file name for the jags code
+  cat("
+  model{
+    # priors
+    beta ~ dnorm(0,1E-6)
+    sigma ~ dunif(0,100)
+    tau_y <- 1/sigma^2
+    # alpha priors
+    mu_alpha ~ dnorm(0,1E-6)
+    varsigma ~ dunif(0,100)
+    tau_alpha <- 1/varsigma^2
+    # allow the intercept alpha to vary across sites
+      for(j in 1:n.sites){
+        alpha[j] ~ dnorm(mu_alpha, tau_alpha)
+      }
+  
+    # likelihood
+    for(i in 1:length(log.emission)) {
+      log_mu[i] <- alpha[group[i]] + beta * log.n.input.centered[i]
+      log.emission[i] ~ dnorm(log_mu[i], tau_y)
+    }
+  
+    ## quantities of interest
+      # predicted emissions FOR EACH SITE
+        ## from the JAGS primer: 
+          # If you have two product symbols in the conditional distribution with different indices
+            # ...and two subscripts in the quantity of interest i.e. quantity[i, j] 
+            # ...then this dual product is specified in JAGS using nested for loops:
+        for(i in 1:length(log.n.input.centered.pred)) {
+          for(j in 1:n.sites){
+            log_mu_site_pred[i, j] <- alpha[j] + beta * log.n.input.centered.pred[i]
+          } # end j
+        } # end i
+      
+      # predicted emissions ACROSS SITES
+        alpha_pred ~ dnorm(mu_alpha, tau_alpha)
+        for(i in 1:length(log.n.input.centered.pred)){
+          log_mu_pred[i] <- alpha_pred + beta * log.n.input.centered.pred[i]
+          mu_pred[i] <- exp(log_mu_pred[i])
+        }
+  }
+  ", fill = TRUE)
+  sink()
+}
+################################################################
+# implement model
+##################################################################
+# specify 3 scalars, n.adapt, n.update, and n.iter
+# n.adapt = number of iterations that JAGS will use to choose the sampler 
+  # and to assure optimum mixing of the MCMC chain
+n.adapt = 1000
+# n.update = number of iterations that will be discarded to allow the chain to 
+#   converge before iterations are stored (aka, burn-in)
+n.update = 10000
+# n.iter = number of iterations that will be stored in the 
+  # final chain as samples from the posterior distribution
+n.iter = 10000
+######################
+# Call to JAGS
+######################
+jm = rjags::jags.model(
+  file = "NO2JAGS_randomints.R"
+  , data = data
+  , inits = inits
+  , n.chains = length(inits)
+  , n.adapt = n.adapt
+)
+stats::update(jm, n.iter = n.update)
+# save the coda object (more precisely, an mcmc.list object) to R as "zc"
+zc_randomints = rjags::coda.samples(
+  model = jm
+  , variable.names = c("alpha", "beta", "sigma", "mu_alpha", "varsigma", "log_mu_site_pred", "log_mu_pred", "mu_pred")
+  , n.iter = n.iter
+  , n.thin = 1
+)
+```
+
+#### Model Output
+
+Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters.  Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+
+```{r}
+#####################
+# check output
+#####################
+# trace plot
+MCMCvis::MCMCtrace(zc_randomints, params = c("beta", "sigma", "mu_alpha", "varsigma"), pdf = FALSE)
+
+# summary
+MCMCvis::MCMCsummary(zc_randomints, params = c("beta", "sigma", "mu_alpha", "varsigma"))
+
+# Caterpillar plots
+MCMCvis::MCMCplot(zc_randomints, params = c("beta", "sigma", "mu_alpha", "varsigma"), xlim = c(-0.5,1.5) )
+
+```
+
+Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+
+```{r}
+# Caterpillar plots
+MCMCvis::MCMCplot(
+  zc_nopooled
+  , params = c("alpha")
+  , horiz = FALSE
+  , ylim = c(-6,5)
+  # Number specifying size of text for parameter labels on axis.
+  , sz_labels = 0.6
+  # Number specifying size of points represents posterior medians.
+  , sz_med = 0.7
+  # Number specifying thickness of 50 percent CI line (thicker line).
+  , sz_thick = 2
+  # Number specifying thickness of 95 percent CI line (thinner line).
+  , sz_thin = 1
+)
+
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[grep("_temp",ls())])
+gc()
+```
