@@ -311,15 +311,15 @@ Produce trace plots of the chains for model parameters. Produce a summary table 
 #####################
 # check output
 #####################
-# summary
-MCMCvis::MCMCsummary(zc_pooled, params = c("alpha", "beta", "sigma"))
 # trace plot
 MCMCvis::MCMCtrace(zc_pooled, params = c("alpha", "beta", "sigma"), pdf = FALSE)
+# summary
+MCMCvis::MCMCsummary(zc_pooled, params = c("alpha", "beta", "sigma"))
 # Caterpillar plots
 MCMCvis::MCMCplot(zc_pooled, params = c("alpha", "beta", "sigma"))
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 # Heidelberger and Welch diagnostic
 coda::heidel.diag(zc_pooled)
 ```
@@ -611,10 +611,13 @@ MCMCvis::MCMCtrace(zc_nopooled, params = c("beta", "sigma"), pdf = FALSE)
 MCMCvis::MCMCsummary(zc_nopooled, params = c("alpha", "beta", "sigma")) %>% 
   data.frame() %>% 
   dplyr::slice_tail(n = 6)
-  
+
+# Caterpillar plots
+MCMCvis::MCMCplot(zc_nopooled, params = c("beta", "sigma"))
+
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval = FALSE}
 # Heidelberger and Welch diagnostic
 coda::heidel.diag(zc_nopooled)
 ```
@@ -627,12 +630,13 @@ MCMCvis::MCMCplot(
   zc_nopooled
   , params = c("alpha")
   , horiz = FALSE
+  , ylim = c(-6,5)
   # Number specifying size of text for parameter labels on axis.
-  , sz_labels = 1
+  , sz_labels = 0.6
   # Number specifying size of points represents posterior medians.
-  , sz_med = 1
+  , sz_med = 0.7
   # Number specifying thickness of 50 percent CI line (thicker line).
-  , sz_thick = 1
+  , sz_thick = 2
   # Number specifying thickness of 95 percent CI line (thinner line).
   , sz_thin = 1
   
@@ -644,4 +648,10 @@ MCMCvis::MCMCplot(
 ### Question 6
 
 How is the model able to estimate intercepts for sites where there is only a single x value, or even sites where there is only a single observation at all?
+
+\textcolor{violet}{So as long as a site as even as single point the intercept can be estimated for that site since $\beta$ (the slope of the logged data) is calculated across all sites. This would not work if we were fitting separate slopes and intercepts for each site in the no pool model.}
+
+```{r}
+## in progress
+```
 
