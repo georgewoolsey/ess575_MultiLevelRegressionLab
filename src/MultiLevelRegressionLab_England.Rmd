@@ -422,7 +422,7 @@ knitr::include_graphics("../data/DAG2.jpg")
 Write out the joint distribution for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$). Start by using generic `[ ]`. Use $\sigma^{2}$ to represent the uncertainty in your model realizing that you might need moment matching when you choose a specific distribution.
 
 $$
-\bigl[ \boldsymbol{\alpha},\beta,\sigma^2 \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n} \prod_{j=1}^{J}  \bigl[ \log(y_{ij})\mid g\big(\alpha_{j},\beta,\log(x_{ij})\big),\sigma^{2} \bigr] \bigl[\alpha_{j} \bigr] \bigl[ \beta \bigr] \bigl[ \sigma  \bigr]
+\bigl[ \boldsymbol{\alpha},\beta,\sigma^2 \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n} \prod_{j=1}^{J}  \bigl[ \log(y_{ij})\mid g\bigl(\alpha_{j},\beta,\log(x_{ij})\bigr),\sigma^{2} \bigr] \bigl[\alpha_{j} \bigr] \bigl[ \beta \bigr] \bigl[ \sigma  \bigr]
 $$
 
 ### Question 3 
@@ -631,6 +631,10 @@ MCMCvis::MCMCplot(zc_nopooled, params = c("beta", "sigma"), xlim = c(-0.5,1.5) )
 coda::heidel.diag(zc_nopooled)
 ```
 
+Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
+
+\textcolor{violet}{fill this in!!!!}
+
 Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
 
 ```{r}
@@ -681,14 +685,15 @@ pred2 <- MCMCvis::MCMCpstr(
   , func = median
 )
 # create data frame
-pred1.df <- melt(pred1[[1]], as.is = TRUE, varnames = c("x", "group.index", "metric")) %>% 
+pred1.df <- reshape2::melt(pred1[[1]], as.is = TRUE, varnames = c("x", "group.index", "metric")) %>% 
   spread(metric, value) %>%
   arrange(group.index, x) %>%
   dplyr::select(group.index, lower, upper)
-pred2.df <- melt(pred2[[1]], as.is = TRUE, varnames = c("x", "group.index"), value.name = "median") %>%
+pred2.df <- reshape2::melt(pred2[[1]], as.is = TRUE, varnames = c("x", "group.index"), value.name = "median") %>%
   arrange(group.index, x) %>% 
   dplyr::select(median)
-lpred.snp.df <- cbind(log.n.input.pred = log(n.input.pred), pred1.df, pred2.df)
+# cbind
+logpred.nopool.df <- cbind(log.n.input.pred = log(n.input.pred), pred1.df, pred2.df)
 ```
 
 To add the predictions to the plots for each site we use `geom_line` and `geom_ribbon` again, in combination with `facet_wrap`.
@@ -696,11 +701,11 @@ To add the predictions to the plots for each site we use `geom_line` and `geom_r
 ```{r, fig.width=9, fig.height=13}
 g2 +
   geom_line(
-    data = lpred.snp.df
+    data = logpred.nopool.df
     , mapping = aes(x = log.n.input.pred, y = median)
   ) +
   geom_ribbon(
-    data = lpred.snp.df
+    data = logpred.nopool.df
     , mapping = aes(x = log.n.input.pred, ymin = lower, ymax = upper)
     , alpha = 0.2
     , fill = "yellow"
@@ -713,7 +718,6 @@ remove(list = ls()[stringr::str_starts(ls(), "pred")])
 remove(list = ls()[stringr::str_starts(ls(), "lpred")])
 gc()
 ```
-
 
 # Random Intercepts
 
@@ -740,7 +744,7 @@ $$
 Joint:
 
 $$
-\bigl[ \alpha_{j},\beta, \mu_{\alpha}, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n} \prod_{j=1}^{J}  \bigl[ \log(y_{ij})\mid g\big(\alpha_{j}, \beta,\log(x_{ij})\big),\sigma^{2} \bigr] \bigl[\alpha_{j} \mid \mu_{\alpha}, \varsigma_{\alpha}^2 \bigr] \bigl[ \beta \bigr] \bigl[ \sigma  \bigr] \bigl[ \varsigma  \bigr]
+\bigl[ \alpha_{j},\beta, \mu_{\alpha}, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n} \prod_{j=1}^{J}  \bigl[ \log(y_{ij})\mid g\bigl(\alpha_{j}, \beta,\log(x_{ij})\bigr),\sigma^{2} \bigr] \bigl[\alpha_{j} \mid \mu_{\alpha}, \varsigma_{\alpha}^2 \bigr] \bigl[ \beta \bigr] \bigl[ \sigma  \bigr] \bigl[ \varsigma  \bigr]
 $$
 
 ### Question 3
@@ -836,7 +840,7 @@ model{
 # insert JAGS model code into an R script
 ##################################################################
 { # Extra bracket needed only for R markdown files - see answers
-  sink("NO2JAGS_randomints.R") # This is the file name for the jags code
+  sink("NO2JAGS_randomintrcpts.R") # This is the file name for the jags code
   cat("
   model{
     # priors
@@ -897,7 +901,7 @@ n.iter = 10000
 # Call to JAGS
 ######################
 jm = rjags::jags.model(
-  file = "NO2JAGS_randomints.R"
+  file = "NO2JAGS_randomintrcpts.R"
   , data = data
   , inits = inits
   , n.chains = length(inits)
@@ -905,7 +909,7 @@ jm = rjags::jags.model(
 )
 stats::update(jm, n.iter = n.update)
 # save the coda object (more precisely, an mcmc.list object) to R as "zc"
-zc_randomints = rjags::coda.samples(
+zc_randomintrcpts = rjags::coda.samples(
   model = jm
   , variable.names = c("alpha", "beta", "sigma", "mu_alpha", "varsigma", "log_mu_site_pred", "log_mu_pred", "mu_pred")
   , n.iter = n.iter
@@ -922,22 +926,26 @@ Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\
 # check output
 #####################
 # trace plot
-MCMCvis::MCMCtrace(zc_randomints, params = c("beta", "sigma", "mu_alpha", "varsigma"), pdf = FALSE)
+MCMCvis::MCMCtrace(zc_randomintrcpts, params = c("beta", "sigma", "mu_alpha", "varsigma"), pdf = FALSE)
 
 # summary
-MCMCvis::MCMCsummary(zc_randomints, params = c("beta", "sigma", "mu_alpha", "varsigma"))
+MCMCvis::MCMCsummary(zc_randomintrcpts, params = c("beta", "sigma", "mu_alpha", "varsigma"))
 
 # Caterpillar plots
-MCMCvis::MCMCplot(zc_randomints, params = c("beta", "sigma", "mu_alpha", "varsigma"), xlim = c(-0.5,1.5) )
+MCMCvis::MCMCplot(zc_randomintrcpts, params = c("beta", "sigma", "mu_alpha", "varsigma"), xlim = c(-0.5,1.5) )
 
 ```
+
+Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why?
+
+\textcolor{violet}{fill this in!!!!}
 
 Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
 
 ```{r}
 # Caterpillar plots
 MCMCvis::MCMCplot(
-  zc_nopooled
+  zc_randomintrcpts
   , params = c("alpha")
   , horiz = FALSE
   , ylim = c(-6,5)
@@ -957,3 +965,277 @@ MCMCvis::MCMCplot(
 remove(list = ls()[grep("_temp",ls())])
 gc()
 ```
+
+## Visualizing the random intercepts model predictions
+
+### Question 6
+
+Modify code from the pooled and no-pool models to visualize the model predictions. For the site-level predictions, add a dotted line showing the posterior median of $\textrm{N} _2 \textrm{O}$ emission from the no-pool model. What do you notice about the uncertainty of predicted log emissions from the random intercept model you fit here compared to the predictions of the pooled model you did in problem 1? Explain the difference.
+
+#### Pooled 
+
+```{r}
+# HDI
+pred1 <- MCMCvis::MCMCpstr(
+  zc_randomintrcpts
+  , params = c("log_mu_pred", "mu_pred")
+  , func = function(x) HDInterval::hdi(x, .95)
+)
+# median
+pred2 <- MCMCvis::MCMCpstr(
+  zc_randomintrcpts
+  , params = c("log_mu_pred", "mu_pred")
+  , func = median
+)
+# put in data frame
+pred.randomintrcpts.df <- dplyr::bind_cols(
+  n.input.pred
+  , data.frame(pred1$mu_pred)
+  , median = pred2$mu_pred
+)
+lpred.randomintrcpts.df <- dplyr::bind_cols(
+  log.n.input.pred = log(n.input.pred)
+  , data.frame(pred1$log_mu_pred)
+  , median = pred2$log_mu_pred
+)
+```
+
+Plot the predictions
+
+```{r}
+g5 <- g1 +
+  geom_line(
+    data = pred.randomintrcpts.df
+    , mapping = aes(x = n.input.pred, y = median)
+  ) +
+  geom_ribbon(
+    data = pred.randomintrcpts.df
+    , mapping = aes(x = n.input.pred, ymin = lower, ymax = upper)
+    , alpha = 0.2
+    , fill = "yellow"
+  )
+
+g6 <- g2 +
+  geom_line(
+    data = lpred.randomintrcpts.df
+    , mapping = aes(x = log.n.input.pred, y = median)
+  ) +
+  geom_ribbon(
+    data = lpred.randomintrcpts.df
+    , mapping = aes(x = log.n.input.pred, ymin = lower, ymax = upper)
+    , alpha = 0.2
+    , fill = "yellow"
+  )
+
+gridExtra::grid.arrange(g5, g6, nrow = 1)
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[stringr::str_starts(ls(), "pred")])
+remove(list = ls()[stringr::str_starts(ls(), "lpred")])
+gc()
+```
+
+What do you notice about the uncertainty of predicted log emissions from the random intercept model you fit here compared to the predictions of the pooled model you did in problem 1? Explain the difference.
+
+\textcolor{violet}{fill this in!!!!}
+
+#### Non-Pooled
+
+Plot the predictions
+
+```{r}
+# HDI
+pred1 <- MCMCvis::MCMCpstr(
+  zc_randomintrcpts
+  , params = "log_mu_site_pred"
+  , func = function(x) HDInterval::hdi(x, .95)
+)
+# median
+pred2 <- MCMCvis::MCMCpstr(
+  zc_randomintrcpts
+  , params = "log_mu_site_pred"
+  , func = median
+)
+# create data frame
+pred1.df <- reshape2::melt(pred1[[1]], as.is = TRUE, varnames = c("x", "group.index", "metric")) %>% 
+  spread(metric, value) %>%
+  arrange(group.index, x) %>%
+  dplyr::select(group.index, lower, upper)
+pred2.df <- reshape2::melt(pred2[[1]], as.is = TRUE, varnames = c("x", "group.index"), value.name = "median") %>%
+  arrange(group.index, x) %>% 
+  dplyr::select(median)
+# cbind
+logpred.randomintrcpts.df <- cbind(log.n.input.pred = log(n.input.pred), pred1.df, pred2.df)
+```
+
+For the site-level predictions, add a dotted line showing the posterior median of $\textrm{N} _2 \textrm{O}$ emission from the no-pool model. 
+
+```{r, fig.width=9, fig.height=13}
+g2 +
+  geom_ribbon(
+    data = logpred.randomintrcpts.df
+    , mapping = aes(x = log.n.input.pred, ymin = lower, ymax = upper)
+    , alpha = 0.2
+    , fill = "yellow"
+  ) +
+  # add a dotted line showing...from the no-pool model
+  geom_line(
+    data = logpred.nopool.df
+    , mapping = aes(x = log.n.input.pred, y = median)
+    , linetype = "longdash" # cant see dotted so changing 
+    , color = "midnightblue"
+  ) +
+  # random intercepts
+  geom_line(
+    data = logpred.randomintrcpts.df
+    , mapping = aes(x = log.n.input.pred, y = median)
+    , linetype = "solid"
+    , color = "black"
+  ) +
+  facet_wrap(~group.index)
+```
+
+### Question 7
+
+Why do the intercepts differ for some sites between the no-pool model and the random-intercepts model? Is this behavior consistent? Look closely at sites 51 and 56.
+
+Look closely at sites 51 and 56.
+
+```{r}
+temp_grps <- c(51, 56)
+ggplot(data = BayesNSF::N2OEmission %>% dplyr::filter(group.index %in% temp_grps)) +
+  geom_point(
+    mapping = aes(y = log(emission), x = log(n.input))
+    , alpha = 3/10
+    , shape = 21
+    , colour = "black"
+    , fill = "brown"
+    , size = 3
+  ) +
+  geom_ribbon(
+    data = logpred.randomintrcpts.df %>% dplyr::filter(group.index %in% temp_grps)
+    , mapping = aes(x = log.n.input.pred, ymin = lower, ymax = upper)
+    , alpha = 0.2
+    , fill = "yellow"
+  ) +
+  # add a dotted line showing...from the no-pool model
+  geom_line(
+    data = logpred.nopool.df %>% dplyr::filter(group.index %in% temp_grps)
+    , mapping = aes(x = log.n.input.pred, y = median)
+    , linetype = "longdash" # cant see dotted so changing 
+    , color = "midnightblue"
+  ) +
+  # random intercepts
+  geom_line(
+    data = logpred.randomintrcpts.df %>% dplyr::filter(group.index %in% temp_grps)
+    , mapping = aes(x = log.n.input.pred, y = median)
+    , linetype = "solid"
+    , color = "black"
+  ) +
+  facet_wrap(~group.index
+    , labeller = labeller(
+        group.index = function(x){paste0("site #", x)}
+      )
+  ) +
+  labs(
+    subtitle = "no-pool = dashed, random-intercepts = solid"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.subtitle = element_text(face="italic")
+  )
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[stringr::str_starts(ls(), "temp_")])
+remove(list = ls()[stringr::str_starts(ls(), "pred")])
+remove(list = ls()[stringr::str_starts(ls(), "lpred")])
+gc()
+```
+
+Why do the intercepts differ for some sites between the no-pool model and the random-intercepts model? Is this behavior consistent?
+
+\textcolor{violet}{fill this in!!!! borrowing strength, cnt data points between sites}
+
+## Diagramming and writing the random intercepts, group-level effect model
+
+In the previous example, we assumed that the variation in the intercept was attributable to spatial variation among sites. We did not try to explain that variation, we simply acknowledged that it exists. Now we are going to "model a parameter" using soil carbon content data at the site-level to explain variation in the intercepts among sites. Modify the previous model to represent the effect of soil carbon on the intercept using the deterministic model below to predict $\alpha_j$. Here, we logit transform the carbon data to "spread them out" mapping 0-1 to all real numbers.
+
+$$
+g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr) = \kappa + \eta \bigl(\text{logit}(w_ij) \bigr)
+$$ 
+
+### Question 8
+
+Draw a Bayesian network for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$) and soil carbon content ($w_{j}$). 
+
+```{r, echo=FALSE, out.width="50%", out.height="50%", fig.cap="DAG", fig.align='center'}
+knitr::include_graphics("../data/DAG4.jpg")
+```
+
+### Question 9
+
+Write out the posterior and joint distribution for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$) and soil carbon content ($w_{j}$). Choose appropriate distributions for each random variable. 
+
+$$
+\begin{aligned}
+g \bigl(\alpha_{j},\beta,\log(x_{ij}) \bigr) = \alpha_{j} + \beta \bigl(\log(x_ij) \bigr)\\
+g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr) = \kappa + \eta \bigl(\text{logit}(w_ij) \bigr)
+\end{aligned}
+$$
+
+
+Joint:
+
+
+$$
+\begin{aligned}
+
+\bigl[ \alpha_{j},\beta, \mu_{\alpha}, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} {\sf normal} \bigr( \log(y_{ij}) \mid g \bigl( \alpha_{j}, \beta, \log(x_{ij})  \bigr), \sigma^{2}\bigr)\\
+\times \; {\sf normal} \bigr(\alpha_{j} \mid g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr), \varsigma_{\alpha}^2 \bigr) \\ 
+\times \; {\sf normal} \bigr(\beta \mid 0,10000\bigr) \\
+\times \; {\sf normal} \bigr(\kappa \mid 0,10000\bigr) \\
+\times \; {\sf normal} \bigr(\eta \mid 0,10000\bigr) \\
+\times \; {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl) \\
+\times \; {\sf uniform}\bigr(\varsigma \mid 0, 100 \bigl)
+\end{aligned}
+$$
+
+## Fitting the random intercepts, group-level effect model with JAGS
+
+Modify your random intercepts model to implement the model that include soil carbon content as covariate at the site level. Make predictions for how mean logged $\textrm{N} _2 \textrm{O}$ emission and median $\textrm{N} _2 \textrm{O}$ emission varies with respect to soil fertilizer input *the uncertainty associated with site* as you did in the previous example. Use the `data` and initial values for JAGS provided below to allow you to concentrate on writing JAGS code for the model.
+
+```{r}
+n.input.pred <- seq(
+  min(BayesNSF::N2OEmission$n.input)
+  , max(BayesNSF::N2OEmission$n.input)
+  , 10
+)
+n.sites <- length(unique(BayesNSF::N2OEmission$group.index))
+
+data = list(
+  log.emission = log(BayesNSF::N2OEmission$emission)
+  , log.n.input.centered = log(BayesNSF::N2OEmission$n.input) - mean(log(BayesNSF::N2OEmission$n.input))
+  , log.n.input.centered.pred = log(n.input.pred) - mean(log(BayesNSF::N2OEmission$n.input))
+    #divide by 100 to make data a proportion, take logit, and center
+  , w = boot::logit(SiteCarbon$mean/100) - mean(boot::logit(SiteCarbon$mean/100))
+  , group = BayesNSF::N2OEmission$group.index
+  , n.sites = n.sites
+)
+
+inits = list(
+  list(alpha = rep(0, n.sites), beta = .5, sigma = 50, sigma.alpha = 10, eta = .2, kappa = .5)
+  , list(alpha = rep(1, n.sites), beta = 1.5, sigma = 10, sigma.alpha = 20, eta = 3, kappa = .7)
+  , list(alpha = rep(-1, n.sites), beta = .75, sigma = 20, sigma.alpha = 12, eta = .1, kappa = .3)
+)
+```
+
+### Question 10
+
+Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+
+```{r}
+# in progress
+```
+

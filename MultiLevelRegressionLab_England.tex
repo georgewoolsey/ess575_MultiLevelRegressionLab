@@ -1,0 +1,1929 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{caption}
+\captionsetup[figure]{labelformat=empty}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={ESS 575: Multi-Level Regression Lab},
+  pdfauthor={Team England},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{ESS 575: Multi-Level Regression Lab}
+\author{Team England}
+\date{25 October, 2022}
+
+\begin{document}
+\maketitle
+
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+Team England:
+
+\begin{itemize}
+\tightlist
+\item
+  Caroline Blommel
+\item
+  Carolyn Coyle
+\item
+  Bryn Crosby
+\item
+  George Woolsey
+\end{itemize}
+
+\href{mailto:cblommel@mail.colostate.edu}{\nolinkurl{cblommel@mail.colostate.edu}},
+\href{mailto:carolynm@mail.colostate.edu}{\nolinkurl{carolynm@mail.colostate.edu}},
+\href{mailto:brcrosby@rams.colostate.edu}{\nolinkurl{brcrosby@rams.colostate.edu}},
+\href{mailto:george.woolsey@colostate.edu}{\nolinkurl{george.woolsey@colostate.edu}}
+
+\hypertarget{preliminaries}{%
+\section{Preliminaries}\label{preliminaries}}
+
+\hypertarget{motivation}{%
+\subsection{Motivation}\label{motivation}}
+
+Each section of this lab has two parts -- a model \emph{building}
+exercise and a model \emph{coding} exercise. The material covered here
+is important and broadly useful -- building multi-levels models is a
+true workhorse for understanding ecological processes because so many
+problems contain information at nested spatial scales, levels of
+organization, or categories. It will be worthwhile to dig in deeply to
+understand it. The big picture is to demonstrate the flexibility that
+you gain as a modeler by understanding basic principles of Bayesian
+analysis. To accomplish that, these exercises will reinforce the
+following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Diagramming and writing hierarchical models
+\item
+  Using data to model parameters
+\item
+  JAGS coding
+\item
+  Creating index variables, a critically important and useful skill
+\item
+  Posterior predictive checks
+\end{enumerate}
+
+\hypertarget{introduction}{%
+\subsection{Introduction}\label{introduction}}
+
+Ecological data are often collected at multiple scales or levels of
+organization in nested designs. Group is a catchall term for the upper
+level in many different types of nested hierarchies. Groups could
+logically be composed of populations, locations, species, treatments,
+life stages, and individual studies, or really, any sensible category.
+We have measurements within groups on individual organisms, plots,
+species, time periods, and so on. We may also have measurements on the
+groups themselves, that is, covariates that apply at the upper level of
+organization or spatial scale or the category that contains the
+measurements. Multilevel models represent the way that a quantity of
+interest responds to the combined influence of observations taken at the
+group level and within the group.
+
+Nitrous oxide \(\textrm{N} _2 \textrm{O}\), a greenhouse gas roughly 300
+times more potent than carbon dioxide in forcing atmospheric warming, is
+emitted when synthetic nitrogenous fertilizers are added to soils. Qian
+and colleagues (2010) conducted a Bayesian meta-analysis of
+\(\textrm{N} _2 \textrm{O}\) emissions (g N \(\cdot\)
+ha\textsuperscript{-1} \(\cdot\) d\textsuperscript{-1}) from
+agricultural soils using data from a study conducted by Carey (2007),
+who reviewed 164 relevant studies. Studies occurred at different
+locations, forming a group-level hierarchy (we will use only sites that
+have both nitrogen and carbon data, which reduces the number of sites to
+107 in the analysis here). Soil carbon content (g \(\cdot\) organic C
+\(\cdot\) g\textsuperscript{-1} soil dry matter) was measured as a
+group-level covariate and is assumed to be measured without error.
+Observations of \(\textrm{N} _2 \textrm{O}\) emission are also assumed
+to be measured without error and were paired with measurements of
+fertilizer addition (kg N\(\cdot\) ha\textsuperscript{-1} \(\cdot\)
+year\textsuperscript{-1}). The effect of different types of fertilizer
+was also studied.
+
+You are going to use these data to build increasingly complex models of
+\(\textrm{N} _2 \textrm{O}\) emission. The initial models will ignore
+some important covariates as well as how the data are structured
+hierarchically into sites. This is ok! When writing for a multi-level
+model like this one, do it incrementally, starting with a separate model
+for each site (the no-pool model) or a model that ignores sites entirely
+(the pooled model). After getting these models to work you can add
+complexity by drawing the intercept for each model from a distribution,
+before pursuing further refinements. We \textbf{strongly sugggest} this
+approach because it is always best to do the simple thing first: there
+is less to go wrong. Also, when things do go wrong it will be clearer as
+to what is causing the problem.
+
+\hypertarget{r-libraries-needed-for-this-lab}{%
+\subsection{R libraries needed for this
+lab}\label{r-libraries-needed-for-this-lab}}
+
+You need to load the following libraries. Set the seed to 10 to compare
+your answers to ours.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# bread{-}and{-}butter}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(lubridate)}
+\FunctionTok{library}\NormalTok{(viridis)}
+\FunctionTok{library}\NormalTok{(scales)}
+\FunctionTok{library}\NormalTok{(latex2exp)}
+\CommentTok{\# visualization}
+\FunctionTok{library}\NormalTok{(cowplot)}
+\FunctionTok{library}\NormalTok{(kableExtra)}
+\CommentTok{\# jags and bayesian}
+\FunctionTok{library}\NormalTok{(actuar)}
+\FunctionTok{library}\NormalTok{(rjags)}
+\FunctionTok{library}\NormalTok{(ggthemes)}
+\FunctionTok{library}\NormalTok{(gridExtra)}
+\FunctionTok{library}\NormalTok{(MCMCvis)}
+\FunctionTok{library}\NormalTok{(HDInterval)}
+\FunctionTok{library}\NormalTok{(BayesNSF)}
+\FunctionTok{library}\NormalTok{(reshape2)}
+\CommentTok{\#set seed}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{pooled}{%
+\section{Pooled}\label{pooled}}
+
+\hypertarget{diagramming-and-writing-the-pooled-model}{%
+\subsection{Diagramming and writing the pooled
+model}\label{diagramming-and-writing-the-pooled-model}}
+
+Let's begin by ignoring the data on soil carbon and fertilizer type. In
+addition, we will ignore site, such that all observations are treated as
+independent from one another. This is what's known as complete pooling -
+see Gelman and Hill, (2007), or just a pooled model. You will use a
+linearized power function for your deterministic model of emissions as a
+function of nitrogen input:
+
+\[
+\begin{aligned}
+\mu_{i} = \gamma x_{i}^{\beta}\\
+\alpha = \log \bigl(\gamma \bigr)\\
+\log \bigl(\mu_{i} \bigr)  = \alpha+\beta \bigl(\log(x_i) \bigr)\\
+g \bigl(\alpha,\beta,\log(x_i) \bigr)  = \alpha + \beta \bigl(\log(x_i) \bigr) \\
+\end{aligned}
+\]
+
+\hypertarget{question-1}{%
+\subsubsection{Question 1}\label{question-1}}
+
+Interpret the coefficients \(\alpha\), \(\beta\), and \(\gamma\) in this
+model.
+
+\textcolor{violet}{We are interested in modelling $\textrm{N} _2 \textrm{O}$ emission as a function of soil carbon content, fertilizer addition, and fertilizer type. We begin by ignoring the data on soil carbon and fertilizer type. In addition, we initially ignore site-level variations by pooling the data from different sites (i.e. a pooled model). In the model $\mu_{i} = \gamma x_{i}^{\beta}$, $\gamma$ is the baseline scale factor for the fertilizer addition rate ($x_{i}$) impact to $\textrm{N} _2 \textrm{O}$ emission. The exponent $\beta$ allows for the influence of fertilizer input on $\textrm{N} _2 \textrm{O}$ emission to vary with the rate of fertilizer input. Exponential regression models are used to model situations in which growth/change begins slowly and then accelerates rapidly without bound, or where decay begins rapidly and then slows down to get closer and closer to zero. The transformation $\alpha = \log(\gamma)$ allows for linear representation of the deterministic model.}
+
+\hypertarget{question-2}{%
+\subsubsection{Question 2}\label{question-2}}
+
+Draw a Bayesian network for a linear regression model of
+\(\textrm{N} _2 \textrm{O}\) emission (\(y_{i}\)) on fertilizer addition
+(\(x_{i}\)).
+
+\begin{figure}
+\includegraphics[width=0.5\linewidth,height=0.5\textheight]{../data/DAG1} \caption{DAG}\label{fig:fig.a}
+\end{figure}
+
+\hypertarget{question-3}{%
+\subsubsection{Question 3}\label{question-3}}
+
+Write out the joint distribution for a linear regression model of
+\(\textrm{N} _2 \textrm{O}\) emission (\(y_{i}\)) on fertilizer addition
+(\(x_{i}\)). Start by using generic \texttt{{[}\ {]}}. Use
+\(\sigma^{2}\) to represent the uncertainty in your model realizing that
+you might need moment matching when you choose a specific distribution.
+
+\[
+\bigl[ \alpha,\beta,\sigma^2 \mid y_i\bigr] \propto \prod_{i=1}^{n} \bigl[ \log(y_{i}) \mid g \bigl( \alpha, \beta, \log(x_i)  \bigr), \sigma^{2}\bigr][\alpha]\bigl[ \beta\bigr]\bigl[ \sigma \bigr]
+\]
+
+\hypertarget{question-4}{%
+\subsubsection{Question 4}\label{question-4}}
+
+Finish by choosing specific distributions for likelihoods and priors.
+You will use the math in the answer as a template to code your model in
+the subsequent exercises. What are assuming about the distribution of
+the untransformed \(\mu_i\)?
+
+\[
+\bigl[ \alpha,\beta,\sigma^2 \mid y_i\bigr] \propto \prod_{i=1}^{n} {\sf normal} \bigr( \log(y_{i}) \mid g \bigl( \alpha, \beta, \log(x_i)  \bigr), \sigma^{2}\bigr) \times {\sf normal} \bigr(\alpha \mid 0,10000\bigr)  \times {\sf normal} \bigr(\beta \mid 0,10000\bigr) \times {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl)
+\]
+
+\hypertarget{question-5}{%
+\subsubsection{Question 5}\label{question-5}}
+
+What is the hypothesis represented by this model?
+
+\textcolor{violet}{We are ignoring site-level variations by pooling the data from different sites (i.e. a pooled model). This means that we are assuming that the emissions response to nitrogen addition does not vary across sites. In this pooled model, we are allowing $\textrm{N} _2 \textrm{O}$ emission to increase exponentially with fertilizer application rate.}
+
+\hypertarget{visualizing-the-pooled-data}{%
+\subsection{Visualizing the pooled
+data}\label{visualizing-the-pooled-data}}
+
+It is always a good idea to look at the data. Examine the head of the
+data frame for emissions. Note that the columns \texttt{group.index} and
+\texttt{fert.index} contain indices for sites and fertilizer types. We
+are going to ignore these for now since the pooled model does not take
+these into account. Use the code below to plot
+\(\textrm{N} _2 \textrm{O}\) emissions as a function of fertilizer input
+for both the logged and unlogged data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# view the first few rows of data}
+\NormalTok{BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{head}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   fertilizer group carbon n.input emission reps group.index fert.index
+## 1          A    14    2.7     180    0.620   13          10          2
+## 2          A    14    4.6     180    0.450   13          10          2
+## 3          A    11    0.9     112    0.230   12           7          2
+## 4          A    38    0.5     100    0.153   14          29          2
+## 5          A     1    4.0     250    1.000    6           1          2
+## 6          A    38    0.5     100    0.216   14          29          2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# data structure}
+\NormalTok{BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{glimpse}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 563
+## Columns: 8
+## $ fertilizer  <fct> A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A~
+## $ group       <int> 14, 14, 11, 38, 1, 38, 11, 11, 11, 11, 13, 13, 13, 13, 1, ~
+## $ carbon      <dbl> 2.70, 4.60, 0.90, 0.50, 4.00, 0.50, 0.90, 0.90, 0.90, 0.90~
+## $ n.input     <dbl> 180, 180, 112, 100, 250, 100, 112, 112, 117, 82, 112, 112,~
+## $ emission    <dbl> 0.620, 0.450, 0.230, 0.153, 1.000, 0.216, 0.240, 0.890, 0.~
+## $ reps        <int> 13, 13, 12, 14, 6, 14, 12, 12, 12, 12, 14, 14, 14, 14, 6, ~
+## $ group.index <int> 10, 10, 7, 29, 1, 29, 7, 7, 7, 7, 9, 9, 9, 9, 1, 9, 1, 7, ~
+## $ fert.index  <int> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2~
+\end{verbatim}
+
+We are going to use \texttt{ggplot} to visualize the data in this lab.
+If you are unfamiliar with this package, don't worry. We will provide
+you will all the codes you need and help your get oriented. We think you
+will find the plotting functions in \texttt{ggplot} very powerful and
+intuitive. We start by using \texttt{ggplot} to load the data frame we
+will plot data from. Then we add \texttt{geom\_point} and use the
+\texttt{aes} argument (the aesthetic mappings) to define the x and y
+values for the points. All \texttt{ggplot} functions require you to
+define the aesthetic mappings as needed. Here, they are the same as
+setting x and y in the normal plot functions. The other big difference
+is that \texttt{ggplot} allows you to add successive layers to the plot
+using the \texttt{+} operator. You will see later on that this offers a
+lot of flexibility. We add the \texttt{geom\_line} feature and then set
+the theme to \texttt{minimal}. Lastly, we use the \texttt{grid.arrange}
+function to position multiple plots at once. This is similar to using
+\texttt{mfrow} with \texttt{par}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# untransformed}
+\NormalTok{g1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}
+    \AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ emission, }\AttributeTok{x =}\NormalTok{ n.input)}
+\NormalTok{    , }\AttributeTok{alpha =} \DecValTok{3}\SpecialCharTok{/}\DecValTok{10}
+\NormalTok{    , }\AttributeTok{shape =} \DecValTok{21}
+\NormalTok{    , }\AttributeTok{colour =} \StringTok{"black"}
+\NormalTok{    , }\AttributeTok{fill =} \StringTok{"brown"}
+\NormalTok{    , }\AttributeTok{size =} \DecValTok{3}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\CommentTok{\# log transformed}
+\NormalTok{g2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}
+    \AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{y =} \FunctionTok{log}\NormalTok{(emission), }\AttributeTok{x =} \FunctionTok{log}\NormalTok{(n.input))}
+\NormalTok{    , }\AttributeTok{alpha =} \DecValTok{3}\SpecialCharTok{/}\DecValTok{10}
+\NormalTok{    , }\AttributeTok{shape =} \DecValTok{21}
+\NormalTok{    , }\AttributeTok{colour =} \StringTok{"black"}
+\NormalTok{    , }\AttributeTok{fill =} \StringTok{"brown"}
+\NormalTok{    , }\AttributeTok{size =} \DecValTok{3}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }
+\CommentTok{\# plot side by side}
+\NormalTok{gridExtra}\SpecialCharTok{::}\FunctionTok{grid.arrange}\NormalTok{(g1, g2, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\hypertarget{fitting-the-pooled-model-with-jags}{%
+\subsubsection{Fitting the pooled model with
+JAGS}\label{fitting-the-pooled-model-with-jags}}
+
+You will now write a simple, pooled model where you gloss over
+differences in sites and fertilizer types and lump everything into a set
+of \(x\) and \(y\) pairs using the R template provided below. It is
+imperative that you study the data statement and match the variable
+names in your JAGS code to the left hand side of the = in the data list.
+Call the intercept \texttt{alpha}, the slope \texttt{beta} and use
+\texttt{sigma} to name the standard deviation in the likelihood. Also
+notice, that we center the nitrogen input covariate to speed
+convergence. You could also standardize this as well.
+
+In addition to fitting this model, we would like you to have JAGS
+predict the mean logged \(\textrm{N} _2 \textrm{O}\) emissions and the
+median unlogged \(\textrm{N} _2 \textrm{O}\) emissions as a function of
+soil fertilizer input. (Why median? Hint: think back to the distribution
+of the untransformed data above in question 3 above). To help you out we
+have provided the range of \(\textrm{N} _2 \textrm{O}\) values to
+predict over as the third element in the \texttt{data} list. Make sure
+you understand how we chose these values.
+
+Note that in this problem and the ones that follow we have set up the
+data and the initial conditions for you. This will save time and
+frustration, allowing you to concentrate on writing code for the model
+but you must pay attention to the names we give in the \texttt{data} and
+\texttt{inits} lists. These must agree with the variable names in your
+model. Please see any of the course instructors if there is anything
+that you don't understand about these lists.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n.input.pred }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input), }\FunctionTok{max}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input), }\DecValTok{10}\NormalTok{)}
+
+\NormalTok{data }\OtherTok{=} \FunctionTok{list}\NormalTok{(}
+  \AttributeTok{log.emission =} \FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{emission) }\SpecialCharTok{\%\textgreater{}\%} 
+      \FunctionTok{as.double}\NormalTok{()}
+\NormalTok{  , }\AttributeTok{log.n.input.centered =} \FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input) }\SpecialCharTok{{-}} 
+      \FunctionTok{mean}\NormalTok{(}\FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input)) }\SpecialCharTok{\%\textgreater{}\%} 
+        \FunctionTok{as.double}\NormalTok{()}
+\NormalTok{  , }\AttributeTok{log.n.input.centered.pred =} \FunctionTok{log}\NormalTok{(n.input.pred) }\SpecialCharTok{{-}} 
+      \FunctionTok{mean}\NormalTok{(}\FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input)) }\SpecialCharTok{\%\textgreater{}\%} 
+        \FunctionTok{as.double}\NormalTok{()}
+\NormalTok{)}
+
+\NormalTok{inits }\OtherTok{=} \FunctionTok{list}\NormalTok{(}
+  \FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \DecValTok{0}\NormalTok{, }\AttributeTok{beta =}\NormalTok{ .}\DecValTok{5}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{50}\NormalTok{)}
+\NormalTok{  , }\FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }\AttributeTok{beta =} \FloatTok{1.5}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{10}\NormalTok{)}
+\NormalTok{  , }\FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \DecValTok{2}\NormalTok{, }\AttributeTok{beta =}\NormalTok{ .}\DecValTok{75}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{20}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{question-6}{%
+\subsubsection{Question 6}\label{question-6}}
+
+Write the code for the model. Compile the model and execute the MCMC to
+produce a coda object. Produce trace plots of the chains for model
+parameters. Produce a summary table and caterpillar plot for the
+parameters and tests for convergence including the effective sample
+size.
+
+\hypertarget{jags-model}{%
+\paragraph{JAGS Model}\label{jags-model}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\# JAGS Model}
+\NormalTok{model\{}
+  
+  \CommentTok{\# priors}
+\NormalTok{  alpha }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{1E{-}6}\NormalTok{)}
+\NormalTok{  beta }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{1E{-}6}\NormalTok{)}
+\NormalTok{  sigma }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dunif}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{100}\NormalTok{)}
+\NormalTok{  tau }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}
+
+  \CommentTok{\# likelihood}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(log.emission)) \{}
+\NormalTok{    log\_mu[i] }\OtherTok{\textless{}{-}}\NormalTok{ alpha }\SpecialCharTok{+}\NormalTok{ beta }\SpecialCharTok{*}\NormalTok{ log.n.input.centered[i]}
+\NormalTok{    log.emission[i] }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(log\_mu[i], tau)}
+\NormalTok{  \}}
+
+  \DocumentationTok{\#\# quantities of interest}
+    \CommentTok{\# predicted emissions}
+    \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(log.n.input.centered.pred)) \{}
+\NormalTok{      log\_mu\_pred[j] }\OtherTok{\textless{}{-}}\NormalTok{ alpha }\SpecialCharTok{+}\NormalTok{ beta }\SpecialCharTok{*}\NormalTok{ log.n.input.centered.pred[j]}
+\NormalTok{      mu\_pred[j] }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(log\_mu\_pred[j])}
+\NormalTok{    \}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{implement-jags-model}{%
+\paragraph{Implement JAGS Model}\label{implement-jags-model}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# insert JAGS model code into an R script}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\NormalTok{\{ }\CommentTok{\# Extra bracket needed only for R markdown files {-} see answers}
+  \FunctionTok{sink}\NormalTok{(}\StringTok{"NO2JAGS\_pooled.R"}\NormalTok{) }\CommentTok{\# This is the file name for the jags code}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"}
+\StringTok{  model\{}
+\StringTok{      \# priors}
+\StringTok{      alpha \textasciitilde{} dnorm(0,1E{-}6)}
+\StringTok{      beta \textasciitilde{} dnorm(0,1E{-}6)}
+\StringTok{      sigma \textasciitilde{} dunif(0,100)}
+\StringTok{      tau \textless{}{-} 1/sigma\^{}2}
+\StringTok{    }
+\StringTok{      \# likelihood}
+\StringTok{      for (i in 1:length(log.emission)) \{}
+\StringTok{        log\_mu[i] \textless{}{-} alpha + beta * log.n.input.centered[i]}
+\StringTok{        log.emission[i] \textasciitilde{} dnorm(log\_mu[i], tau)}
+\StringTok{      \}}
+\StringTok{    }
+\StringTok{      \#\# quantities of interest}
+\StringTok{        \# predicted emissions}
+\StringTok{        for (j in 1:length(log.n.input.centered.pred)) \{}
+\StringTok{          log\_mu\_pred[j] \textless{}{-} alpha + beta * log.n.input.centered.pred[j]}
+\StringTok{          mu\_pred[j] \textless{}{-} exp(log\_mu\_pred[j])}
+\StringTok{        \}}
+\StringTok{  \}}
+\StringTok{  "}\NormalTok{, }\AttributeTok{fill =} \ConstantTok{TRUE}\NormalTok{)}
+  \FunctionTok{sink}\NormalTok{()}
+\NormalTok{\}}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# implement model}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# specify 3 scalars, n.adapt, n.update, and n.iter}
+\CommentTok{\# n.adapt = number of iterations that JAGS will use to choose the sampler }
+  \CommentTok{\# and to assure optimum mixing of the MCMC chain}
+\NormalTok{n.adapt }\OtherTok{=} \DecValTok{1000}
+\CommentTok{\# n.update = number of iterations that will be discarded to allow the chain to }
+\CommentTok{\#   converge before iterations are stored (aka, burn{-}in)}
+\NormalTok{n.update }\OtherTok{=} \DecValTok{10000}
+\CommentTok{\# n.iter = number of iterations that will be stored in the }
+  \CommentTok{\# final chain as samples from the posterior distribution}
+\NormalTok{n.iter }\OtherTok{=} \DecValTok{10000}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# Call to JAGS}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\NormalTok{jm }\OtherTok{=}\NormalTok{ rjags}\SpecialCharTok{::}\FunctionTok{jags.model}\NormalTok{(}
+  \AttributeTok{file =} \StringTok{"NO2JAGS\_pooled.R"}
+\NormalTok{  , }\AttributeTok{data =}\NormalTok{ data}
+\NormalTok{  , }\AttributeTok{inits =}\NormalTok{ inits}
+\NormalTok{  , }\AttributeTok{n.chains =} \FunctionTok{length}\NormalTok{(inits)}
+\NormalTok{  , }\AttributeTok{n.adapt =}\NormalTok{ n.adapt}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 563
+##    Unobserved stochastic nodes: 3
+##    Total graph size: 1854
+## 
+## Initializing model
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stats}\SpecialCharTok{::}\FunctionTok{update}\NormalTok{(jm, }\AttributeTok{n.iter =}\NormalTok{ n.update)}
+\CommentTok{\# save the coda object (more precisely, an mcmc.list object) to R as "zc"}
+\NormalTok{zc\_pooled }\OtherTok{=}\NormalTok{ rjags}\SpecialCharTok{::}\FunctionTok{coda.samples}\NormalTok{(}
+  \AttributeTok{model =}\NormalTok{ jm}
+\NormalTok{  , }\AttributeTok{variable.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"alpha"}\NormalTok{, }\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{, }\StringTok{"tau"}\NormalTok{, }\StringTok{"log\_mu\_pred"}\NormalTok{, }\StringTok{"mu\_pred"}\NormalTok{)}
+  \CommentTok{\# , variable.names = c("a", "b", "p")}
+\NormalTok{  , }\AttributeTok{n.iter =}\NormalTok{ n.iter}
+\NormalTok{  , }\AttributeTok{n.thin =} \DecValTok{1}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{model-output}{%
+\paragraph{Model Output}\label{model-output}}
+
+Produce trace plots of the chains for model parameters. Produce a
+summary table and caterpillar plot for the parameters and tests for
+convergence including the effective sample size.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# check output}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# trace plot}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCtrace}\NormalTok{(zc\_pooled, }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"alpha"}\NormalTok{, }\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{), }\AttributeTok{pdf =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# summary}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCsummary}\NormalTok{(zc\_pooled, }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"alpha"}\NormalTok{, }\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             mean         sd        2.5%        50%     97.5% Rhat n.eff
+## alpha 0.04367949 0.06830640 -0.09024603 0.04398248 0.1778201    1 30896
+## beta  0.91191229 0.10785096  0.70148553 0.91198217 1.1231760    1 31156
+## sigma 1.62618035 0.04909531  1.53376688 1.62533710 1.7256600    1 17775
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Caterpillar plots}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCplot}\NormalTok{(zc\_pooled, }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"alpha"}\NormalTok{, }\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-7-2.pdf}
+
+\hypertarget{visualizing-the-pooled-model-predictions}{%
+\subsection{Visualizing the pooled model
+predictions}\label{visualizing-the-pooled-model-predictions}}
+
+Let's overlay the predicted mean logged \(\textrm{N} _2 \textrm{O}\)
+emissions and median unlogged \(\textrm{N} _2 \textrm{O}\) emissions as
+a function of soil fertilizer input from the pooled model on top of the
+raw data. We summarize the predictions using \texttt{MCMCpstr()} twice -
+once to get the 95\% HDPI intervals and a second time to get the
+posterior median for each fertilizer input value. We combine these
+predictions into two data frames, one for the logged
+\(\textrm{N} _2 \textrm{O}\) emissions and one for untransformed
+\(\textrm{N} _2 \textrm{O}\) emissions. We append our new graphical
+elements onto our old plots with the \texttt{+} operator. We plot the
+median of the posterior distribution as a black line with
+\texttt{geom\_line()} and the 95\% credible intervals as a yellow shaded
+region using the \texttt{geom\_ribbon()} function. These data come from
+a different data frame than the one we used to plot the raw data so we
+need to add the \texttt{data} argument in the new \texttt{geom\_line}
+and \texttt{geom\_ribbon}. Again, we provide you with the code to do
+this to save time. You will need to modify this code to make similar
+plots for models you fit in later exercises.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# highest posterior density interval of predictions}
+\NormalTok{pred1 }\OtherTok{\textless{}{-}}\NormalTok{ MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCpstr}\NormalTok{(}
+\NormalTok{  zc\_pooled}
+\NormalTok{  , }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"mu\_pred"}\NormalTok{, }\StringTok{"log\_mu\_pred"}\NormalTok{)}
+\NormalTok{  , }\AttributeTok{func =} \ControlFlowTok{function}\NormalTok{(x) HDInterval}\SpecialCharTok{::}\FunctionTok{hdi}\NormalTok{(x, .}\DecValTok{95}\NormalTok{)}
+\NormalTok{)}
+\CommentTok{\# median of predictions}
+\NormalTok{pred2 }\OtherTok{\textless{}{-}}\NormalTok{ MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCpstr}\NormalTok{(}
+\NormalTok{  zc\_pooled}
+\NormalTok{  , }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"mu\_pred"}\NormalTok{, }\StringTok{"log\_mu\_pred"}\NormalTok{)}
+\NormalTok{  , }\AttributeTok{func =}\NormalTok{ median}
+\NormalTok{)}
+\CommentTok{\# put in data frame}
+\NormalTok{pred.po.df }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{bind\_cols}\NormalTok{(}
+\NormalTok{  n.input.pred}
+\NormalTok{  , }\FunctionTok{data.frame}\NormalTok{(pred1}\SpecialCharTok{$}\NormalTok{mu\_pred)}
+\NormalTok{  , }\AttributeTok{median =}\NormalTok{ pred2}\SpecialCharTok{$}\NormalTok{mu\_pred}
+\NormalTok{)}
+\NormalTok{lpred.po.df }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{bind\_cols}\NormalTok{(}
+  \AttributeTok{log.n.input.pred =} \FunctionTok{log}\NormalTok{(n.input.pred)}
+\NormalTok{  , }\FunctionTok{data.frame}\NormalTok{(pred1}\SpecialCharTok{$}\NormalTok{log\_mu\_pred)}
+\NormalTok{  , }\AttributeTok{median =}\NormalTok{ pred2}\SpecialCharTok{$}\NormalTok{log\_mu\_pred}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Plot the predictions
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g3 }\OtherTok{\textless{}{-}}\NormalTok{ g1 }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ pred.po.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ n.input.pred, }\AttributeTok{y =}\NormalTok{ median)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_ribbon}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ pred.po.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ n.input.pred, }\AttributeTok{ymin =}\NormalTok{ lower, }\AttributeTok{ymax =}\NormalTok{ upper)}
+\NormalTok{    , }\AttributeTok{alpha =} \FloatTok{0.2}
+\NormalTok{    , }\AttributeTok{fill =} \StringTok{"yellow"}
+\NormalTok{  )}
+
+\NormalTok{g4 }\OtherTok{\textless{}{-}}\NormalTok{ g2 }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ lpred.po.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{y =}\NormalTok{ median)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_ribbon}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ lpred.po.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{ymin =}\NormalTok{ lower, }\AttributeTok{ymax =}\NormalTok{ upper)}
+\NormalTok{    , }\AttributeTok{alpha =} \FloatTok{0.2}
+\NormalTok{    , }\AttributeTok{fill =} \StringTok{"yellow"}
+\NormalTok{  )}
+
+\NormalTok{gridExtra}\SpecialCharTok{::}\FunctionTok{grid.arrange}\NormalTok{(g3, g4, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\hypertarget{non-pooled}{%
+\section{Non-Pooled}\label{non-pooled}}
+
+\hypertarget{diagramming-and-writing-the-no-pool-model}{%
+\subsection{Diagramming and writing the no-pool
+model}\label{diagramming-and-writing-the-no-pool-model}}
+
+Great! - you've got the pooled model fitted and made some predictions
+from it. However, perhaps the idea of ignoring the site effects is not
+sitting so well with you. Let's take this a step further by modeling the
+relationship between \(\textrm{N} _2 \textrm{O}\) emission and
+fertilizer input such that the intercept \(\alpha_{j}\) varies by site
+(we will again ignore the data on soil carbon and fertilizer type). This
+is the opposite of the pooled model where we completely ignored the
+effect of site as here we treat the intercept for each site as
+independent. This is commonly called a no-pool model. The deterministic
+portion of this model remains a linearized power function, but two
+subscripts are required: \(i\) which indexes the measurement within
+sites and \(j\) which indexes site itself.
+
+\[
+\begin{aligned}
+\mu_{ij}  = \gamma_{j} x_{ij}^{\beta}\\
+\alpha_{j}  = \log \bigl(\gamma_{j} \bigr)\\
+\log \bigl(\mu_{ij} \bigr)  = \alpha_{j}+\beta \bigl(\log(x_{ij}) \bigr)\\
+g \bigl(\alpha_{j},\beta,\log(x_{ij}) \bigr)  = \alpha_{j}+\beta \bigl(\log(x_{ij}) \bigr) \\
+\end{aligned}
+\]
+
+\hypertarget{question-1-1}{%
+\subsubsection{Question 1}\label{question-1-1}}
+
+Draw a Bayesian network for a linear regression model of
+\(\textrm{N} _2 \textrm{O}\) emission (\(y_{ij}\)) on fertilizer
+addition (\(x_{ij}\)).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth,height=0.5\textheight]{../data/DAG2} 
+
+}
+
+\caption{DAG}\label{fig:unnamed-chunk-12}
+\end{figure}
+
+\hypertarget{question-2-1}{%
+\subsubsection{Question 2}\label{question-2-1}}
+
+Write out the joint distribution for a linear regression model of
+\(\textrm{N} _2 \textrm{O}\) emission (\(y_{ij}\)) on fertilizer
+addition (\(x_{ij}\)). Start by using generic \texttt{{[}\ {]}}. Use
+\(\sigma^{2}\) to represent the uncertainty in your model realizing that
+you might need moment matching when you choose a specific distribution.
+
+\[
+\bigl[ \boldsymbol{\alpha},\beta,\sigma^2 \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n} \prod_{j=1}^{J}  \bigl[ \log(y_{ij})\mid g\bigl(\alpha_{j},\beta,\log(x_{ij})\bigr),\sigma^{2} \bigr] \bigl[\alpha_{j} \bigr] \bigl[ \beta \bigr] \bigl[ \sigma  \bigr]
+\]
+
+\hypertarget{question-3-1}{%
+\subsubsection{Question 3}\label{question-3-1}}
+
+Finish by choosing specific distributions for likelihoods and priors.
+You will use the math in the answer as a template to code your model in
+the subsequent exercises.
+
+\[
+\begin{aligned}
+\bigl[ \boldsymbol{\alpha},\beta,\sigma^2 \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} {\sf normal} \bigr( \log(y_{ij}) \mid g \bigl( \alpha_{j}, \beta, \log(x_{ij})  \bigr), \sigma^{2}\bigr)\\
+\times \; {\sf normal} \bigr(\alpha_{j} \mid 0,10000\bigr) \\ 
+\times \; {\sf normal} \bigr(\beta \mid 0,10000\bigr) \\
+\times \; {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl)
+\end{aligned}
+\]
+
+\hypertarget{question-4-1}{%
+\subsubsection{Question 4}\label{question-4-1}}
+
+What is the hypothesis represented by this model?
+
+\textcolor{violet}{fill this in!!!!}
+
+\hypertarget{visualizing-the-data}{%
+\subsection{Visualizing the data}\label{visualizing-the-data}}
+
+Let's visualize the data again, but this time highlighting the role site
+plays in determining the relationship between
+\(\textrm{N} _2 \textrm{O}\) emission and fertilizer input. First,
+\texttt{head()} the data to see how groups are organized. You will use
+\texttt{group.index} to group the observations by site.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# view the first few rows of data}
+\NormalTok{BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{head}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   fertilizer group carbon n.input emission reps group.index fert.index
+## 1          A    14    2.7     180    0.620   13          10          2
+## 2          A    14    4.6     180    0.450   13          10          2
+## 3          A    11    0.9     112    0.230   12           7          2
+## 4          A    38    0.5     100    0.153   14          29          2
+## 5          A     1    4.0     250    1.000    6           1          2
+## 6          A    38    0.5     100    0.216   14          29          2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# data structure}
+\NormalTok{BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{glimpse}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 563
+## Columns: 8
+## $ fertilizer  <fct> A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A~
+## $ group       <int> 14, 14, 11, 38, 1, 38, 11, 11, 11, 11, 13, 13, 13, 13, 1, ~
+## $ carbon      <dbl> 2.70, 4.60, 0.90, 0.50, 4.00, 0.50, 0.90, 0.90, 0.90, 0.90~
+## $ n.input     <dbl> 180, 180, 112, 100, 250, 100, 112, 112, 117, 82, 112, 112,~
+## $ emission    <dbl> 0.620, 0.450, 0.230, 0.153, 1.000, 0.216, 0.240, 0.890, 0.~
+## $ reps        <int> 13, 13, 12, 14, 6, 14, 12, 12, 12, 12, 14, 14, 14, 14, 6, ~
+## $ group.index <int> 10, 10, 7, 29, 1, 29, 7, 7, 7, 7, 9, 9, 9, 9, 1, 9, 1, 7, ~
+## $ fert.index  <int> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2~
+\end{verbatim}
+
+Use the code below to plot logged \(\textrm{N} _2 \textrm{O}\) emissions
+against logged fertilizer input. This is the same ggplot code as before
+except now we amend it to make plots for individual sites simply by
+adding the \texttt{facet\_wrap} function and specifying the grouping
+variable(here it is \texttt{group.index}) as an argument.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g2 }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{group.index)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+\hypertarget{fitting-the-no-pool-model-with-jags}{%
+\subsubsection{Fitting the no-pool model with
+JAGS}\label{fitting-the-no-pool-model-with-jags}}
+
+You will now write a simple, no-pool model using the R template provided
+below. In addition to fitting this model, we would like you to have JAGS
+predict the mean logged \(\textrm{N} _2 \textrm{O}\) emissions
+\textbf{for each site} as a function of soil fertilizer input. To help
+you out we have provided the range of \(\textrm{N} _2 \textrm{O}\)
+values to predict over as the third element in the \texttt{data} list.
+\textbf{Note that you must use the index trick covered in lecture to
+align observations in each site with the appropriate intercept}. Here
+are the preliminaries to set up the model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n.sites }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{group.index))}
+\NormalTok{n.input.pred }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input), }\FunctionTok{max}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input), }\DecValTok{10}\NormalTok{)}
+
+\NormalTok{data }\OtherTok{=} \FunctionTok{list}\NormalTok{(}
+  \AttributeTok{log.emission =} \FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{emission) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{as.double}\NormalTok{()}
+\NormalTok{  , }\AttributeTok{log.n.input.centered =} \FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input) }\SpecialCharTok{{-}} 
+      \FunctionTok{mean}\NormalTok{(}\FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input)) }\SpecialCharTok{\%\textgreater{}\%} 
+        \FunctionTok{as.double}\NormalTok{()}
+\NormalTok{  , }\AttributeTok{log.n.input.centered.pred =} \FunctionTok{log}\NormalTok{(n.input.pred) }\SpecialCharTok{{-}} 
+      \FunctionTok{mean}\NormalTok{(}\FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input)) }\SpecialCharTok{\%\textgreater{}\%} 
+        \FunctionTok{as.double}\NormalTok{()}
+\NormalTok{  , }\AttributeTok{group =}\NormalTok{ BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{group.index }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{as.double}\NormalTok{()}
+\NormalTok{  , }\AttributeTok{n.sites =}\NormalTok{ n.sites}
+\NormalTok{)}
+
+\NormalTok{inits }\OtherTok{=} \FunctionTok{list}\NormalTok{(}
+  \FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, n.sites), }\AttributeTok{beta =}\NormalTok{ .}\DecValTok{5}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{50}\NormalTok{)}
+\NormalTok{  , }\FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \FunctionTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, n.sites), }\AttributeTok{beta =} \FloatTok{1.5}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{10}\NormalTok{)}
+\NormalTok{  , }\FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \FunctionTok{rep}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, n.sites), }\AttributeTok{beta =}\NormalTok{ .}\DecValTok{75}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{20}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{question-5-1}{%
+\subsubsection{Question 5}\label{question-5-1}}
+
+Write the code for the model. Compile the model and execute the MCMC to
+produce a coda object. Produce trace plots of the chains for model
+parameters, excluding \(\boldsymbol{\alpha}\) and a summary table of
+these same parameters. Assess convergence and look at the effective
+sample sizes for each of these parameters. Do you think any of the
+chains need to be run for longer and if so why? Make a horizontal
+caterpillar plot for the the \(\boldsymbol{\alpha}\).
+
+\hypertarget{jags-model-1}{%
+\paragraph{JAGS Model}\label{jags-model-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\# JAGS Model}
+\NormalTok{model\{}
+  \CommentTok{\# priors}
+  \CommentTok{\# allow the intercept alpha to vary across sites}
+    \ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n.sites)\{}
+\NormalTok{      alpha[j] }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{1E{-}6}\NormalTok{) }
+\NormalTok{    \}}
+  \CommentTok{\# the slope beta is constant across sites}
+\NormalTok{  beta }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{1E{-}6}\NormalTok{)}
+\NormalTok{  sigma }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dunif}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{100}\NormalTok{)}
+\NormalTok{  tau }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}
+
+  \CommentTok{\# likelihood}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(log.emission)) \{}
+\NormalTok{    log\_mu[i] }\OtherTok{\textless{}{-}}\NormalTok{ alpha[group[i]] }\SpecialCharTok{+}\NormalTok{ beta }\SpecialCharTok{*}\NormalTok{ log.n.input.centered[i]}
+\NormalTok{    log.emission[i] }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(log\_mu[i], tau)}
+\NormalTok{  \}}
+
+  \DocumentationTok{\#\# quantities of interest}
+    \CommentTok{\# predicted emissions}
+    \DocumentationTok{\#\# from the JAGS primer: }
+      \CommentTok{\# If you have two product symbols in the conditional distribution with different indices}
+        \CommentTok{\# ...and two subscripts in the quantity of interest i.e. quantity[i, j] }
+        \CommentTok{\# ...then this dual product is specified in JAGS using nested for loops:}
+    \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(log.n.input.centered.pred)) \{}
+      \ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n.sites)\{}
+\NormalTok{        log\_mu\_site\_pred[i, j] }\OtherTok{\textless{}{-}}\NormalTok{ alpha[j] }\SpecialCharTok{+}\NormalTok{ beta }\SpecialCharTok{*}\NormalTok{ log.n.input.centered.pred[i]}
+\NormalTok{      \} }\CommentTok{\# end j}
+\NormalTok{    \} }\CommentTok{\# end i}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{implement-jags-model-1}{%
+\paragraph{Implement JAGS Model}\label{implement-jags-model-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# insert JAGS model code into an R script}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\NormalTok{\{ }\CommentTok{\# Extra bracket needed only for R markdown files {-} see answers}
+  \FunctionTok{sink}\NormalTok{(}\StringTok{"NO2JAGS\_nopooled.R"}\NormalTok{) }\CommentTok{\# This is the file name for the jags code}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"}
+\StringTok{  model\{}
+\StringTok{    \# priors}
+\StringTok{    \# allow the intercept alpha to vary across sites}
+\StringTok{      for(j in 1:n.sites)\{}
+\StringTok{        alpha[j] \textasciitilde{} dnorm(0,1E{-}6) }
+\StringTok{      \}}
+\StringTok{    \# the slope beta is constant across sites}
+\StringTok{    beta \textasciitilde{} dnorm(0,1E{-}6)}
+\StringTok{    sigma \textasciitilde{} dunif(0,100)}
+\StringTok{    tau \textless{}{-} 1/sigma\^{}2}
+\StringTok{  }
+\StringTok{    \# likelihood}
+\StringTok{    for(i in 1:length(log.emission)) \{}
+\StringTok{      log\_mu[i] \textless{}{-} alpha[group[i]] + beta * log.n.input.centered[i]}
+\StringTok{      log.emission[i] \textasciitilde{} dnorm(log\_mu[i], tau)}
+\StringTok{    \}}
+\StringTok{  }
+\StringTok{    \#\# quantities of interest}
+\StringTok{      \# predicted emissions}
+\StringTok{      \#\# from the JAGS primer: }
+\StringTok{        \# If you have two product symbols in the conditional distribution with different indices}
+\StringTok{          \# ...and two subscripts in the quantity of interest i.e. quantity[i, j] }
+\StringTok{          \# ...then this dual product is specified in JAGS using nested for loops:}
+\StringTok{      for(i in 1:length(log.n.input.centered.pred)) \{}
+\StringTok{        for(j in 1:n.sites)\{}
+\StringTok{          log\_mu\_site\_pred[i, j] \textless{}{-} alpha[j] + beta * log.n.input.centered.pred[i]}
+\StringTok{        \} \# end j}
+\StringTok{      \} \# end i}
+\StringTok{  \}}
+\StringTok{  "}\NormalTok{, }\AttributeTok{fill =} \ConstantTok{TRUE}\NormalTok{)}
+  \FunctionTok{sink}\NormalTok{()}
+\NormalTok{\}}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# implement model}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# specify 3 scalars, n.adapt, n.update, and n.iter}
+\CommentTok{\# n.adapt = number of iterations that JAGS will use to choose the sampler }
+  \CommentTok{\# and to assure optimum mixing of the MCMC chain}
+\NormalTok{n.adapt }\OtherTok{=} \DecValTok{1000}
+\CommentTok{\# n.update = number of iterations that will be discarded to allow the chain to }
+\CommentTok{\#   converge before iterations are stored (aka, burn{-}in)}
+\NormalTok{n.update }\OtherTok{=} \DecValTok{10000}
+\CommentTok{\# n.iter = number of iterations that will be stored in the }
+  \CommentTok{\# final chain as samples from the posterior distribution}
+\NormalTok{n.iter }\OtherTok{=} \DecValTok{10000}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# Call to JAGS}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\NormalTok{jm }\OtherTok{=}\NormalTok{ rjags}\SpecialCharTok{::}\FunctionTok{jags.model}\NormalTok{(}
+  \AttributeTok{file =} \StringTok{"NO2JAGS\_nopooled.R"}
+\NormalTok{  , }\AttributeTok{data =}\NormalTok{ data}
+\NormalTok{  , }\AttributeTok{inits =}\NormalTok{ inits}
+\NormalTok{  , }\AttributeTok{n.chains =} \FunctionTok{length}\NormalTok{(inits)}
+\NormalTok{  , }\AttributeTok{n.adapt =}\NormalTok{ n.adapt}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 563
+##    Unobserved stochastic nodes: 109
+##    Total graph size: 15372
+## 
+## Initializing model
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stats}\SpecialCharTok{::}\FunctionTok{update}\NormalTok{(jm, }\AttributeTok{n.iter =}\NormalTok{ n.update)}
+\CommentTok{\# save the coda object (more precisely, an mcmc.list object) to R as "zc"}
+\NormalTok{zc\_nopooled }\OtherTok{=}\NormalTok{ rjags}\SpecialCharTok{::}\FunctionTok{coda.samples}\NormalTok{(}
+  \AttributeTok{model =}\NormalTok{ jm}
+\NormalTok{  , }\AttributeTok{variable.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"alpha"}\NormalTok{, }\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{, }\StringTok{"tau"}\NormalTok{, }\StringTok{"log\_mu\_site\_pred"}\NormalTok{)}
+  \CommentTok{\# , variable.names = c("a", "b", "p")}
+\NormalTok{  , }\AttributeTok{n.iter =}\NormalTok{ n.iter}
+\NormalTok{  , }\AttributeTok{n.thin =} \DecValTok{1}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{model-output-1}{%
+\paragraph{Model Output}\label{model-output-1}}
+
+Produce trace plots of the chains for model parameters, excluding
+\(\boldsymbol{\alpha}\) and a summary table of these same parameters.
+Assess convergence and look at the effective sample sizes for each of
+these parameters. Do you think any of the chains need to be run for
+longer and if so why?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# check output}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# trace plot}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCtrace}\NormalTok{(zc\_nopooled, }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{), }\AttributeTok{pdf =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# summary}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCsummary}\NormalTok{(zc\_nopooled, }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"alpha"}\NormalTok{, }\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{data.frame}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{slice\_tail}\NormalTok{(}\AttributeTok{n =} \DecValTok{6}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   mean         sd      X2.5.        X50.      X97.5. Rhat n.eff
+## alpha[104] -0.07388139 0.39108974 -0.8336653 -0.07458111  0.69397368    1 30436
+## alpha[105] -0.39360170 0.42330650 -1.2244965 -0.38952922  0.43008892    1 29278
+## alpha[106] -0.65723136 0.34924852 -1.3415584 -0.65741672  0.03283677    1 27740
+## alpha[107] -1.09279135 0.51707445 -2.1000701 -1.09267618 -0.08456387    1 31241
+## beta        0.85088341 0.10227878  0.6513408  0.85081898  1.05147326    1  8429
+## sigma       1.03124878 0.03406659  0.9668343  1.03053671  1.10032086    1 13556
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Caterpillar plots}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCplot}\NormalTok{(zc\_nopooled, }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{), }\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{,}\FloatTok{1.5}\NormalTok{) )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-18-2.pdf}
+
+Assess convergence and look at the effective sample sizes for each of
+these parameters. Do you think any of the chains need to be run for
+longer and if so why?
+
+\textcolor{violet}{fill this in!!!!}
+
+Make a horizontal caterpillar plot for the the \(\boldsymbol{\alpha}\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Caterpillar plots}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCplot}\NormalTok{(}
+\NormalTok{  zc\_nopooled}
+\NormalTok{  , }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"alpha"}\NormalTok{)}
+\NormalTok{  , }\AttributeTok{horiz =} \ConstantTok{FALSE}
+\NormalTok{  , }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{6}\NormalTok{,}\DecValTok{5}\NormalTok{)}
+  \CommentTok{\# Number specifying size of text for parameter labels on axis.}
+\NormalTok{  , }\AttributeTok{sz\_labels =} \FloatTok{0.6}
+  \CommentTok{\# Number specifying size of points represents posterior medians.}
+\NormalTok{  , }\AttributeTok{sz\_med =} \FloatTok{0.7}
+  \CommentTok{\# Number specifying thickness of 50 percent CI line (thicker line).}
+\NormalTok{  , }\AttributeTok{sz\_thick =} \DecValTok{2}
+  \CommentTok{\# Number specifying thickness of 95 percent CI line (thinner line).}
+\NormalTok{  , }\AttributeTok{sz\_thin =} \DecValTok{1}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-20-1.pdf}
+
+\hypertarget{question-6-1}{%
+\subsubsection{Question 6}\label{question-6-1}}
+
+How is the model able to estimate intercepts for sites where there is
+only a single x value, or even sites where there is only a single
+observation at all?
+
+\textcolor{violet}{The model is able to estimate intercepts for sites where there is only a single data record because, in this model, the slope ($\beta$) is calculated using data from all sites. That is, the slope is assumed to be constant across sites. If we also allowed the slope ($\beta$) to vary across sites, then the model would require more than one data point to estimate site-specifice intercept and slope.}
+
+\hypertarget{visualizing-the-no-pool-model-predictions}{%
+\subsection{Visualizing the no-pool model
+predictions}\label{visualizing-the-no-pool-model-predictions}}
+
+We modify the \texttt{MCMCpstr} code from the previous model to produce
+a data frame of the median and 95\% HDPI credible intervals of
+\(\textrm{N} _2 \textrm{O}\) emission predictions for each site.
+\texttt{MCMCpstr} preserves the shape of the parameter from your JAGS
+model, which can be very handy in certain situations. Here,
+\texttt{pred1} is a list whose first element is a 3D-array. This array's
+rows are fertilizer inputs, columns are sites, and z-values are the
+quantities produced by the \texttt{hdi} function, which in this case is
+the lower and upper credible interval. You can \texttt{str} the
+\texttt{pred1{[}{[}1{]}{]}} object to see this for yourself. For
+plotting purposes though, we would like a data frame with columns for
+site, fertilizer input, the posterior's median emission, and the
+posterior's lower and upper HDPI credible intervals. This can be made
+easily using the \texttt{melt} function to go from wide to long followed
+by the \texttt{spread} function to make separate columns for the lower
+and upper bounds. Then we rely on \texttt{select} and \texttt{arrange}
+to order the data properly and keep the relevant columns. Lastly, we use
+\texttt{cbind} to make the data frame we seek, taking advantage of the
+fact that \texttt{n.input.pred} will repeat each site, which is exactly
+what we want it to do.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# HDI}
+\NormalTok{pred1 }\OtherTok{\textless{}{-}}\NormalTok{ MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCpstr}\NormalTok{(}
+\NormalTok{  zc\_nopooled}
+\NormalTok{  , }\AttributeTok{params =} \StringTok{"log\_mu\_site\_pred"}
+\NormalTok{  , }\AttributeTok{func =} \ControlFlowTok{function}\NormalTok{(x) HDInterval}\SpecialCharTok{::}\FunctionTok{hdi}\NormalTok{(x, .}\DecValTok{95}\NormalTok{)}
+\NormalTok{)}
+\CommentTok{\# median}
+\NormalTok{pred2 }\OtherTok{\textless{}{-}}\NormalTok{ MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCpstr}\NormalTok{(}
+\NormalTok{  zc\_nopooled}
+\NormalTok{  , }\AttributeTok{params =} \StringTok{"log\_mu\_site\_pred"}
+\NormalTok{  , }\AttributeTok{func =}\NormalTok{ median}
+\NormalTok{)}
+\CommentTok{\# create data frame}
+\NormalTok{pred1.df }\OtherTok{\textless{}{-}}\NormalTok{ reshape2}\SpecialCharTok{::}\FunctionTok{melt}\NormalTok{(pred1[[}\DecValTok{1}\NormalTok{]], }\AttributeTok{as.is =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{varnames =} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{, }\StringTok{"group.index"}\NormalTok{, }\StringTok{"metric"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{spread}\NormalTok{(metric, value) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(group.index, x) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(group.index, lower, upper)}
+\NormalTok{pred2.df }\OtherTok{\textless{}{-}}\NormalTok{ reshape2}\SpecialCharTok{::}\FunctionTok{melt}\NormalTok{(pred2[[}\DecValTok{1}\NormalTok{]], }\AttributeTok{as.is =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{varnames =} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{, }\StringTok{"group.index"}\NormalTok{), }\AttributeTok{value.name =} \StringTok{"median"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(group.index, x) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(median)}
+\CommentTok{\# cbind}
+\NormalTok{logpred.nopool.df }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(}\AttributeTok{log.n.input.pred =} \FunctionTok{log}\NormalTok{(n.input.pred), pred1.df, pred2.df)}
+\end{Highlighting}
+\end{Shaded}
+
+To add the predictions to the plots for each site we use
+\texttt{geom\_line} and \texttt{geom\_ribbon} again, in combination with
+\texttt{facet\_wrap}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g2 }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ logpred.nopool.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{y =}\NormalTok{ median)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_ribbon}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ logpred.nopool.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{ymin =}\NormalTok{ lower, }\AttributeTok{ymax =}\NormalTok{ upper)}
+\NormalTok{    , }\AttributeTok{alpha =} \FloatTok{0.2}
+\NormalTok{    , }\AttributeTok{fill =} \StringTok{"yellow"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{group.index)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-23-1.pdf}
+
+\hypertarget{random-intercepts}{%
+\section{Random Intercepts}\label{random-intercepts}}
+
+\hypertarget{diagramming-and-writing-the-random-intercepts-model}{%
+\subsection{Diagramming and writing the random intercepts
+model}\label{diagramming-and-writing-the-random-intercepts-model}}
+
+So far you have either ignored site completely (the pooled model) or
+treated all the site intercepts as independent from one another (the
+no-pool model). Now you are going to treat the site intercepts as
+partially pooled, meaning you will model them as coming from a common
+distribution. In other words, you will treat these intercepts in your
+model as a group level effect (aka, random effect). Hence, this model is
+often called a random-intercepts model. Like in the no-pool model, the
+deterministic portion of this model remains a linearized power function,
+but two subscripts are required: \(i\) which indexes the measurement
+within sites and \(j\) which indexes site itself. However, unlike the
+no-pool model, assume that these intercepts are drawn from a
+distribution with mean \(\mu_{\alpha}\) and variance
+\(\varsigma_{\alpha}^2\).
+
+\hypertarget{question-1-2}{%
+\subsubsection{Question 1}\label{question-1-2}}
+
+Draw a Bayesian network for a linear regression model of
+\(\textrm{N} _2 \textrm{O}\) emission (\(y_{ij}\)) on fertilizer
+addition (\(x_{ij}\)).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth,height=0.5\textheight]{../data/DAG3} 
+
+}
+
+\caption{DAG}\label{fig:unnamed-chunk-25}
+\end{figure}
+
+\hypertarget{question-2-2}{%
+\subsubsection{Question 2}\label{question-2-2}}
+
+Write out the posterior and joint distribution for a linear regression
+model of \(\textrm{N} _2 \textrm{O}\) emission (\(y_{ij}\)) on
+fertilizer addition (\(x_{ij}\)). Start by using generic
+\texttt{{[}\ {]}}. Use \(\sigma^{2}\) and, \(\varsigma^{2}\) to
+represent the uncertainty in your model realizing that you might need
+moment matching when you choose a specific distribution.
+
+\[
+g \bigl(\alpha_{j},\beta,\log(x_{ij}) \bigr) = \alpha_{j} + \beta \bigl(\log(x_ij) \bigr)
+\]
+
+Joint:
+
+\[
+\bigl[ \alpha_{j},\beta, \mu_{\alpha}, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n} \prod_{j=1}^{J}  \bigl[ \log(y_{ij})\mid g\bigl(\alpha_{j}, \beta,\log(x_{ij})\bigr),\sigma^{2} \bigr] \bigl[\alpha_{j} \mid \mu_{\alpha}, \varsigma_{\alpha}^2 \bigr] \bigl[ \beta \bigr] \bigl[ \sigma  \bigr] \bigl[ \varsigma  \bigr]
+\]
+
+\hypertarget{question-3-2}{%
+\subsubsection{Question 3}\label{question-3-2}}
+
+Finish by choosing specific distributions for likelihoods and priors.
+You will use the math in the answer as a template to code your model in
+the subsequent exercises.
+
+\[
+\begin{aligned}
+\bigl[ \alpha_{j},\beta, \mu_{\alpha}, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} {\sf normal} \bigr( \log(y_{ij}) \mid g \bigl( \alpha_{j}, \beta, \log(x_{ij})  \bigr), \sigma^{2}\bigr)\\
+\times \; {\sf normal} \bigr(\alpha_{j} \mid \mu_{\alpha}, \varsigma_{\alpha}^2 \bigr) \\ 
+\times \; {\sf normal} \bigr(\beta \mid 0,10000\bigr) \\
+\times \; {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl) \\
+\times \; {\sf uniform}\bigr(\varsigma \mid 0, 100 \bigl)
+\end{aligned}
+\] \#\#\# Fitting the random intercepts model with JAGS
+
+Now you will implement the random-intercepts model that allows the
+intercept \(\alpha_{j}\) to vary by site, where each intercept is drawn
+from a common distribution. Use the \texttt{data} and initial values for
+JAGS provided below to allow you to concentrate on writing JAGS code for
+the model.
+
+In addition to fitting this model, we would like you to have JAGS
+predict the mean logged \(\textrm{N} _2 \textrm{O}\) emissions
+\textbf{for each site} as a function of soil fertilizer input, just like
+you did in the no-pool model. We also would like you to predict the mean
+logged \(\textrm{N} _2 \textrm{O}\) emissions and the median unlogged
+\(\textrm{N} _2 \textrm{O}\) emissions as a function of soil fertilizer
+input, just like you did in the pooled model. However, these predictions
+should take into account \textbf{the uncertainty associated with site}.
+This is equivalent to asking you to make a prediction for a new site
+whose intercept \(\alpha_{j}\) is drawn from the same distribution as
+the intercepts are for the actual sites themselves. To help you out we
+have provided the range of \(\textrm{N} _2 \textrm{O}\) values to
+predict over as the third element in the \texttt{data} list.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n.input.pred }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(N2OEmission}\SpecialCharTok{$}\NormalTok{n.input), }\FunctionTok{max}\NormalTok{(N2OEmission}\SpecialCharTok{$}\NormalTok{n.input), }\DecValTok{10}\NormalTok{)}
+\NormalTok{n.sites }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(N2OEmission}\SpecialCharTok{$}\NormalTok{group.index))}
+
+\NormalTok{data }\OtherTok{=} \FunctionTok{list}\NormalTok{(}
+  \AttributeTok{log.emission =} \FunctionTok{log}\NormalTok{(N2OEmission}\SpecialCharTok{$}\NormalTok{emission),}
+  \AttributeTok{log.n.input.centered =} \FunctionTok{log}\NormalTok{(N2OEmission}\SpecialCharTok{$}\NormalTok{n.input) }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(}\FunctionTok{log}\NormalTok{(N2OEmission}\SpecialCharTok{$}\NormalTok{n.input)),}
+  \AttributeTok{log.n.input.centered.pred =} \FunctionTok{log}\NormalTok{(n.input.pred) }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(}\FunctionTok{log}\NormalTok{(N2OEmission}\SpecialCharTok{$}\NormalTok{n.input)),}
+  \AttributeTok{group =}\NormalTok{ N2OEmission}\SpecialCharTok{$}\NormalTok{group.index,}
+  \AttributeTok{n.sites =}\NormalTok{ n.sites)}
+
+\NormalTok{inits }\OtherTok{=} \FunctionTok{list}\NormalTok{(}
+  \FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, n.sites), }\AttributeTok{beta =}\NormalTok{ .}\DecValTok{5}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{50}\NormalTok{, }\AttributeTok{mu.alpha=} \DecValTok{0}\NormalTok{, }\AttributeTok{sigma.alpha =} \DecValTok{10}\NormalTok{),}
+  \FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \FunctionTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, n.sites), }\AttributeTok{beta =} \FloatTok{1.5}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{10}\NormalTok{, }\AttributeTok{mu.alpha=} \DecValTok{2}\NormalTok{, }\AttributeTok{sigma.alpha =} \DecValTok{20}\NormalTok{),}
+  \FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \FunctionTok{rep}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, n.sites), }\AttributeTok{beta =}\NormalTok{ .}\DecValTok{75}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{20}\NormalTok{, }\AttributeTok{mu.alpha=} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\AttributeTok{sigma.alpha =} \DecValTok{12}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{question-5-2}{%
+\subsubsection{Question 5}\label{question-5-2}}
+
+Write the code for the model. Compile the model and execute the MCMC to
+produce a coda object. Produce trace plots of the chains for model
+parameters, excluding \(\boldsymbol{\alpha}\) and a summary table of
+these same parameters. Assess convergence and look at the effective
+sample sizes for each of these parameters. Do you think any of the
+chains need to be run for longer and if so why? Make a horizontal
+caterpillar plot for the the \(\boldsymbol{\alpha}\).
+
+\hypertarget{jags-model-2}{%
+\paragraph{JAGS Model}\label{jags-model-2}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\# JAGS Model}
+\NormalTok{model\{}
+  \CommentTok{\# priors}
+\NormalTok{  beta }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{1E{-}6}\NormalTok{)}
+\NormalTok{  sigma }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dunif}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{100}\NormalTok{)}
+\NormalTok{  tau\_y }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}
+  \CommentTok{\# alpha priors}
+\NormalTok{  mu\_alpha }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{1E{-}6}\NormalTok{)}
+\NormalTok{  varsigma }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dunif}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{100}\NormalTok{)}
+\NormalTok{  tau\_alpha }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\NormalTok{varsigma}\SpecialCharTok{\^{}}\DecValTok{2}
+  \CommentTok{\# allow the intercept alpha to vary across sites}
+    \ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n.sites)\{}
+\NormalTok{      alpha[j] }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(mu\_alpha, tau\_alpha)}
+\NormalTok{    \}}
+
+  \CommentTok{\# likelihood}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(log.emission)) \{}
+\NormalTok{    log\_mu[i] }\OtherTok{\textless{}{-}}\NormalTok{ alpha[group[i]] }\SpecialCharTok{+}\NormalTok{ beta }\SpecialCharTok{*}\NormalTok{ log.n.input.centered[i]}
+\NormalTok{    log.emission[i] }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(log\_mu[i], tau\_y)}
+\NormalTok{  \}}
+
+  \DocumentationTok{\#\# quantities of interest}
+    \CommentTok{\# predicted emissions FOR EACH SITE}
+      \DocumentationTok{\#\# from the JAGS primer: }
+        \CommentTok{\# If you have two product symbols in the conditional distribution with different indices}
+          \CommentTok{\# ...and two subscripts in the quantity of interest i.e. quantity[i, j] }
+          \CommentTok{\# ...then this dual product is specified in JAGS using nested for loops:}
+      \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(log.n.input.centered.pred)) \{}
+        \ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n.sites)\{}
+\NormalTok{          log\_mu\_site\_pred[i, j] }\OtherTok{\textless{}{-}}\NormalTok{ alpha[j] }\SpecialCharTok{+}\NormalTok{ beta }\SpecialCharTok{*}\NormalTok{ log.n.input.centered.pred[i]}
+\NormalTok{        \} }\CommentTok{\# end j}
+\NormalTok{      \} }\CommentTok{\# end i}
+    
+    \CommentTok{\# predicted emissions ACROSS SITES}
+\NormalTok{      alpha\_pred }\SpecialCharTok{\textasciitilde{}} \FunctionTok{dnorm}\NormalTok{(mu\_alpha, tau\_alpha)}
+      \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(log.n.input.centered.pred))\{}
+\NormalTok{        log\_mu\_pred[i] }\OtherTok{\textless{}{-}}\NormalTok{ alpha\_pred }\SpecialCharTok{+}\NormalTok{ beta }\SpecialCharTok{*}\NormalTok{ log.n.input.centered.pred[i]}
+\NormalTok{        mu\_pred[i] }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(log\_mu\_pred[i])}
+\NormalTok{      \}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{implement-jags-model-2}{%
+\paragraph{Implement JAGS Model}\label{implement-jags-model-2}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# insert JAGS model code into an R script}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\NormalTok{\{ }\CommentTok{\# Extra bracket needed only for R markdown files {-} see answers}
+  \FunctionTok{sink}\NormalTok{(}\StringTok{"NO2JAGS\_randomintrcpts.R"}\NormalTok{) }\CommentTok{\# This is the file name for the jags code}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"}
+\StringTok{  model\{}
+\StringTok{    \# priors}
+\StringTok{    beta \textasciitilde{} dnorm(0,1E{-}6)}
+\StringTok{    sigma \textasciitilde{} dunif(0,100)}
+\StringTok{    tau\_y \textless{}{-} 1/sigma\^{}2}
+\StringTok{    \# alpha priors}
+\StringTok{    mu\_alpha \textasciitilde{} dnorm(0,1E{-}6)}
+\StringTok{    varsigma \textasciitilde{} dunif(0,100)}
+\StringTok{    tau\_alpha \textless{}{-} 1/varsigma\^{}2}
+\StringTok{    \# allow the intercept alpha to vary across sites}
+\StringTok{      for(j in 1:n.sites)\{}
+\StringTok{        alpha[j] \textasciitilde{} dnorm(mu\_alpha, tau\_alpha)}
+\StringTok{      \}}
+\StringTok{  }
+\StringTok{    \# likelihood}
+\StringTok{    for(i in 1:length(log.emission)) \{}
+\StringTok{      log\_mu[i] \textless{}{-} alpha[group[i]] + beta * log.n.input.centered[i]}
+\StringTok{      log.emission[i] \textasciitilde{} dnorm(log\_mu[i], tau\_y)}
+\StringTok{    \}}
+\StringTok{  }
+\StringTok{    \#\# quantities of interest}
+\StringTok{      \# predicted emissions FOR EACH SITE}
+\StringTok{        \#\# from the JAGS primer: }
+\StringTok{          \# If you have two product symbols in the conditional distribution with different indices}
+\StringTok{            \# ...and two subscripts in the quantity of interest i.e. quantity[i, j] }
+\StringTok{            \# ...then this dual product is specified in JAGS using nested for loops:}
+\StringTok{        for(i in 1:length(log.n.input.centered.pred)) \{}
+\StringTok{          for(j in 1:n.sites)\{}
+\StringTok{            log\_mu\_site\_pred[i, j] \textless{}{-} alpha[j] + beta * log.n.input.centered.pred[i]}
+\StringTok{          \} \# end j}
+\StringTok{        \} \# end i}
+\StringTok{      }
+\StringTok{      \# predicted emissions ACROSS SITES}
+\StringTok{        alpha\_pred \textasciitilde{} dnorm(mu\_alpha, tau\_alpha)}
+\StringTok{        for(i in 1:length(log.n.input.centered.pred))\{}
+\StringTok{          log\_mu\_pred[i] \textless{}{-} alpha\_pred + beta * log.n.input.centered.pred[i]}
+\StringTok{          mu\_pred[i] \textless{}{-} exp(log\_mu\_pred[i])}
+\StringTok{        \}}
+\StringTok{  \}}
+\StringTok{  "}\NormalTok{, }\AttributeTok{fill =} \ConstantTok{TRUE}\NormalTok{)}
+  \FunctionTok{sink}\NormalTok{()}
+\NormalTok{\}}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# implement model}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# specify 3 scalars, n.adapt, n.update, and n.iter}
+\CommentTok{\# n.adapt = number of iterations that JAGS will use to choose the sampler }
+  \CommentTok{\# and to assure optimum mixing of the MCMC chain}
+\NormalTok{n.adapt }\OtherTok{=} \DecValTok{1000}
+\CommentTok{\# n.update = number of iterations that will be discarded to allow the chain to }
+\CommentTok{\#   converge before iterations are stored (aka, burn{-}in)}
+\NormalTok{n.update }\OtherTok{=} \DecValTok{10000}
+\CommentTok{\# n.iter = number of iterations that will be stored in the }
+  \CommentTok{\# final chain as samples from the posterior distribution}
+\NormalTok{n.iter }\OtherTok{=} \DecValTok{10000}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# Call to JAGS}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\NormalTok{jm }\OtherTok{=}\NormalTok{ rjags}\SpecialCharTok{::}\FunctionTok{jags.model}\NormalTok{(}
+  \AttributeTok{file =} \StringTok{"NO2JAGS\_randomintrcpts.R"}
+\NormalTok{  , }\AttributeTok{data =}\NormalTok{ data}
+\NormalTok{  , }\AttributeTok{inits =}\NormalTok{ inits}
+\NormalTok{  , }\AttributeTok{n.chains =} \FunctionTok{length}\NormalTok{(inits)}
+\NormalTok{  , }\AttributeTok{n.adapt =}\NormalTok{ n.adapt}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 563
+##    Unobserved stochastic nodes: 112
+##    Total graph size: 15619
+## 
+## Initializing model
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stats}\SpecialCharTok{::}\FunctionTok{update}\NormalTok{(jm, }\AttributeTok{n.iter =}\NormalTok{ n.update)}
+\CommentTok{\# save the coda object (more precisely, an mcmc.list object) to R as "zc"}
+\NormalTok{zc\_randomintrcpts }\OtherTok{=}\NormalTok{ rjags}\SpecialCharTok{::}\FunctionTok{coda.samples}\NormalTok{(}
+  \AttributeTok{model =}\NormalTok{ jm}
+\NormalTok{  , }\AttributeTok{variable.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"alpha"}\NormalTok{, }\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{, }\StringTok{"mu\_alpha"}\NormalTok{, }\StringTok{"varsigma"}\NormalTok{, }\StringTok{"log\_mu\_site\_pred"}\NormalTok{, }\StringTok{"log\_mu\_pred"}\NormalTok{, }\StringTok{"mu\_pred"}\NormalTok{)}
+\NormalTok{  , }\AttributeTok{n.iter =}\NormalTok{ n.iter}
+\NormalTok{  , }\AttributeTok{n.thin =} \DecValTok{1}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{model-output-2}{%
+\paragraph{Model Output}\label{model-output-2}}
+
+Produce trace plots of the chains for model parameters, excluding
+\(\boldsymbol{\alpha}\) and a summary table of these same parameters.
+Assess convergence and look at the effective sample sizes for each of
+these parameters. Do you think any of the chains need to be run for
+longer and if so why? Make a horizontal caterpillar plot for the the
+\(\boldsymbol{\alpha}\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# check output}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# trace plot}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCtrace}\NormalTok{(zc\_randomintrcpts, }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{, }\StringTok{"mu\_alpha"}\NormalTok{, }\StringTok{"varsigma"}\NormalTok{), }\AttributeTok{pdf =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-29-1.pdf}
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-29-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# summary}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCsummary}\NormalTok{(zc\_randomintrcpts, }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{, }\StringTok{"mu\_alpha"}\NormalTok{, }\StringTok{"varsigma"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##               mean         sd       2.5%       50%    97.5% Rhat n.eff
+## beta     0.8751152 0.09381995  0.6929538 0.8741896 1.061220    1 10458
+## sigma    1.0270831 0.03378976  0.9638491 1.0262135 1.096306    1 14310
+## mu_alpha 0.1818220 0.13055134 -0.0726559 0.1812325 0.438162    1 20237
+## varsigma 1.2096691 0.09824695  1.0335825 1.2048714 1.417870    1 11341
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Caterpillar plots}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCplot}\NormalTok{(zc\_randomintrcpts, }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"beta"}\NormalTok{, }\StringTok{"sigma"}\NormalTok{, }\StringTok{"mu\_alpha"}\NormalTok{, }\StringTok{"varsigma"}\NormalTok{), }\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{,}\FloatTok{1.5}\NormalTok{) )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-29-3.pdf}
+
+Assess convergence and look at the effective sample sizes for each of
+these parameters. Do you think any of the chains need to be run for
+longer and if so why?
+
+\textcolor{violet}{fill this in!!!!}
+
+Make a horizontal caterpillar plot for the the \(\boldsymbol{\alpha}\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Caterpillar plots}
+\NormalTok{MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCplot}\NormalTok{(}
+\NormalTok{  zc\_randomintrcpts}
+\NormalTok{  , }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"alpha"}\NormalTok{)}
+\NormalTok{  , }\AttributeTok{horiz =} \ConstantTok{FALSE}
+\NormalTok{  , }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{6}\NormalTok{,}\DecValTok{5}\NormalTok{)}
+  \CommentTok{\# Number specifying size of text for parameter labels on axis.}
+\NormalTok{  , }\AttributeTok{sz\_labels =} \FloatTok{0.6}
+  \CommentTok{\# Number specifying size of points represents posterior medians.}
+\NormalTok{  , }\AttributeTok{sz\_med =} \FloatTok{0.7}
+  \CommentTok{\# Number specifying thickness of 50 percent CI line (thicker line).}
+\NormalTok{  , }\AttributeTok{sz\_thick =} \DecValTok{2}
+  \CommentTok{\# Number specifying thickness of 95 percent CI line (thinner line).}
+\NormalTok{  , }\AttributeTok{sz\_thin =} \DecValTok{1}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-30-1.pdf}
+
+\hypertarget{visualizing-the-random-intercepts-model-predictions}{%
+\subsection{Visualizing the random intercepts model
+predictions}\label{visualizing-the-random-intercepts-model-predictions}}
+
+\hypertarget{question-6-2}{%
+\subsubsection{Question 6}\label{question-6-2}}
+
+Modify code from the pooled and no-pool models to visualize the model
+predictions. For the site-level predictions, add a dotted line showing
+the posterior median of \(\textrm{N} _2 \textrm{O}\) emission from the
+no-pool model. What do you notice about the uncertainty of predicted log
+emissions from the random intercept model you fit here compared to the
+predictions of the pooled model you did in problem 1? Explain the
+difference.
+
+\hypertarget{pooled-1}{%
+\paragraph{Pooled}\label{pooled-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# HDI}
+\NormalTok{pred1 }\OtherTok{\textless{}{-}}\NormalTok{ MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCpstr}\NormalTok{(}
+\NormalTok{  zc\_randomintrcpts}
+\NormalTok{  , }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"log\_mu\_pred"}\NormalTok{, }\StringTok{"mu\_pred"}\NormalTok{)}
+\NormalTok{  , }\AttributeTok{func =} \ControlFlowTok{function}\NormalTok{(x) HDInterval}\SpecialCharTok{::}\FunctionTok{hdi}\NormalTok{(x, .}\DecValTok{95}\NormalTok{)}
+\NormalTok{)}
+\CommentTok{\# median}
+\NormalTok{pred2 }\OtherTok{\textless{}{-}}\NormalTok{ MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCpstr}\NormalTok{(}
+\NormalTok{  zc\_randomintrcpts}
+\NormalTok{  , }\AttributeTok{params =} \FunctionTok{c}\NormalTok{(}\StringTok{"log\_mu\_pred"}\NormalTok{, }\StringTok{"mu\_pred"}\NormalTok{)}
+\NormalTok{  , }\AttributeTok{func =}\NormalTok{ median}
+\NormalTok{)}
+\CommentTok{\# put in data frame}
+\NormalTok{pred.randomintrcpts.df }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{bind\_cols}\NormalTok{(}
+\NormalTok{  n.input.pred}
+\NormalTok{  , }\FunctionTok{data.frame}\NormalTok{(pred1}\SpecialCharTok{$}\NormalTok{mu\_pred)}
+\NormalTok{  , }\AttributeTok{median =}\NormalTok{ pred2}\SpecialCharTok{$}\NormalTok{mu\_pred}
+\NormalTok{)}
+\NormalTok{lpred.randomintrcpts.df }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{bind\_cols}\NormalTok{(}
+  \AttributeTok{log.n.input.pred =} \FunctionTok{log}\NormalTok{(n.input.pred)}
+\NormalTok{  , }\FunctionTok{data.frame}\NormalTok{(pred1}\SpecialCharTok{$}\NormalTok{log\_mu\_pred)}
+\NormalTok{  , }\AttributeTok{median =}\NormalTok{ pred2}\SpecialCharTok{$}\NormalTok{log\_mu\_pred}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Plot the predictions
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g5 }\OtherTok{\textless{}{-}}\NormalTok{ g1 }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ pred.randomintrcpts.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ n.input.pred, }\AttributeTok{y =}\NormalTok{ median)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_ribbon}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ pred.randomintrcpts.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ n.input.pred, }\AttributeTok{ymin =}\NormalTok{ lower, }\AttributeTok{ymax =}\NormalTok{ upper)}
+\NormalTok{    , }\AttributeTok{alpha =} \FloatTok{0.2}
+\NormalTok{    , }\AttributeTok{fill =} \StringTok{"yellow"}
+\NormalTok{  )}
+
+\NormalTok{g6 }\OtherTok{\textless{}{-}}\NormalTok{ g2 }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ lpred.randomintrcpts.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{y =}\NormalTok{ median)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_ribbon}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ lpred.randomintrcpts.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{ymin =}\NormalTok{ lower, }\AttributeTok{ymax =}\NormalTok{ upper)}
+\NormalTok{    , }\AttributeTok{alpha =} \FloatTok{0.2}
+\NormalTok{    , }\AttributeTok{fill =} \StringTok{"yellow"}
+\NormalTok{  )}
+
+\NormalTok{gridExtra}\SpecialCharTok{::}\FunctionTok{grid.arrange}\NormalTok{(g5, g6, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-33-1.pdf}
+
+What do you notice about the uncertainty of predicted log emissions from
+the random intercept model you fit here compared to the predictions of
+the pooled model you did in problem 1? Explain the difference.
+
+\textcolor{violet}{fill this in!!!!}
+
+\hypertarget{non-pooled-1}{%
+\paragraph{Non-Pooled}\label{non-pooled-1}}
+
+Plot the predictions
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# HDI}
+\NormalTok{pred1 }\OtherTok{\textless{}{-}}\NormalTok{ MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCpstr}\NormalTok{(}
+\NormalTok{  zc\_randomintrcpts}
+\NormalTok{  , }\AttributeTok{params =} \StringTok{"log\_mu\_site\_pred"}
+\NormalTok{  , }\AttributeTok{func =} \ControlFlowTok{function}\NormalTok{(x) HDInterval}\SpecialCharTok{::}\FunctionTok{hdi}\NormalTok{(x, .}\DecValTok{95}\NormalTok{)}
+\NormalTok{)}
+\CommentTok{\# median}
+\NormalTok{pred2 }\OtherTok{\textless{}{-}}\NormalTok{ MCMCvis}\SpecialCharTok{::}\FunctionTok{MCMCpstr}\NormalTok{(}
+\NormalTok{  zc\_randomintrcpts}
+\NormalTok{  , }\AttributeTok{params =} \StringTok{"log\_mu\_site\_pred"}
+\NormalTok{  , }\AttributeTok{func =}\NormalTok{ median}
+\NormalTok{)}
+\CommentTok{\# create data frame}
+\NormalTok{pred1.df }\OtherTok{\textless{}{-}}\NormalTok{ reshape2}\SpecialCharTok{::}\FunctionTok{melt}\NormalTok{(pred1[[}\DecValTok{1}\NormalTok{]], }\AttributeTok{as.is =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{varnames =} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{, }\StringTok{"group.index"}\NormalTok{, }\StringTok{"metric"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{spread}\NormalTok{(metric, value) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(group.index, x) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(group.index, lower, upper)}
+\NormalTok{pred2.df }\OtherTok{\textless{}{-}}\NormalTok{ reshape2}\SpecialCharTok{::}\FunctionTok{melt}\NormalTok{(pred2[[}\DecValTok{1}\NormalTok{]], }\AttributeTok{as.is =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{varnames =} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{, }\StringTok{"group.index"}\NormalTok{), }\AttributeTok{value.name =} \StringTok{"median"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(group.index, x) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(median)}
+\CommentTok{\# cbind}
+\NormalTok{logpred.randomintrcpts.df }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(}\AttributeTok{log.n.input.pred =} \FunctionTok{log}\NormalTok{(n.input.pred), pred1.df, pred2.df)}
+\end{Highlighting}
+\end{Shaded}
+
+For the site-level predictions, add a dotted line showing the posterior
+median of \(\textrm{N} _2 \textrm{O}\) emission from the no-pool model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g2 }\SpecialCharTok{+}
+  \FunctionTok{geom\_ribbon}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ logpred.randomintrcpts.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{ymin =}\NormalTok{ lower, }\AttributeTok{ymax =}\NormalTok{ upper)}
+\NormalTok{    , }\AttributeTok{alpha =} \FloatTok{0.2}
+\NormalTok{    , }\AttributeTok{fill =} \StringTok{"yellow"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# add a dotted line showing...from the no{-}pool model}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ logpred.nopool.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{y =}\NormalTok{ median)}
+\NormalTok{    , }\AttributeTok{linetype =} \StringTok{"longdash"} \CommentTok{\# cant see dotted so changing }
+\NormalTok{    , }\AttributeTok{color =} \StringTok{"midnightblue"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# random intercepts}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ logpred.randomintrcpts.df}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{y =}\NormalTok{ median)}
+\NormalTok{    , }\AttributeTok{linetype =} \StringTok{"solid"}
+\NormalTok{    , }\AttributeTok{color =} \StringTok{"black"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{group.index)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-36-1.pdf}
+
+\hypertarget{question-7}{%
+\subsubsection{Question 7}\label{question-7}}
+
+Why do the intercepts differ for some sites between the no-pool model
+and the random-intercepts model? Is this behavior consistent? Look
+closely at sites 51 and 56.
+
+Look closely at sites 51 and 56.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{temp\_grps }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{51}\NormalTok{, }\DecValTok{56}\NormalTok{)}
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(group.index }\SpecialCharTok{\%in\%}\NormalTok{ temp\_grps)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}
+    \AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{y =} \FunctionTok{log}\NormalTok{(emission), }\AttributeTok{x =} \FunctionTok{log}\NormalTok{(n.input))}
+\NormalTok{    , }\AttributeTok{alpha =} \DecValTok{3}\SpecialCharTok{/}\DecValTok{10}
+\NormalTok{    , }\AttributeTok{shape =} \DecValTok{21}
+\NormalTok{    , }\AttributeTok{colour =} \StringTok{"black"}
+\NormalTok{    , }\AttributeTok{fill =} \StringTok{"brown"}
+\NormalTok{    , }\AttributeTok{size =} \DecValTok{3}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_ribbon}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ logpred.randomintrcpts.df }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(group.index }\SpecialCharTok{\%in\%}\NormalTok{ temp\_grps)}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{ymin =}\NormalTok{ lower, }\AttributeTok{ymax =}\NormalTok{ upper)}
+\NormalTok{    , }\AttributeTok{alpha =} \FloatTok{0.2}
+\NormalTok{    , }\AttributeTok{fill =} \StringTok{"yellow"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# add a dotted line showing...from the no{-}pool model}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ logpred.nopool.df }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(group.index }\SpecialCharTok{\%in\%}\NormalTok{ temp\_grps)}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{y =}\NormalTok{ median)}
+\NormalTok{    , }\AttributeTok{linetype =} \StringTok{"longdash"} \CommentTok{\# cant see dotted so changing }
+\NormalTok{    , }\AttributeTok{color =} \StringTok{"midnightblue"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# random intercepts}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ logpred.randomintrcpts.df }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(group.index }\SpecialCharTok{\%in\%}\NormalTok{ temp\_grps)}
+\NormalTok{    , }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ log.n.input.pred, }\AttributeTok{y =}\NormalTok{ median)}
+\NormalTok{    , }\AttributeTok{linetype =} \StringTok{"solid"}
+\NormalTok{    , }\AttributeTok{color =} \StringTok{"black"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{group.index}
+\NormalTok{    , }\AttributeTok{labeller =} \FunctionTok{labeller}\NormalTok{(}
+        \AttributeTok{group.index =} \ControlFlowTok{function}\NormalTok{(x)\{}\FunctionTok{paste0}\NormalTok{(}\StringTok{"site \#"}\NormalTok{, x)\}}
+\NormalTok{      )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{subtitle =} \StringTok{"no{-}pool = dashed, random{-}intercepts = solid"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{plot.subtitle =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face=}\StringTok{"italic"}\NormalTok{)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{C:/Data/ESS575/ess575_MultiLevelRegressionLab/src/../MultiLevelRegressionLab_England_files/figure-latex/unnamed-chunk-37-1.pdf}
+
+Why do the intercepts differ for some sites between the no-pool model
+and the random-intercepts model? Is this behavior consistent?
+
+\textcolor{violet}{fill this in!!!! borrowing strength, # data points between sites}
+
+\hypertarget{diagramming-and-writing-the-random-intercepts-group-level-effect-model}{%
+\subsection{Diagramming and writing the random intercepts, group-level
+effect
+model}\label{diagramming-and-writing-the-random-intercepts-group-level-effect-model}}
+
+In the previous example, we assumed that the variation in the intercept
+was attributable to spatial variation among sites. We did not try to
+explain that variation, we simply acknowledged that it exists. Now we
+are going to ``model a parameter'' using soil carbon content data at the
+site-level to explain variation in the intercepts among sites. Modify
+the previous model to represent the effect of soil carbon on the
+intercept using the deterministic model below to predict \(\alpha_j\).
+Here, we logit transform the carbon data to ``spread them out'' mapping
+0-1 to all real numbers.
+
+\[
+g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr) = \kappa + \eta \bigl(\text{logit}(w_ij) \bigr)
+\]
+
+\hypertarget{question-8}{%
+\subsubsection{Question 8}\label{question-8}}
+
+Draw a Bayesian network for a linear regression model of
+\(\textrm{N} _2 \textrm{O}\) emission (\(y_{ij}\)) on fertilizer
+addition (\(x_{ij}\)) and soil carbon content (\(w_{j}\)).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth,height=0.5\textheight]{../data/DAG4} 
+
+}
+
+\caption{DAG}\label{fig:unnamed-chunk-39}
+\end{figure}
+
+\hypertarget{question-9}{%
+\subsubsection{Question 9}\label{question-9}}
+
+Write out the posterior and joint distribution for a linear regression
+model of \(\textrm{N} _2 \textrm{O}\) emission (\(y_{ij}\)) on
+fertilizer addition (\(x_{ij}\)) and soil carbon content (\(w_{j}\)).
+Choose appropriate distributions for each random variable.
+
+\[
+\begin{aligned}
+g \bigl(\alpha_{j},\beta,\log(x_{ij}) \bigr) = \alpha_{j} + \beta \bigl(\log(x_ij) \bigr)\\
+g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr) = \kappa + \eta \bigl(\text{logit}(w_ij) \bigr)
+\end{aligned}
+\]
+
+Joint:
+
+\$\$
+
+\begin{aligned}
+
+\bigl[ \alpha_{j},\beta, \mu_{\alpha}, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} {\sf normal} \bigr( \log(y_{ij}) \mid g \bigl( \alpha_{j}, \beta, \log(x_{ij})  \bigr), \sigma^{2}\bigr)\\
+\times \; {\sf normal} \bigr(\alpha_{j} \mid g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr), \varsigma_{\alpha}^2 \bigr) \\ 
+\times \; {\sf normal} \bigr(\beta \mid 0,10000\bigr) \\
+\times \; {\sf normal} \bigr(\kappa \mid 0,10000\bigr) \\
+\times \; {\sf normal} \bigr(\eta \mid 0,10000\bigr) \\
+\times \; {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl) \\
+\times \; {\sf uniform}\bigr(\varsigma \mid 0, 100 \bigl)
+\end{aligned}
+
+\$\$
+
+\hypertarget{fitting-the-random-intercepts-group-level-effect-model-with-jags}{%
+\subsection{Fitting the random intercepts, group-level effect model with
+JAGS}\label{fitting-the-random-intercepts-group-level-effect-model-with-jags}}
+
+Modify your random intercepts model to implement the model that include
+soil carbon content as covariate at the site level. Make predictions for
+how mean logged \(\textrm{N} _2 \textrm{O}\) emission and median
+\(\textrm{N} _2 \textrm{O}\) emission varies with respect to soil
+fertilizer input \emph{the uncertainty associated with site} as you did
+in the previous example. Use the \texttt{data} and initial values for
+JAGS provided below to allow you to concentrate on writing JAGS code for
+the model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n.input.pred }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}
+  \FunctionTok{min}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input)}
+\NormalTok{  , }\FunctionTok{max}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input)}
+\NormalTok{  , }\DecValTok{10}
+\NormalTok{)}
+\NormalTok{n.sites }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{group.index))}
+
+\NormalTok{data }\OtherTok{=} \FunctionTok{list}\NormalTok{(}
+  \AttributeTok{log.emission =} \FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{emission)}
+\NormalTok{  , }\AttributeTok{log.n.input.centered =} \FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input) }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(}\FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input))}
+\NormalTok{  , }\AttributeTok{log.n.input.centered.pred =} \FunctionTok{log}\NormalTok{(n.input.pred) }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(}\FunctionTok{log}\NormalTok{(BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{n.input))}
+    \CommentTok{\#divide by 100 to make data a proportion, take logit, and center}
+\NormalTok{  , }\AttributeTok{w =}\NormalTok{ boot}\SpecialCharTok{::}\FunctionTok{logit}\NormalTok{(SiteCarbon}\SpecialCharTok{$}\NormalTok{mean}\SpecialCharTok{/}\DecValTok{100}\NormalTok{) }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(boot}\SpecialCharTok{::}\FunctionTok{logit}\NormalTok{(SiteCarbon}\SpecialCharTok{$}\NormalTok{mean}\SpecialCharTok{/}\DecValTok{100}\NormalTok{))}
+\NormalTok{  , }\AttributeTok{group =}\NormalTok{ BayesNSF}\SpecialCharTok{::}\NormalTok{N2OEmission}\SpecialCharTok{$}\NormalTok{group.index}
+\NormalTok{  , }\AttributeTok{n.sites =}\NormalTok{ n.sites}
+\NormalTok{)}
+
+\NormalTok{inits }\OtherTok{=} \FunctionTok{list}\NormalTok{(}
+  \FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, n.sites), }\AttributeTok{beta =}\NormalTok{ .}\DecValTok{5}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{50}\NormalTok{, }\AttributeTok{sigma.alpha =} \DecValTok{10}\NormalTok{, }\AttributeTok{eta =}\NormalTok{ .}\DecValTok{2}\NormalTok{, }\AttributeTok{kappa =}\NormalTok{ .}\DecValTok{5}\NormalTok{)}
+\NormalTok{  , }\FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \FunctionTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, n.sites), }\AttributeTok{beta =} \FloatTok{1.5}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{10}\NormalTok{, }\AttributeTok{sigma.alpha =} \DecValTok{20}\NormalTok{, }\AttributeTok{eta =} \DecValTok{3}\NormalTok{, }\AttributeTok{kappa =}\NormalTok{ .}\DecValTok{7}\NormalTok{)}
+\NormalTok{  , }\FunctionTok{list}\NormalTok{(}\AttributeTok{alpha =} \FunctionTok{rep}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, n.sites), }\AttributeTok{beta =}\NormalTok{ .}\DecValTok{75}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{20}\NormalTok{, }\AttributeTok{sigma.alpha =} \DecValTok{12}\NormalTok{, }\AttributeTok{eta =}\NormalTok{ .}\DecValTok{1}\NormalTok{, }\AttributeTok{kappa =}\NormalTok{ .}\DecValTok{3}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{question-10}{%
+\subsubsection{Question 10}\label{question-10}}
+
+Write the code for the model. Compile the model and execute the MCMC to
+produce a coda object. Produce trace plots of the chains for model
+parameters, excluding \(\boldsymbol{\alpha}\) and a summary table of
+these same parameters. Assess convergence and look at the effective
+sample sizes for each of these parameters. Do you think any of the
+chains need to be run for longer and if so why? Make a horizontal
+caterpillar plot for the the \(\boldsymbol{\alpha}\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# in progress}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}
