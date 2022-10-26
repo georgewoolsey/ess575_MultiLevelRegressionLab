@@ -2,14 +2,21 @@
   model{
     ## priors
       # y priors
-      beta ~ dnorm(0,1E-6)
       sigma ~ dunif(0,100)
       tau_y <- 1/sigma^2
       # alpha priors
       kappa ~ dnorm(0,1E-6)
       eta ~ dnorm(0,1E-6)
-      varsigma ~ dunif(0,100)
-      tau_alpha <- 1/varsigma^2
+      varsigma_alpha ~ dunif(0,100)
+      tau_alpha <- 1/varsigma_alpha^2
+      # beta priors
+        mu_beta ~ dnorm(0,1E-6)
+        varsigma_beta ~ dunif(0,100)
+        tau_beta <- 1/varsigma_beta^2
+        # include a group level effect of fertilizer type on the slope of the emission
+          for(k in 1:n.ferts){
+            beta[k] ~ dnorm(mu_beta, tau_beta)
+          }
     
     ## likelihood
     # intercept (alpha) likelihood
@@ -21,16 +28,8 @@
       }
     # y likelihood
       for(i in 1:length(log.emission)) {
-        log_mu[i] <- alpha[group[i]] + beta * log.n.input.centered[i]
+        log_mu[i] <- alpha[group[i]] + beta[fertilizer[i]] * log.n.input.centered[i]
         log.emission[i] ~ dnorm(log_mu[i], tau_y)
       }
-  
-    ## quantities of interest
-      # predicted emissions ACROSS SITES
-        alpha_pred ~ dnorm(kappa, tau_alpha)
-        for(i in 1:length(log.n.input.centered.pred)){
-          log_mu_pred[i] <- alpha_pred + beta * log.n.input.centered.pred[i]
-          mu_pred[i] <- exp(log_mu_pred[i])
-        }
   }
   

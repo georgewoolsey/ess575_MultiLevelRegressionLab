@@ -78,6 +78,7 @@ library(actuar)
 library(rjags)
 library(ggthemes)
 library(gridExtra)
+
 library(MCMCvis)
 library(HDInterval)
 library(BayesNSF)
@@ -493,7 +494,7 @@ inits = list(
 
 ### Question 5
 
-Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
 
 #### JAGS Model
@@ -636,7 +637,7 @@ Assess convergence and look at the effective sample sizes for each of these para
 
 \textcolor{violet}{fill this in!!!!}
 
-Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
 ```{r}
 # Caterpillar plots
@@ -786,7 +787,7 @@ inits = list(
 
 ### Question 5
 
-Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters.  Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters.  Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
 #### JAGS Model
 
@@ -919,7 +920,7 @@ zc_randomintrcpts = rjags::coda.samples(
 
 #### Model Output
 
-Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters.  Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters.  Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
 ```{r}
 #####################
@@ -940,7 +941,7 @@ Assess convergence and look at the effective sample sizes for each of these para
 
 \textcolor{violet}{fill this in!!!!}
 
-Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
 ```{r}
 # Caterpillar plots
@@ -1232,7 +1233,7 @@ inits = list(
 
 ### Question 10
 
-Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
 #### JAGS Model
 
@@ -1355,7 +1356,7 @@ zc_randomintrcpts_alpha = rjags::coda.samples(
 
 #### Model Output
 
-Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
 ```{r}
 #####################
@@ -1376,7 +1377,7 @@ Assess convergence and look at the effective sample sizes for each of these para
 
 \textcolor{violet}{fill this in!!!!}
 
-Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
 ```{r}
 # Caterpillar plots
@@ -1519,23 +1520,21 @@ $$
 \end{aligned}
 $$
 
-
-
 ### Fitting the random carbon fertilizer model with JAGS
 
 Modify your random intercepts model to implement the model that include soil carbon content and fertilizer type as covariates at the site level. Use the `data` and initial values for JAGS provided below to allow you to concentrate on writing JAGS code for the model.
 
 ```{r}
-n.sites <- length(unique(N2OEmission$group.index))
-n.ferts <- length(unique(N2OEmission$fert.index))
+n.sites <- length(unique(BayesNSF::N2OEmission$group.index))
+n.ferts <- length(unique(BayesNSF::N2OEmission$fert.index))
 
 data = list(
-  log.emission = log(N2OEmission$emission),
-  log.n.input.centered = log(N2OEmission$n.input) - mean(log(N2OEmission$n.input)),
-  #take logit and center.  You will need the boot library
-  w = boot::logit(SiteCarbon$mean) - mean(boot::logit(SiteCarbon$mean)),
-  fertilizer = N2OEmission$fert.index, 
-  group = N2OEmission$group.index,
+  log.emission = log(BayesNSF::N2OEmission$emission),
+  log.n.input.centered = log(BayesNSF::N2OEmission$n.input) - mean(log(BayesNSF::N2OEmission$n.input)),
+  #divide by 100 to make data a proportion, take logit, and center
+  w = boot::logit(BayesNSF::SiteCarbon$mean/100) - mean(boot::logit(BayesNSF::SiteCarbon$mean/100)),
+  fertilizer = BayesNSF::N2OEmission$fert.index, 
+  group = BayesNSF::N2OEmission$group.index,
   n.sites = n.sites,
   n.ferts = n.ferts)
 
@@ -1550,9 +1549,192 @@ inits = list(
 
 ### Question 3
 
-Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
+
+#### JAGS Model
+
+```{r, eval=FALSE}
+## JAGS Model
+model{
+  ## priors
+    # y priors
+    sigma ~ dunif(0,100)
+    tau_y <- 1/sigma^2
+    # alpha priors
+    kappa ~ dnorm(0,1E-6)
+    eta ~ dnorm(0,1E-6)
+    varsigma_alpha ~ dunif(0,100)
+    tau_alpha <- 1/varsigma_alpha^2
+    # beta priors
+      mu_beta ~ dnorm(0,1E-6)
+      varsigma_beta ~ dunif(0,100)
+      tau_beta <- 1/varsigma_beta^2
+      # include a group level effect of fertilizer type on the slope of the emission
+        for(k in 1:n.ferts){
+          beta[k] ~ dnorm(mu_beta, tau_beta)
+        }
+  
+  ## likelihood
+  # intercept (alpha) likelihood
+    # represent the effect of soil carbon ...
+      # ...on the intercept using the deterministic model below to predict alpha_j
+    for(j in 1:n.sites){
+      mu_alpha[j] <- kappa + eta * w[j]
+      alpha[j] ~ dnorm(mu_alpha[j], tau_alpha)
+    }
+  # y likelihood
+    for(i in 1:length(log.emission)) {
+      log_mu[i] <- alpha[group[i]] + beta[fertilizer[i]] * log.n.input.centered[i]
+      log.emission[i] ~ dnorm(log_mu[i], tau_y)
+    }
+}
+```
+
+#### Implement JAGS Model
 
 ```{r}
+##################################################################
+# insert JAGS model code into an R script
+##################################################################
+{ # Extra bracket needed only for R markdown files - see answers
+  sink("NO2JAGS_randomcoeffs.R") # This is the file name for the jags code
+  cat("
+  model{
+    ## priors
+      # y priors
+      sigma ~ dunif(0,100)
+      tau_y <- 1/sigma^2
+      # alpha priors
+      kappa ~ dnorm(0,1E-6)
+      eta ~ dnorm(0,1E-6)
+      varsigma_alpha ~ dunif(0,100)
+      tau_alpha <- 1/varsigma_alpha^2
+      # beta priors
+        mu_beta ~ dnorm(0,1E-6)
+        varsigma_beta ~ dunif(0,100)
+        tau_beta <- 1/varsigma_beta^2
+        # include a group level effect of fertilizer type on the slope of the emission
+          for(k in 1:n.ferts){
+            beta[k] ~ dnorm(mu_beta, tau_beta)
+          }
+    
+    ## likelihood
+    # intercept (alpha) likelihood
+      # represent the effect of soil carbon ...
+        # ...on the intercept using the deterministic model below to predict alpha_j
+      for(j in 1:n.sites){
+        mu_alpha[j] <- kappa + eta * w[j]
+        alpha[j] ~ dnorm(mu_alpha[j], tau_alpha)
+      }
+    # y likelihood
+      for(i in 1:length(log.emission)) {
+        log_mu[i] <- alpha[group[i]] + beta[fertilizer[i]] * log.n.input.centered[i]
+        log.emission[i] ~ dnorm(log_mu[i], tau_y)
+      }
+  }
+  ", fill = TRUE)
+  sink()
+}
+################################################################
+# implement model
+##################################################################
+# specify 3 scalars, n.adapt, n.update, and n.iter
+# n.adapt = number of iterations that JAGS will use to choose the sampler 
+  # and to assure optimum mixing of the MCMC chain
+n.adapt = 2000
+# n.update = number of iterations that will be discarded to allow the chain to 
+#   converge before iterations are stored (aka, burn-in)
+n.update = 10000
+# n.iter = number of iterations that will be stored in the 
+  # final chain as samples from the posterior distribution
+n.iter = 10000
+######################
+# Call to JAGS
+######################
+jm = rjags::jags.model(
+  file = "NO2JAGS_randomcoeffs.R"
+  , data = data
+  , inits = inits
+  , n.chains = length(inits)
+  , n.adapt = n.adapt
+)
+stats::update(jm, n.iter = n.update)
+# save the coda object (more precisely, an mcmc.list object) to R as "zc"
+zc_randomcoeffs = rjags::coda.samples(
+  model = jm
+  , variable.names = c("alpha", "beta", "sigma", "kappa", "eta", "varsigma_alpha", "mu_beta", "varsigma_beta")
+  , n.iter = n.iter
+  , n.thin = 1
+)
+```
+
+#### Model Output
+
+Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+
+```{r}
+#####################
+# check output
+#####################
+# trace plot
+MCMCvis::MCMCtrace(zc_randomcoeffs, params = c(
+    "sigma"
+    , "kappa"
+    , "eta"
+    , "mu_beta"
+    , "varsigma_alpha"
+    , "varsigma_beta"
+  )
+  , pdf = FALSE
+)
+
+# summary
+MCMCvis::MCMCsummary(zc_randomcoeffs, params = c(
+    "sigma"
+    , "kappa"
+    , "eta"
+    , "mu_beta"
+    , "varsigma_alpha"
+    , "varsigma_beta"
+  )
+)
+
+# Caterpillar plots
+MCMCvis::MCMCplot(zc_randomcoeffs, params = c(
+    "sigma"
+    , "kappa"
+    , "eta"
+    , "mu_beta"
+    , "varsigma_alpha"
+    , "varsigma_beta"
+  )
+  , xlim = c(-0.5,1.5) 
+)
+
+```
+
+Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why?
+
+\textcolor{violet}{fill this in!!!!}
+
+Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
+
+```{r}
+# Caterpillar plots
+MCMCvis::MCMCplot(
+  zc_randomcoeffs
+  , params = c("alpha")
+  , horiz = FALSE
+  , ylim = c(-6,5)
+  # Number specifying size of text for parameter labels on axis.
+  , sz_labels = 0.6
+  # Number specifying size of points represents posterior medians.
+  , sz_med = 0.7
+  # Number specifying thickness of 50 percent CI line (thicker line).
+  , sz_thick = 2
+  # Number specifying thickness of 95 percent CI line (thinner line).
+  , sz_thin = 1
+)
 
 ```
 
@@ -1561,7 +1743,25 @@ Write the code for the model. Compile the model and execute the MCMC to produce 
 
 How do you assess whether fertilizer type a good predictor of $\textrm{N} _2 \textrm{O}$ emission?  How would we compare the slope for fertilizer type 1 to type 5?
 
+
 ```{r}
+# Caterpillar plots
+MCMCvis::MCMCplot(
+  zc_randomcoeffs
+  , params = c("beta")
+  , horiz = FALSE
+  , ylim = c(-0.5,3)
+  # Number specifying size of text for parameter labels on axis.
+  , sz_labels = 0.6
+  # Number specifying size of points represents posterior medians.
+  , sz_med = 0.7
+  # Number specifying thickness of 50 percent CI line (thicker line).
+  , sz_thick = 2
+  # Number specifying thickness of 95 percent CI line (thinner line).
+  , sz_thin = 1
+)
 
 ```
+
+\textcolor{violet}{A caterpillar plot for the $\boldsymbol{\beta}$ would allow us to assess whether fertilizer type a good predictor of emission and compare the slope across fertilizer type. Based on the caterpiller plot above, there is not much variation in the slope based on fertilizer type when considering the confidence interval of each $\beta_k$.}
 
