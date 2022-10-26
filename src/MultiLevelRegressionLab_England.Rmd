@@ -35,6 +35,7 @@ knitr::opts_chunk$set(
   , message = FALSE
   , fig.height = 5
   , fig.width = 7
+  , eval = TRUE
 )
 ```
 
@@ -110,7 +111,7 @@ Interpret the coefficients $\alpha$, $\beta$, and $\gamma$ in this model.
 
 Draw a Bayesian network for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{i}$) on fertilizer addition ($x_{i}$).
 
-```{r, echo=FALSE, out.width="50%", out.height="50%", fig.cap="DAG", fig.a}
+```{r, echo=FALSE, out.width="50%", out.height="50%", fig.cap="DAG", fig.align='center'}
 knitr::include_graphics("../data/DAG1.jpg")
 ```
 
@@ -1156,7 +1157,7 @@ gc()
 
 Why do the intercepts differ for some sites between the no-pool model and the random-intercepts model? Is this behavior consistent?
 
-\textcolor{violet}{fill this in!!!! borrowing strength, cnt data points between sites}
+\textcolor{violet}{fill this in!!!! borrowing strength, cnt data obs between sites}
 
 ## Diagramming and writing the random intercepts, group-level effect model
 
@@ -1191,7 +1192,6 @@ Joint:
 
 $$
 \begin{aligned}
-
 \bigl[ \alpha_{j},\beta, \mu_{\alpha}, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} {\sf normal} \bigr( \log(y_{ij}) \mid g \bigl( \alpha_{j}, \beta, \log(x_{ij})  \bigr), \sigma^{2}\bigr)\\
 \times \; {\sf normal} \bigr(\alpha_{j} \mid g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr), \varsigma_{\alpha}^2 \bigr) \\ 
 \times \; {\sf normal} \bigr(\beta \mid 0,10000\bigr) \\
