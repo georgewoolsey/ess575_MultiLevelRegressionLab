@@ -1763,5 +1763,345 @@ MCMCvis::MCMCplot(
 
 ```
 
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[stringr::str_starts(ls(), "pred")])
+remove(list = ls()[stringr::str_starts(ls(), "lpred")])
+gc()
+```
+
 \textcolor{violet}{A caterpillar plot for the $\boldsymbol{\beta}$ would allow us to assess whether fertilizer type a good predictor of emission and compare the slope across fertilizer type. Based on the caterpiller plot above, there is not much variation in the slope based on fertilizer type when considering the confidence interval of each $\beta_k$.}
 
+## Diagramming and writing the random coefficients model
+
+Last we return to the random intercepts model where you assumed that different sites had different intercepts but the same slope, which is to say that individual sites had emission responses to fertilizer that were parallel. This seems unreasonable (particularly when you look at site-level plots of the data), representing the need to model group effects on intercepts and slopes. The idea is that both the slope and the intercept are random variables drawn from a distribution of slopes and intercepts where variation in the values of the random variable is attributable to unspecified spatial differences among sites. It is tempting to simply add a distribution for the slopes in the same way you modeled the intercepts, and you will see papers where this is done (wrongly). However, when you seek to understand group effects on multiple parameters you must account for the way that the parameters covary. Write a model for group effects on slope and intercepts. Exploit the following hints:
+
+Represent the slope and intercept as a two element vector for each group and use a multivariate normal distribution in the same way you used a normal for the intercept. So the individual slopes ($\alpha_{j})$ and intercept ($\beta_{j})$ will be drawn from:
+
+```{r, echo=FALSE, out.width="75%", out.height="75%", fig.cap="", fig.align='center'}
+knitr::include_graphics("../data/eq1.jpg")
+```
+
+The second parameter in the multivariate normal is a variance-covariance matrix representing how the slope and intercept covary. It has variance terms on the diagonal, and covariance terms on the off-diagonal, i.e.,
+
+```{r, echo=FALSE, out.width="75%", out.height="75%", fig.cap="", fig.align='center'}
+knitr::include_graphics("../data/eq2.jpg")
+```
+
+The covariance terms are defined as $\text{Cov}\bigl( \boldsymbol{\alpha}, \boldsymbol{\beta} \bigr) = \rho \varsigma_{\alpha} \varsigma_{\beta}$ where $\rho$ is the coefficient of correlation between $\boldsymbol{\alpha}$ and $\boldsymbol{\beta}$.
+
+### Question 5
+
+Draw a Bayesian network and write out the posterior and joint distribution for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$).
+
+```{r, echo=FALSE, out.width="50%", out.height="50%", fig.cap="DAG", fig.align='center'}
+knitr::include_graphics("../data/DAG6.jpg")
+```
+
+
+### Question 6
+
+Write out the posterior and joint distributions for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$). Choose appropriate distributions for each random variable.
+
+
+$$
+\begin{aligned}
+g \bigl(\alpha_{j},\beta_{k},\log(x_{ij}) \bigr) = \alpha_{j} + \beta_{k} \bigl(\log(x_ij) \bigr)\\
+\end{aligned}
+$$
+
+```{r, echo=FALSE, out.width="60%", out.height="60%", fig.cap="", fig.align='center'}
+knitr::include_graphics("../data/eq2.jpg")
+```
+
+Joint:
+
+*$\rho$ = coefficient of correlation = $-1 \le \rho \le 1$*
+
+$$
+\begin{aligned}
+\bigl[ \alpha_{j},\beta_{j}, \mu_{\alpha}, \mu_{\beta}, \sigma^2, \varsigma_{\alpha}^2, \varsigma_{\beta}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} {\sf normal} \bigr( \log(y_{ij}) \mid g \bigl( \alpha_{j}, \beta_{j}, \log(x_{ij})  \bigr), \sigma^{2}\bigr)\\
+\times \; {\sf multivariate \ normal} \biggr(\begin{pmatrix} \alpha_{j}\\ \beta_{j} \end{pmatrix} \bigg| \begin{pmatrix} \mu_{\alpha}\\ \mu_{\beta} \end{pmatrix}, \Sigma \biggr) \\ 
+\times \; {\sf normal} \bigr(\mu_{\alpha} \mid 0,10000\bigr) \\
+\times \; {\sf normal} \bigr(\mu_{\beta} \mid 0,10000\bigr) \\
+\times \; {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl) \\
+\times \; {\sf uniform}\bigr(\varsigma_{\alpha} \mid 0, 100 \bigl) \\
+\times \; {\sf uniform}\bigr(\varsigma_{\beta} \mid 0, 100 \bigl) \\ 
+\times \; {\sf uniform}\bigr(\rho \mid 0, 1 \bigl)
+\end{aligned}
+$$
+
+## Fitting the random coefficients model with JAGS
+
+We now want to allow *both* slopes and intercepts to vary by site as described in the math exercise. This is a pretty challenging coding problem, so I thought it would be more useful for you to study code that works than to try to write the code yourself. So take a careful look at the following and discuss it with your group. Are the slope and intercepts correlated? How could you make a probabilistic statement about the correlation?
+
+```{r}
+n.sites <- length(unique(BayesNSF::N2OEmission$group.index))
+
+data = list(
+  log.emission = log(BayesNSF::N2OEmission$emission),
+  log.n.input.centered = log(BayesNSF::N2OEmission$n.input) - mean(log(BayesNSF::N2OEmission$n.input)),
+  group = BayesNSF::N2OEmission$group.index,
+  n.sites = n.sites)
+
+B = matrix(nrow = n.sites, ncol = 2)
+B[,1] = .1
+B[,2] = 1.5
+
+inits = list(
+  list(B = B, sigma = 50, mu_alpha = 0, mu_beta = 1.5, varsigma_alpha = 10, varsigma_beta = 10, rho = -.5),
+  list(B = B*.5, sigma = 20, mu_alpha = -.2, mu_beta = .8, varsigma_alpha = 50, varsigma_beta = 50, rho = .5),
+  list(B = B*.3, sigma = 10, mu_alpha = -.4, mu_beta = 1.8, varsigma_alpha = 30, varsigma_beta = 20, rho = 0))
+```
+
+Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+
+#### JAGS Model
+
+```{r, eval=FALSE}
+## JAGS Model
+model{
+  ## priors
+    # coefficient of correlation for covariance matrix
+    rho ~ dunif(-1,1)
+    # y priors
+    sigma ~ dunif(0,100)
+    tau_y <- 1/sigma^2
+    # alpha priors
+      mu_alpha ~ dnorm(0,1E-6)
+      varsigma_alpha ~ dunif(0,100)
+    # beta priors
+      mu_beta ~ dnorm(0,1E-6)
+      varsigma_beta ~ dunif(0,100)
+    #### ??????????????????????????????????????????????????????
+    # model group effects on intercepts and slopes
+    #### ??????????????????????????????????????????????????????
+      # http://www.stat.yale.edu/~jtc5/238/materials/jags_4.3.0_manual_with_distributions.pdf
+        # p. 53
+        # y[1:N] ~ dmnorm(mu[1:N], Omega[1:N, 1:N])
+        # ........
+        # .....While the following construction should work in theory:
+        #   y ~ dnorm(mu, Omega)
+        #   Omega <- inverse(Sigma)
+        #   in practice it may lead to runtime errors if Sigma cannot be inverted.
+        # let's hope that Sigma can be inverted ;D !!!!!!!
+      # put mu_alpha and mu_beta in matrix
+        mu_matrix[1, 1] <- mu_alpha # row 1, column 1
+        mu_matrix[1, 2] <- mu_beta # row 1, column 2
+      # define Sigma matrix (variance-covariance matrix)
+        # varsigma^2 
+        Sigma_matrix[1, 1] <- varsigma_alpha^2 # row 1, column 1
+        Sigma_matrix[2, 2] <- varsigma_beta^2 # row 2, column 2
+        # Cov(alpha,beta) = rho * varsigma_alpha * varsigma_beta
+        Sigma_matrix[2, 1] <- rho * varsigma_alpha * varsigma_beta # row 2, column 1
+        Sigma_matrix[1, 2] <- rho * varsigma_alpha * varsigma_beta # row 1, column 2
+        # invert Sigma matrix
+        Omega_matrix <- inverse(Sigma_matrix)
+      # model group effects on intercepts and slopes
+        for (j in 1:n.sites) {
+          B[j,1:2] ~ dmnorm(mu_matrix, Omega_matrix)
+          alpha[j] <- B[j,1] # row j, column 1
+          beta[j] <- B[j,2] # row j, column 2
+        }
+  ## likelihood
+  # y likelihood
+    for(i in 1:length(log.emission)) {
+      log_mu[i] <- alpha[group[i]] + beta[group[i]] * log.n.input.centered[i]
+      log.emission[i] ~ dnorm(log_mu[i], tau_y)
+    }
+}
+```
+
+#### Implement JAGS Model
+
+```{r}
+##################################################################
+# insert JAGS model code into an R script
+##################################################################
+{ # Extra bracket needed only for R markdown files - see answers
+  sink("NO2JAGS_randomcoeffs_fnl.R") # This is the file name for the jags code
+  cat("
+  model{
+    ## priors
+      # coefficient of correlation for covariance matrix
+      rho ~ dunif(-1,1)
+      # y priors
+      sigma ~ dunif(0,100)
+      tau_y <- 1/sigma^2
+      # alpha priors
+        mu_alpha ~ dnorm(0,1E-6)
+        varsigma_alpha ~ dunif(0,100)
+      # beta priors
+        mu_beta ~ dnorm(0,1E-6)
+        varsigma_beta ~ dunif(0,100)
+      #### ??????????????????????????????????????????????????????
+      # model group effects on intercepts and slopes
+      #### ??????????????????????????????????????????????????????
+        # http://www.stat.yale.edu/~jtc5/238/materials/jags_4.3.0_manual_with_distributions.pdf
+          # p. 53
+          # y[1:N] ~ dmnorm(mu[1:N], Omega[1:N, 1:N])
+          # ........
+          # .....While the following construction should work in theory:
+          #   y ~ dnorm(mu, Omega)
+          #   Omega <- inverse(Sigma)
+          #   in practice it may lead to runtime errors if Sigma cannot be inverted.
+          # let's hope that Sigma can be inverted ;D !!!!!!!
+        # put mu_alpha and mu_beta in matrix
+          mu_matrix[1, 1] <- mu_alpha # row 1, column 1
+          mu_matrix[1, 2] <- mu_beta # row 1, column 2
+        # define Sigma matrix (variance-covariance matrix)
+          # varsigma^2 
+          Sigma_matrix[1, 1] <- varsigma_alpha^2 # row 1, column 1
+          Sigma_matrix[2, 2] <- varsigma_beta^2 # row 2, column 2
+          # Cov(alpha,beta) = rho * varsigma_alpha * varsigma_beta
+          Sigma_matrix[2, 1] <- rho * varsigma_alpha * varsigma_beta # row 2, column 1
+          Sigma_matrix[1, 2] <- rho * varsigma_alpha * varsigma_beta # row 1, column 2
+          # invert Sigma matrix
+          Omega_matrix <- inverse(Sigma_matrix)
+        # model group effects on intercepts and slopes
+          for (j in 1:n.sites) {
+            B[j,1:2] ~ dmnorm(mu_matrix, Omega_matrix)
+            alpha[j] <- B[j,1] # row j, column 1
+            beta[j] <- B[j,2] # row j, column 2
+          }
+    ## likelihood
+    # y likelihood
+      for(i in 1:length(log.emission)) {
+        log_mu[i] <- alpha[group[i]] + beta[group[i]] * log.n.input.centered[i]
+        log.emission[i] ~ dnorm(log_mu[i], tau_y)
+      }
+  }
+  ", fill = TRUE)
+  sink()
+}
+################################################################
+# implement model
+##################################################################
+# specify 3 scalars, n.adapt, n.update, and n.iter
+# n.adapt = number of iterations that JAGS will use to choose the sampler 
+  # and to assure optimum mixing of the MCMC chain
+n.adapt = 2000
+# n.update = number of iterations that will be discarded to allow the chain to 
+#   converge before iterations are stored (aka, burn-in)
+n.update = 10000
+# n.iter = number of iterations that will be stored in the 
+  # final chain as samples from the posterior distribution
+n.iter = 10000
+######################
+# Call to JAGS
+######################
+jm = rjags::jags.model(
+  file = "NO2JAGS_randomcoeffs_fnl.R"
+  , data = data
+  , inits = inits
+  , n.chains = length(inits)
+  , n.adapt = n.adapt
+)
+stats::update(jm, n.iter = n.update)
+# save the coda object (more precisely, an mcmc.list object) to R as "zc"
+zc_randomcoeffs_fnl = rjags::coda.samples(
+  model = jm
+  , variable.names = c(
+    "rho"
+    , "sigma"
+    , 'mu_alpha'
+    , "mu_beta"
+    , "beta"
+    , "alpha"
+    , "varsigma_alpha"
+    , "varsigma_beta"
+  )
+  , n.iter = n.iter
+  , n.thin = 1
+)
+```
+
+#### Model Output
+
+Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+
+```{r}
+#####################
+# check output
+#####################
+# trace plot
+MCMCvis::MCMCtrace(zc_randomcoeffs_fnl, params = c(
+    "rho"
+    , "sigma"
+    , 'mu_alpha'
+    , "mu_beta"
+    , "varsigma_alpha"
+    , "varsigma_beta"
+  )
+  , pdf = FALSE
+)
+
+# summary
+MCMCvis::MCMCsummary(zc_randomcoeffs_fnl, params = c(
+    "rho"
+    , "sigma"
+    , 'mu_alpha'
+    , "mu_beta"
+    , "varsigma_alpha"
+    , "varsigma_beta"
+  )
+)
+
+# Caterpillar plots
+MCMCvis::MCMCplot(zc_randomcoeffs_fnl, params = c(
+    "rho"
+    , "sigma"
+    , 'mu_alpha'
+    , "mu_beta"
+    , "varsigma_alpha"
+    , "varsigma_beta"
+  )
+  , xlim = c(-0.5,1.5) 
+)
+
+```
+
+Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why?
+
+\textcolor{violet}{fill this in!!!!}
+
+Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
+
+```{r}
+# Caterpillar plots
+MCMCvis::MCMCplot(
+  zc_randomcoeffs_fnl
+  , params = c("alpha")
+  , horiz = FALSE
+  , ylim = c(-6,5)
+  # Number specifying size of text for parameter labels on axis.
+  , sz_labels = 0.6
+  # Number specifying size of points represents posterior medians.
+  , sz_med = 0.7
+  # Number specifying thickness of 50 percent CI line (thicker line).
+  , sz_thick = 2
+  # Number specifying thickness of 95 percent CI line (thinner line).
+  , sz_thin = 1
+)
+
+```
+
+Make a horizontal caterpillar plot for the $\boldsymbol{\beta}$.
+
+```{r}
+# Caterpillar plots
+MCMCvis::MCMCplot(
+  zc_randomcoeffs_fnl
+  , params = c("beta")
+  , horiz = FALSE
+  , ylim = c(-6,5)
+  # Number specifying size of text for parameter labels on axis.
+  , sz_labels = 0.6
+  # Number specifying size of points represents posterior medians.
+  , sz_med = 0.7
+  # Number specifying thickness of 50 percent CI line (thicker line).
+  , sz_thick = 2
+  # Number specifying thickness of 95 percent CI line (thinner line).
+  , sz_thin = 1
+)
+
+```
