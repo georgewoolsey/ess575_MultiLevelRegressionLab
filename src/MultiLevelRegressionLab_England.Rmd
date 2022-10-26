@@ -278,7 +278,7 @@ model{
 # specify 3 scalars, n.adapt, n.update, and n.iter
 # n.adapt = number of iterations that JAGS will use to choose the sampler 
   # and to assure optimum mixing of the MCMC chain
-n.adapt = 1000
+n.adapt = 2000
 # n.update = number of iterations that will be discarded to allow the chain to 
 #   converge before iterations are stored (aka, burn-in)
 n.update = 10000
@@ -578,7 +578,7 @@ model{
 # specify 3 scalars, n.adapt, n.update, and n.iter
 # n.adapt = number of iterations that JAGS will use to choose the sampler 
   # and to assure optimum mixing of the MCMC chain
-n.adapt = 1000
+n.adapt = 2000
 # n.update = number of iterations that will be discarded to allow the chain to 
 #   converge before iterations are stored (aka, burn-in)
 n.update = 10000
@@ -758,7 +758,7 @@ $$
 \times \; {\sf normal} \bigr(\alpha_{j} \mid \mu_{\alpha}, \varsigma_{\alpha}^2 \bigr) \\ 
 \times \; {\sf normal} \bigr(\beta \mid 0,10000\bigr) \\
 \times \; {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl) \\
-\times \; {\sf uniform}\bigr(\varsigma \mid 0, 100 \bigl)
+\times \; {\sf uniform}\bigr(\varsigma_{\alpha} \mid 0, 100 \bigl)
 \end{aligned}
 $$
 ### Fitting the random intercepts model with JAGS
@@ -779,15 +779,14 @@ data = list(
   n.sites = n.sites)
 
 inits = list(
-  list(alpha = rep(0, n.sites), beta = .5, sigma = 50, mu.alpha= 0, sigma.alpha = 10),
-  list(alpha = rep(1, n.sites), beta = 1.5, sigma = 10, mu.alpha= 2, sigma.alpha = 20),
-  list(alpha = rep(-1, n.sites), beta = .75, sigma = 20, mu.alpha= -1, sigma.alpha = 12))
+  list(alpha = rep(0, n.sites), beta = .5, sigma = 50, mu_alpha= 0, varsigma = 10),
+  list(alpha = rep(1, n.sites), beta = 1.5, sigma = 10, mu_alpha= 2, varsigma = 20),
+  list(alpha = rep(-1, n.sites), beta = .75, sigma = 20, mu_alpha= -1, varsigma = 12))
 ```
 
 ### Question 5
 
 Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters.  Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
-
 
 #### JAGS Model
 
@@ -891,7 +890,7 @@ model{
 # specify 3 scalars, n.adapt, n.update, and n.iter
 # n.adapt = number of iterations that JAGS will use to choose the sampler 
   # and to assure optimum mixing of the MCMC chain
-n.adapt = 1000
+n.adapt = 2000
 # n.update = number of iterations that will be discarded to allow the chain to 
 #   converge before iterations are stored (aka, burn-in)
 n.update = 10000
@@ -1182,7 +1181,7 @@ Write out the posterior and joint distribution for a linear regression model of 
 $$
 \begin{aligned}
 g \bigl(\alpha_{j},\beta,\log(x_{ij}) \bigr) = \alpha_{j} + \beta \bigl(\log(x_ij) \bigr)\\
-g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr) = \kappa + \eta \bigl(\text{logit}(w_ij) \bigr)
+g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr) = \kappa + \eta \bigl(\text{logit}(w_j) \bigr)
 \end{aligned}
 $$
 
@@ -1192,19 +1191,19 @@ Joint:
 
 $$
 \begin{aligned}
-\bigl[ \alpha_{j},\beta, \mu_{\alpha}, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} {\sf normal} \bigr( \log(y_{ij}) \mid g \bigl( \alpha_{j}, \beta, \log(x_{ij})  \bigr), \sigma^{2}\bigr)\\
+\bigl[ \alpha_{j},\beta, \kappa, \eta, \sigma^2, \varsigma_{\alpha}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} {\sf normal} \bigr( \log(y_{ij}) \mid g \bigl( \alpha_{j}, \beta, \log(x_{ij})  \bigr), \sigma^{2}\bigr)\\
 \times \; {\sf normal} \bigr(\alpha_{j} \mid g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr), \varsigma_{\alpha}^2 \bigr) \\ 
 \times \; {\sf normal} \bigr(\beta \mid 0,10000\bigr) \\
 \times \; {\sf normal} \bigr(\kappa \mid 0,10000\bigr) \\
 \times \; {\sf normal} \bigr(\eta \mid 0,10000\bigr) \\
 \times \; {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl) \\
-\times \; {\sf uniform}\bigr(\varsigma \mid 0, 100 \bigl)
+\times \; {\sf uniform}\bigr(\varsigma_{\alpha} \mid 0, 100 \bigl)
 \end{aligned}
 $$
 
 ## Fitting the random intercepts, group-level effect model with JAGS
 
-Modify your random intercepts model to implement the model that include soil carbon content as covariate at the site level. Make predictions for how mean logged $\textrm{N} _2 \textrm{O}$ emission and median $\textrm{N} _2 \textrm{O}$ emission varies with respect to soil fertilizer input *the uncertainty associated with site* as you did in the previous example. Use the `data` and initial values for JAGS provided below to allow you to concentrate on writing JAGS code for the model.
+Modify your random intercepts model to implement the model that include soil carbon content as covariate at the site level. Make predictions for how mean logged $\textrm{N} _2 \textrm{O}$ emission and median $\textrm{N} _2 \textrm{O}$ emission varies with respect to soil fertilizer input **the uncertainty associated with site** as you did in the previous example. Use the `data` and initial values for JAGS provided below to allow you to concentrate on writing JAGS code for the model.
 
 ```{r}
 n.input.pred <- seq(
@@ -1219,15 +1218,15 @@ data = list(
   , log.n.input.centered = log(BayesNSF::N2OEmission$n.input) - mean(log(BayesNSF::N2OEmission$n.input))
   , log.n.input.centered.pred = log(n.input.pred) - mean(log(BayesNSF::N2OEmission$n.input))
     #divide by 100 to make data a proportion, take logit, and center
-  , w = boot::logit(SiteCarbon$mean/100) - mean(boot::logit(SiteCarbon$mean/100))
+  , w = boot::logit(BayesNSF::SiteCarbon$mean/100) - mean(boot::logit(BayesNSF::SiteCarbon$mean/100))
   , group = BayesNSF::N2OEmission$group.index
   , n.sites = n.sites
 )
 
 inits = list(
-  list(alpha = rep(0, n.sites), beta = .5, sigma = 50, sigma.alpha = 10, eta = .2, kappa = .5)
-  , list(alpha = rep(1, n.sites), beta = 1.5, sigma = 10, sigma.alpha = 20, eta = 3, kappa = .7)
-  , list(alpha = rep(-1, n.sites), beta = .75, sigma = 20, sigma.alpha = 12, eta = .1, kappa = .3)
+  list(alpha = rep(0, n.sites), beta = .5, sigma = 50, varsigma = 10, eta = .2, kappa = .5)
+  , list(alpha = rep(1, n.sites), beta = 1.5, sigma = 10, varsigma = 20, eta = 3, kappa = .7)
+  , list(alpha = rep(-1, n.sites), beta = .75, sigma = 20, varsigma = 12, eta = .1, kappa = .3)
 )
 ```
 
@@ -1235,7 +1234,334 @@ inits = list(
 
 Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
 
+#### JAGS Model
+
+```{r, eval=FALSE}
+## JAGS Model
+model{
+  ## priors
+    # y priors
+    beta ~ dnorm(0,1E-6)
+    sigma ~ dunif(0,100)
+    tau_y <- 1/sigma^2
+    # alpha priors
+    kappa ~ dnorm(0,1E-6)
+    eta ~ dnorm(0,1E-6)
+    varsigma ~ dunif(0,100)
+    tau_alpha <- 1/varsigma^2
+  
+  ## likelihood
+  # intercept (alpha) likelihood
+    # represent the effect of soil carbon ...
+      # ...on the intercept using the deterministic model below to predict alpha_j
+    for(j in 1:n.sites){
+      mu_alpha[j] <- kappa + eta * w[j]
+      alpha[j] ~ dnorm(mu_alpha[j], tau_alpha)
+    }
+  # y likelihood
+    for(i in 1:length(log.emission)) {
+      log_mu[i] <- alpha[group[i]] + beta * log.n.input.centered[i]
+      log.emission[i] ~ dnorm(log_mu[i], tau_y)
+    }
+
+  ## quantities of interest
+    # predicted emissions ACROSS SITES
+      alpha_pred ~ dnorm(kappa, tau_alpha)
+      for(i in 1:length(log.n.input.centered.pred)){
+        log_mu_pred[i] <- alpha_pred + beta * log.n.input.centered.pred[i]
+        mu_pred[i] <- exp(log_mu_pred[i])
+      }
+}
+```
+
+#### Implement JAGS Model
+
 ```{r}
-# in progress
+##################################################################
+# insert JAGS model code into an R script
+##################################################################
+{ # Extra bracket needed only for R markdown files - see answers
+  sink("NO2JAGS_randomintrcpts_alpha.R") # This is the file name for the jags code
+  cat("
+  model{
+    ## priors
+      # y priors
+      beta ~ dnorm(0,1E-6)
+      sigma ~ dunif(0,100)
+      tau_y <- 1/sigma^2
+      # alpha priors
+      kappa ~ dnorm(0,1E-6)
+      eta ~ dnorm(0,1E-6)
+      varsigma ~ dunif(0,100)
+      tau_alpha <- 1/varsigma^2
+    
+    ## likelihood
+    # intercept (alpha) likelihood
+      # represent the effect of soil carbon ...
+        # ...on the intercept using the deterministic model below to predict alpha_j
+      for(j in 1:n.sites){
+        mu_alpha[j] <- kappa + eta * w[j]
+        alpha[j] ~ dnorm(mu_alpha[j], tau_alpha)
+      }
+    # y likelihood
+      for(i in 1:length(log.emission)) {
+        log_mu[i] <- alpha[group[i]] + beta * log.n.input.centered[i]
+        log.emission[i] ~ dnorm(log_mu[i], tau_y)
+      }
+  
+    ## quantities of interest
+      # predicted emissions ACROSS SITES
+        alpha_pred ~ dnorm(kappa, tau_alpha)
+        for(i in 1:length(log.n.input.centered.pred)){
+          log_mu_pred[i] <- alpha_pred + beta * log.n.input.centered.pred[i]
+          mu_pred[i] <- exp(log_mu_pred[i])
+        }
+  }
+  ", fill = TRUE)
+  sink()
+}
+################################################################
+# implement model
+##################################################################
+# specify 3 scalars, n.adapt, n.update, and n.iter
+# n.adapt = number of iterations that JAGS will use to choose the sampler 
+  # and to assure optimum mixing of the MCMC chain
+n.adapt = 2000
+# n.update = number of iterations that will be discarded to allow the chain to 
+#   converge before iterations are stored (aka, burn-in)
+n.update = 10000
+# n.iter = number of iterations that will be stored in the 
+  # final chain as samples from the posterior distribution
+n.iter = 10000
+######################
+# Call to JAGS
+######################
+jm = rjags::jags.model(
+  file = "NO2JAGS_randomintrcpts_alpha.R"
+  , data = data
+  , inits = inits
+  , n.chains = length(inits)
+  , n.adapt = n.adapt
+)
+stats::update(jm, n.iter = n.update)
+# save the coda object (more precisely, an mcmc.list object) to R as "zc"
+zc_randomintrcpts_alpha = rjags::coda.samples(
+  model = jm
+  , variable.names = c("alpha", "beta", "sigma", "kappa", "eta", "varsigma", "log_mu_pred", "mu_pred")
+  , n.iter = n.iter
+  , n.thin = 1
+)
+```
+
+#### Model Output
+
+Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+
+```{r}
+#####################
+# check output
+#####################
+# trace plot
+MCMCvis::MCMCtrace(zc_randomintrcpts_alpha, params = c("beta", "sigma", "kappa", "eta", "varsigma"), pdf = FALSE)
+
+# summary
+MCMCvis::MCMCsummary(zc_randomintrcpts_alpha, params = c("beta", "sigma", "kappa", "eta", "varsigma"))
+
+# Caterpillar plots
+MCMCvis::MCMCplot(zc_randomintrcpts_alpha, params = c("beta", "sigma", "kappa", "eta", "varsigma"), xlim = c(-0.5,1.5) )
+
+```
+
+Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why?
+
+\textcolor{violet}{fill this in!!!!}
+
+Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+
+```{r}
+# Caterpillar plots
+MCMCvis::MCMCplot(
+  zc_randomintrcpts_alpha
+  , params = c("alpha")
+  , horiz = FALSE
+  , ylim = c(-6,5)
+  # Number specifying size of text for parameter labels on axis.
+  , sz_labels = 0.6
+  # Number specifying size of points represents posterior medians.
+  , sz_med = 0.7
+  # Number specifying thickness of 50 percent CI line (thicker line).
+  , sz_thick = 2
+  # Number specifying thickness of 95 percent CI line (thinner line).
+  , sz_thin = 1
+)
+
+```
+
+## Visualizing random intercepts, group-level effect model predictions
+
+### Question 11
+
+Use the code from the pooled to visualize the model predictions again. Compared to the random effects model, how does modeling site soil carbon affect the uncertainty in predicting $\textrm{N} _2 \textrm{O}$ emissions for new sites?
+
+```{r}
+# HDI
+pred1 <- MCMCvis::MCMCpstr(
+  zc_randomintrcpts_alpha
+  , params = c("log_mu_pred", "mu_pred")
+  , func = function(x) HDInterval::hdi(x, .95)
+)
+# median
+pred2 <- MCMCvis::MCMCpstr(
+  zc_randomintrcpts_alpha
+  , params = c("log_mu_pred", "mu_pred")
+  , func = median
+)
+# put in data frame
+pred.randomintrcpts_alpha.df <- dplyr::bind_cols(
+  n.input.pred
+  , data.frame(pred1$mu_pred)
+  , median = pred2$mu_pred
+)
+lpred.randomintrcpts_alpha.df <- dplyr::bind_cols(
+  log.n.input.pred = log(n.input.pred)
+  , data.frame(pred1$log_mu_pred)
+  , median = pred2$log_mu_pred
+)
+```
+
+Plot the predictions
+
+```{r, fig.cap="Pooled - random intercepts, group-level effect model", fig.height=5, fig.width=7}
+g7 <- g1 +
+  geom_line(
+    data = pred.randomintrcpts_alpha.df
+    , mapping = aes(x = n.input.pred, y = median)
+  ) +
+  geom_ribbon(
+    data = pred.randomintrcpts_alpha.df
+    , mapping = aes(x = n.input.pred, ymin = lower, ymax = upper)
+    , alpha = 0.2
+    , fill = "yellow"
+  )
+
+g8 <- g2 +
+  geom_line(
+    data = lpred.randomintrcpts_alpha.df
+    , mapping = aes(x = log.n.input.pred, y = median)
+  ) +
+  geom_ribbon(
+    data = lpred.randomintrcpts_alpha.df
+    , mapping = aes(x = log.n.input.pred, ymin = lower, ymax = upper)
+    , alpha = 0.2
+    , fill = "yellow"
+  )
+
+gridExtra::grid.arrange(g7, g8, nrow = 1)
+```
+
+```{r, fig.cap="Pooled - random intercepts, No group-level effect model", fig.height=5, fig.width=7}
+gridExtra::grid.arrange(g5, g6, nrow = 1)
+```
+
+Compared to the random effects model, how does modeling site soil carbon affect the uncertainty in predicting $\textrm{N} _2 \textrm{O}$ emissions for new sites?
+
+\textcolor{violet}{fill this in!!!!}
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[stringr::str_starts(ls(), "pred")])
+remove(list = ls()[stringr::str_starts(ls(), "lpred")])
+gc()
+```
+
+# Random Coefficients
+
+## Diagramming and writing the random carbon fertilizer model
+
+Now we are interested in the effect of soil carbon and fertilizer type on $\textrm{N} _2 \textrm{O}$ emissions. Model the effect of carbon as above, but include a group level effect of fertilizer type on the slope of the emission vs fertilizer addition model. This is to say that the slopes of the regressions are drawn from a distribution of fertilizer types. Index plot with $i$, site with $j$, and fertilizer type with $k$. Thus, there will be $K$ slopes, one for each fertilizer type, drawn from a distribution with mean $\mu_{\beta}$ and variance $\varsigma_{\beta}^{2}$. Modify the carbon model you built in the previous step to incorporate effect of fertilizer type.  
+
+Be careful here because the group level effects are formed for two **separate** groups, site and fertilizer type. You might be tempted (or perhaps terrified) to think that you need to model the covariance in this problem, which is not the case. This is required only if you are modeling slope and intercept as group level effects for the **same** grouping variable, for example, site. You will see how this is done in the last problem. Think about it. Covariance between the slope and intercept is only important if they are being estimated from data within the same group. There is only a singe fertilizer type with each group, so it cannot covary with the intercept.
+
+### Question 1
+
+Draw a Bayesian network for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ijk}$) on fertilizer addition ($x_{ijk}$) and soil carbon content $(w_{j})$.
+
+```{r, echo=FALSE, out.width="50%", out.height="50%", fig.cap="DAG", fig.align='center'}
+knitr::include_graphics("../data/DAG5.jpg")
+```
+
+### Question 2
+
+Write out the posterior and joint distributions for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ijk}$) on fertilizer addition ($x_{ijk}$) and soil carbon content ($w_{j}$). Choose appropriate distributions for each random variable.
+
+
+$$
+\begin{aligned}
+g \bigl(\alpha_{j},\beta_{k},\log(x_{ijk}) \bigr) = \alpha_{j} + \beta_{k} \bigl(\log(x_ijk) \bigr)\\
+g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr) = \kappa + \eta \bigl(\text{logit}(w_j) \bigr)
+\end{aligned}
+$$
+
+
+Joint:
+
+
+$$
+\begin{aligned}
+\bigl[ \alpha_{j},\beta_{k}, \kappa, \eta, \mu_{\beta}, \sigma^2, \varsigma_{\alpha}^2, \varsigma_{\beta}^2  \mid \boldsymbol{y} \bigr] \propto \prod_{i=1}^{n}  \prod_{j=1}^{J} \prod_{k=1}^{K} {\sf normal} \bigr( \log(y_{ijk}) \mid g \bigl( \alpha_{j}, \beta_{k}, \log(x_{ijk})  \bigr), \sigma^{2}\bigr)\\
+\times \; {\sf normal} \bigr(\alpha_{j} \mid g_2 \bigl(\kappa,\eta, \text{logit}(w_j) \bigr), \varsigma_{\alpha}^2 \bigr) \\ 
+\times \; {\sf normal} \bigr(\beta_{k} \mid \mu_{\beta}, \varsigma_{\beta}^2 \bigr) \\
+\times \; {\sf normal} \bigr(\kappa \mid 0,10000\bigr) \\
+\times \; {\sf normal} \bigr(\eta \mid 0,10000\bigr) \\
+\times \; {\sf normal} \bigr(\mu_{\beta} \mid 0,10000\bigr) \\
+\times \; {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl) \\
+\times \; {\sf uniform}\bigr(\varsigma_{\alpha} \mid 0, 100 \bigl) \\
+\times \; {\sf uniform}\bigr(\varsigma_{\beta} \mid 0, 100 \bigl)
+\end{aligned}
+$$
+
+
+
+### Fitting the random carbon fertilizer model with JAGS
+
+Modify your random intercepts model to implement the model that include soil carbon content and fertilizer type as covariates at the site level. Use the `data` and initial values for JAGS provided below to allow you to concentrate on writing JAGS code for the model.
+
+```{r}
+n.sites <- length(unique(N2OEmission$group.index))
+n.ferts <- length(unique(N2OEmission$fert.index))
+
+data = list(
+  log.emission = log(N2OEmission$emission),
+  log.n.input.centered = log(N2OEmission$n.input) - mean(log(N2OEmission$n.input)),
+  #take logit and center.  You will need the boot library
+  w = boot::logit(SiteCarbon$mean) - mean(boot::logit(SiteCarbon$mean)),
+  fertilizer = N2OEmission$fert.index, 
+  group = N2OEmission$group.index,
+  n.sites = n.sites,
+  n.ferts = n.ferts)
+
+inits = list(
+  list(alpha = rep(0, n.sites), beta = rep(0, n.ferts), sigma = 50, varsigma_alpha = 10, varsigma_beta = .2,
+    mu_beta = .1, eta = .2, kappa = .5),
+  list(alpha = rep(1, n.sites), beta = rep(2, n.ferts), sigma = 10, varsigma_alpha = 20, varsigma_beta = .1, 
+    mu_beta = 3, eta = 3, kappa = .7),
+  list(alpha = rep(-1, n.sites), beta = rep(1, n.ferts), sigma = 20, varsigma_alpha = 12, varsigma_beta = .3,
+    mu_beta = -2, eta = .1, kappa = .3))
+```
+
+### Question 3
+
+Write the code for the model. Compile the model and execute the MCMC to produce a coda object. Produce trace plots of the chains for model parameters, excluding $\boldsymbol{\alpha}$ and a summary table of these same parameters. Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? Make a horizontal caterpillar plot for the the $\boldsymbol{\alpha}$.
+
+```{r}
+
+```
+
+
+### Question 4
+
+How do you assess whether fertilizer type a good predictor of $\textrm{N} _2 \textrm{O}$ emission?  How would we compare the slope for fertilizer type 1 to type 5?
+
+```{r}
+
 ```
 
