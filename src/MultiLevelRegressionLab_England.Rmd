@@ -1783,7 +1783,7 @@ knitr::include_graphics("../data/eq1.jpg")
 
 The second parameter in the multivariate normal is a variance-covariance matrix representing how the slope and intercept covary. It has variance terms on the diagonal, and covariance terms on the off-diagonal, i.e.,
 
-```{r, echo=FALSE, out.width="75%", out.height="75%", fig.cap="", fig.align='center'}
+```{r, echo=FALSE, out.width="55%", out.height="55%", fig.cap="", fig.align='center'}
 knitr::include_graphics("../data/eq2.jpg")
 ```
 
@@ -1802,6 +1802,11 @@ knitr::include_graphics("../data/DAG6.jpg")
 
 Write out the posterior and joint distributions for a linear regression model of $\textrm{N} _2 \textrm{O}$ emission ($y_{ij}$) on fertilizer addition ($x_{ij}$). Choose appropriate distributions for each random variable.
 
+* Remember: *$\rho$ = coefficient of correlation = $-1 \le \rho \le 1$*
+
+```{r, echo=FALSE, out.width="50%", out.height="50%", fig.cap="", fig.align='center'}
+knitr::include_graphics("../data/eq2.jpg")
+```
 
 $$
 \begin{aligned}
@@ -1809,13 +1814,8 @@ g \bigl(\alpha_{j},\beta_{k},\log(x_{ij}) \bigr) = \alpha_{j} + \beta_{k} \bigl(
 \end{aligned}
 $$
 
-```{r, echo=FALSE, out.width="60%", out.height="60%", fig.cap="", fig.align='center'}
-knitr::include_graphics("../data/eq2.jpg")
-```
-
 Joint:
 
-*$\rho$ = coefficient of correlation = $-1 \le \rho \le 1$*
 
 $$
 \begin{aligned}
@@ -2055,7 +2055,7 @@ MCMCvis::MCMCplot(zc_randomcoeffs_fnl, params = c(
     , "varsigma_alpha"
     , "varsigma_beta"
   )
-  , xlim = c(-0.5,1.5) 
+  , xlim = c(-1,1.5) 
 )
 
 ```
@@ -2112,9 +2112,7 @@ All statistical inference is based on some type of statistical model. A truly fu
 
 The Bayesian approach provides a method, simple to implement, that allows you to check if your model is capable of producing the data. It is called a *posterior predictive check*. The details of the math are given Hobbs and Hooten 8.1 and were covered in lecture. Here is a brief description of how to code it. The algorithm goes like this:
 
-## Question 1
-
-Simulate a new data set at each iteration of the MCMC. This sounds formidable, but it is really no more than drawing a random variable from the likelihood. You can simulate a new data set by embedding the following code in the same `for` loop as your likelihood. For example:
+1) Simulate a new data set at each iteration of the MCMC. This sounds formidable, but it is really no more than drawing a random variable from the likelihood. You can simulate a new data set by embedding the following code in the same `for` loop as your likelihood. For example:
 
 ```{r, eval=FALSE}
 y[i] ~ dnorm(log_mu[i], tau)
@@ -2122,14 +2120,10 @@ y.sim[i] ~ dnorm(log_mu[i], tau)
 ```
 
 
-## Question 2
-
-Calculate a test statistic based on the real and the simulated data. The test statistic could be a mean, standard deviation, coefficient of variation, discrepancy, minimum, maximum – really any function that helps you compare the simulated and real data. It is wise to always include a test statistic that in some way reflects the variance because it is harder for the model to get the variance
+2) Calculate a test statistic based on the real and the simulated data. The test statistic could be a mean, standard deviation, coefficient of variation, discrepancy, minimum, maximum – really any function that helps you compare the simulated and real data. It is wise to always include a test statistic that in some way reflects the variance because it is harder for the model to get the variance
 
 
-## Question 3
-
-We are interested in calculating a Bayesian p value, the probability that the test statistic computed from the simulated data is more extreme than the test statistic computed from the real data. There is evidence of lack of fit – the model cannot give rise to the data – if the Bayesian p value is large or small. We want values between, say, .10 and .90, ideally close to .5. To obtain this the Bayesian p we use the JAGS `step(x)` function that returns 0 if x is less 0 and and 1 otherwise. So, presume our test statistic for was the standard deviation. Consider the following pseudo-code:
+3) We are interested in calculating a Bayesian p value, the probability that the test statistic computed from the simulated data is more extreme than the test statistic computed from the real data. There is evidence of lack of fit – the model cannot give rise to the data – if the Bayesian p value is large or small. We want values between, say, .10 and .90, ideally close to .5. To obtain this the Bayesian p we use the JAGS `step(x)` function that returns 0 if x is less 0 and and 1 otherwise. So, presume our test statistic for was the standard deviation. Consider the following pseudo-code:
 
 ```{r, eval=FALSE}
 for(i in 1:length(y)) {
@@ -2153,4 +2147,392 @@ $$
 $$ 
 
 where $\mu_i$ is the $i^{th}$ prediction of your model. Overlay the posterior distribution of the simulated data on the histogram of the read data (density on y axis, not frequency). What do you conclude? Is there any indication of lack of fit? Enough to discard the model?
+
+## Problem Response
+
+$$
+\begin{aligned}
+\mu_{i} = \gamma x_{i}^{\beta}\\
+\alpha = \log \bigl(\gamma \bigr)\\
+\log \bigl(\mu_{i} \bigr)  = \alpha+\beta \bigl(\log(x_i) \bigr)\\
+g \bigl(\alpha,\beta,\log(x_i) \bigr)  = \alpha + \beta \bigl(\log(x_i) \bigr) \\
+\end{aligned}
+$$
+
+
+Joint:
+
+$$
+\bigl[ \alpha,\beta,\sigma^2 \mid y_i\bigr] \propto \prod_{i=1}^{n} {\sf normal} \bigr( \log(y_{i}) \mid g \bigl( \alpha, \beta, \log(x_i)  \bigr), \sigma^{2}\bigr) \times {\sf normal} \bigr(\alpha \mid 0,10000\bigr)  \times {\sf normal} \bigr(\beta \mid 0,10000\bigr) \times {\sf uniform}\bigr(\sigma \mid 0, 100 \bigl)
+$$
+
+Set up the data and initial conditions.
+
+```{r}
+n.input.pred <- seq(min(BayesNSF::N2OEmission$n.input), max(BayesNSF::N2OEmission$n.input), 10)
+
+data = list(
+  log.emission = log(BayesNSF::N2OEmission$emission) %>% 
+      as.double()
+  , log.n.input.centered = log(BayesNSF::N2OEmission$n.input) - 
+      mean(log(BayesNSF::N2OEmission$n.input)) %>% 
+        as.double()
+  , log.n.input.centered.pred = log(n.input.pred) - 
+      mean(log(BayesNSF::N2OEmission$n.input)) %>% 
+        as.double()
+)
+
+inits = list(
+  list(alpha = 0, beta = .5, sigma = 50)
+  , list(alpha = 1, beta = 1.5, sigma = 10)
+  , list(alpha = 2, beta = .75, sigma = 20)
+)
+```
+
+### JAGS Model
+
+```{r, eval=FALSE}
+## JAGS Model
+model{
+  
+  # priors
+  alpha ~ dnorm(0,1E-6)
+  beta ~ dnorm(0,1E-6)
+  sigma ~ dunif(0,100)
+  tau <- 1/sigma^2
+
+  # likelihood
+  for (i in 1:length(log.emission)) {
+    log_mu[i] <- alpha + beta * log.n.input.centered[i]
+    # returns density (for continuous) because l.h.s. is data (deterministic b/c defined in data)
+    log.emission[i] ~ dnorm(log_mu[i], tau)
+    # posterior predictive distribution of y.new (for model checking)
+      # returns random number generator because l.h.s. is not data (i.e. it is unknown: stochastic node)
+    log.emission_sim[i] ~ dnorm(log_mu[i], tau)
+    # sum of squares 
+        sq[i] <- (log.emission[i]-log_mu[i])^2
+        sq_sim[i] <- (log.emission_sim[i]-log_mu[i])^2
+  }
+
+  ## quantities of interest
+    #posterior predictive checks
+      # test statistics y
+      mean_y <- mean(log.emission)
+      min_y <- min(log.emission)
+      sd_y <- sd(log.emission)
+      fit_y <- sum(sq)
+      # test statistics y_sim
+      mean_y_sim <- mean(log.emission_sim)
+      min_y_sim <- min(log.emission_sim)
+      sd_y_sim <- sd(log.emission_sim)
+      fit_y_sim <- sum(sq_sim)
+      # p-values
+      p_val_mean <- step(mean_y_sim - mean_y)
+      p_val_min <- step(min_y_sim - min_y)
+      p_val_sd <- step(sd_y_sim - sd_y)
+      p_val_fit <- step(fit_y_sim - fit_y)
+}
+```
+
+### Implement JAGS Model
+
+```{r}
+##################################################################
+# insert JAGS model code into an R script
+##################################################################
+{ # Extra bracket needed only for R markdown files - see answers
+  sink("NO2JAGS_pooled_check.R") # This is the file name for the jags code
+  cat("
+  model{
+    
+    # priors
+    alpha ~ dnorm(0,1E-6)
+    beta ~ dnorm(0,1E-6)
+    sigma ~ dunif(0,100)
+    tau <- 1/sigma^2
+  
+    # likelihood
+    for (i in 1:length(log.emission)) {
+      log_mu[i] <- alpha + beta * log.n.input.centered[i]
+      # returns density (for continuous) because l.h.s. is data (deterministic b/c defined in data)
+      log.emission[i] ~ dnorm(log_mu[i], tau)
+      # posterior predictive distribution of y.new (for model checking)
+        # returns random number generator because l.h.s. is not data (i.e. it is unknown: stochastic node)
+      log.emission_sim[i] ~ dnorm(log_mu[i], tau)
+      # sum of squares 
+          sq[i] <- (log.emission[i]-log_mu[i])^2
+          sq_sim[i] <- (log.emission_sim[i]-log_mu[i])^2
+    }
+  
+    ## quantities of interest
+      #posterior predictive checks
+        # test statistics y
+        mean_y <- mean(log.emission)
+        min_y <- min(log.emission)
+        sd_y <- sd(log.emission)
+        fit_y <- sum(sq)
+        # test statistics y_sim
+        mean_y_sim <- mean(log.emission_sim)
+        min_y_sim <- min(log.emission_sim)
+        sd_y_sim <- sd(log.emission_sim)
+        fit_y_sim <- sum(sq_sim)
+        # p-values
+        p_val_mean <- step(mean_y_sim - mean_y)
+        p_val_min <- step(min_y_sim - min_y)
+        p_val_sd <- step(sd_y_sim - sd_y)
+        p_val_fit <- step(fit_y_sim - fit_y)
+  }
+  ", fill = TRUE)
+  sink()
+}
+################################################################
+# implement model
+##################################################################
+# specify 3 scalars, n.adapt, n.update, and n.iter
+# n.adapt = number of iterations that JAGS will use to choose the sampler 
+  # and to assure optimum mixing of the MCMC chain
+n.adapt = 2000
+# n.update = number of iterations that will be discarded to allow the chain to 
+#   converge before iterations are stored (aka, burn-in)
+n.update = 10000
+# n.iter = number of iterations that will be stored in the 
+  # final chain as samples from the posterior distribution
+n.iter = 10000
+######################
+# Call to JAGS
+######################
+jm = rjags::jags.model(
+  file = "NO2JAGS_pooled_check.R"
+  , data = data
+  , inits = inits
+  , n.chains = length(inits)
+  , n.adapt = n.adapt
+)
+stats::update(jm, n.iter = n.update)
+# save the coda object (more precisely, an mcmc.list object) to R as "zc"
+zc_pooled_check = rjags::coda.samples(
+  model = jm
+  , variable.names = c(
+      #priors
+      "alpha", "beta", "sigma", "tau"
+      # simulated data
+      , "log.emission_sim"
+      # test statistics
+      , "mean_y"
+      , "min_y"
+      , "sd_y"
+      , "fit_y"
+      , "mean_y_sim"
+      , "min_y_sim"
+      , "sd_y_sim"
+      , "fit_y_sim"
+      # p-values
+      , "p_val_mean"
+      , "p_val_min"
+      , "p_val_sd"
+      , "p_val_fit"
+    )
+  # , variable.names = c("a", "b", "p")
+  , n.iter = n.iter
+  , n.thin = 1
+)
+```
+
+### Posterior predictive check - Test Statistics
+
+```{r}
+# summary
+MCMCvis::MCMCsummary(zc_pooled_check, params = c(
+      # test statistics
+      "mean_y"
+      , "mean_y_sim"
+      , "min_y"
+      , "min_y_sim"
+      , "sd_y"
+      , "sd_y_sim"
+      , "fit_y"
+      , "fit_y_sim"
+    )
+  )
+```
+
+### Posterior predictive check - p-values
+
+```{r}
+# summary
+MCMCvis::MCMCsummary(zc_pooled_check, params = c(
+      # p-values
+      "p_val_mean"
+      , "p_val_min"
+      , "p_val_sd"
+      , "p_val_fit"
+    )
+  )
+```
+
+### Posterior predictive check - mean plot
+
+```{r}
+# PLOT
+MCMCvis::MCMCchains(zc_pooled_check, params = c("mean_y", "mean_y_sim")) %>%
+  data.frame() %>%
+ggplot(data = .) +
+  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
+  geom_point(
+    mapping  = aes(x = mean_y, y = mean_y_sim)
+    , color = "navy"
+    , alpha = 0.2
+  ) +
+  scale_y_continuous(
+    limits = c(
+      mean(data$log.emission)-(sd(data$log.emission)*1)
+      , mean(data$log.emission)+(sd(data$log.emission)*1)
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  scale_x_continuous(
+    limits = c(
+      mean(data$log.emission)-(sd(data$log.emission)*1)
+      , mean(data$log.emission)+(sd(data$log.emission)*1)
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  xlab("Mean Observed log(Emissions)") +
+  ylab("Mean Simulated log(Emissions)") +
+  labs(
+    title = "Observed vs. Simulated log(Emissions) - Mean"
+    , subtitle = paste0(
+        "*Bayesian P value = "
+        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_mean")) %>% mean() %>% scales::comma(accuracy = 0.01)
+      )
+  ) +
+  theme_bw()
+  
+```
+
+\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_mean")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the $\textrm{N} _2 \textrm{O}$ emissions. If the p-value were very large or very small (i.e., close to 1 or 0), it would indicate lack of fit.}
+
+### Posterior predictive check - SD plot
+
+```{r}
+# PLOT
+MCMCvis::MCMCchains(zc_pooled_check, params = c("sd_y", "sd_y_sim")) %>%
+  data.frame() %>%
+ggplot(data = .) +
+  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
+  geom_point(
+    mapping  = aes(x = sd_y, y = sd_y_sim)
+    , color = "steelblue"
+    , alpha = 0.2
+  ) +
+  scale_y_continuous(
+    limits = c(
+      mean(data$log.emission)-(sd(data$log.emission)*1)
+      , max(data$log.emission)*1.05
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  scale_x_continuous(
+    limits = c(
+      mean(data$log.emission)-(sd(data$log.emission)*1)
+      , max(data$log.emission)*1.05
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  xlab("St. Dev. Observed log(Emissions)") +
+  ylab("St. Dev. Simulated log(Emissions)") +
+  labs(
+    title = "Observed vs. Simulated log(Emissions) - St. Dev."
+    , subtitle = paste0(
+        "*Bayesian P value = "
+        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_sd")) %>% mean() %>% scales::comma(accuracy = 0.01)
+      )
+  ) +
+  theme_bw()
+  
+```
+
+\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_sd")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the standard deviation of $\textrm{N} _2 \textrm{O}$ emissions. If the p-value were very large or very small (i.e., close to 1 or 0), it would indicate lack of fit.}
+
+### Posterior predictive check - Minimum plot
+
+```{r}
+# PLOT
+MCMCvis::MCMCchains(zc_pooled_check, params = c("min_y", "min_y_sim")) %>%
+  data.frame() %>%
+ggplot(data = .) +
+  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
+  geom_point(
+    mapping  = aes(x = min_y, y = min_y_sim)
+    , color = "firebrick"
+    , alpha = 0.2
+  ) +
+  scale_y_continuous(
+    limits = c(
+      min(data$log.emission)*0.95
+      , mean(data$log.emission)+(sd(data$log.emission)*1)
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  scale_x_continuous(
+    limits = c(
+      min(data$log.emission)*0.95
+      , mean(data$log.emission)+(sd(data$log.emission)*1)
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  xlab("Minimum Observed log(Emissions)") +
+  ylab("Minimum Simulated log(Emissions)") +
+  labs(
+    title = "Observed vs. Simulated log(Emissions) - Minimum"
+    , subtitle = paste0(
+        "*Bayesian P value = "
+        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_min")) %>% mean() %>% scales::comma(accuracy = 0.01)
+      )
+  ) +
+  theme_bw()
+  
+```
+
+\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_sd")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the standard deviation of $\textrm{N} _2 \textrm{O}$ emissions. If the p-value were very large or very small (i.e., close to 1 or 0), it would indicate lack of fit.}
+
+### Posterior predictive check - Sum of Squared Errors
+
+```{r}
+# PLOT
+MCMCvis::MCMCchains(zc_pooled_check, params = c("fit_y", "fit_y_sim")) %>%
+  data.frame() %>%
+ggplot(data = .) +
+  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
+  geom_point(
+    mapping  = aes(x = fit_y, y = fit_y_sim)
+    , color = "gray60"
+    , alpha = 0.2
+  ) +
+  scale_y_continuous(
+    limits = c(
+      1100
+      , 2200
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  scale_x_continuous(
+    limits = c(
+      1100
+      , 2200
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  xlab("SSE Observed log(Emissions)") +
+  ylab("SSE Simulated log(Emissions)") +
+  labs(
+    title = "Observed vs. Simulated log(Emissions) - Sum of Squared Errors"
+    , subtitle = paste0(
+        "*Bayesian P value = "
+        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)
+      )
+  ) +
+  theme_bw()
+  
+```
 
