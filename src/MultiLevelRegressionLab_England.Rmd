@@ -2146,7 +2146,7 @@ $$
 \sum_{i=1}^{n} (y_i - \mu_i)^2
 $$ 
 
-where $\mu_i$ is the $i^{th}$ prediction of your model. Overlay the posterior distribution of the simulated data on the histogram of the read data (density on y axis, not frequency). What do you conclude? Is there any indication of lack of fit? Enough to discard the model?
+where $\mu_i$ is the $i^{th}$ prediction of your model. Overlay the posterior distribution of the simulated data on the histogram of the real data (density on y axis, not frequency). What do you conclude? Is there any indication of lack of fit? Enough to discard the model?
 
 ## Problem Response
 
@@ -2194,7 +2194,6 @@ inits = list(
 ```{r, eval=FALSE}
 ## JAGS Model
 model{
-  
   # priors
   alpha ~ dnorm(0,1E-6)
   beta ~ dnorm(0,1E-6)
@@ -2397,10 +2396,10 @@ ggplot(data = .) +
     ) 
     , breaks = scales::extended_breaks(n=10)
   ) +
-  xlab("Mean Observed log(Emissions)") +
-  ylab("Mean Simulated log(Emissions)") +
+  xlab(latex2exp::TeX("Mean Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  ylab(latex2exp::TeX("Mean Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
   labs(
-    title = "Observed vs. Simulated log(Emissions) - Mean"
+    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - Mean")
     , subtitle = paste0(
         "*Bayesian P value = "
         , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_mean")) %>% mean() %>% scales::comma(accuracy = 0.01)
@@ -2439,10 +2438,10 @@ ggplot(data = .) +
     ) 
     , breaks = scales::extended_breaks(n=10)
   ) +
-  xlab("St. Dev. Observed log(Emissions)") +
-  ylab("St. Dev. Simulated log(Emissions)") +
+  xlab(latex2exp::TeX("St. Dev. Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  ylab(latex2exp::TeX("St. Dev. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
   labs(
-    title = "Observed vs. Simulated log(Emissions) - St. Dev."
+    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - St. Dev.")
     , subtitle = paste0(
         "*Bayesian P value = "
         , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_sd")) %>% mean() %>% scales::comma(accuracy = 0.01)
@@ -2467,24 +2466,10 @@ ggplot(data = .) +
     , color = "firebrick"
     , alpha = 0.2
   ) +
-  # scale_y_continuous(
-  #   limits = c(
-  #     -11.5
-  #     , -5
-  #   ) 
-  #   , breaks = scales::extended_breaks(n=10)
-  # ) +
-  # scale_x_continuous(
-  #   limits = c(
-  #     -11.5
-  #     , -5
-  #   ) 
-  #   , breaks = scales::extended_breaks(n=10)
-  # ) +
-  xlab("Minimum Observed log(Emissions)") +
-  ylab("Minimum Simulated log(Emissions)") +
+  xlab(latex2exp::TeX("Minimum Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  ylab(latex2exp::TeX("Minimum Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
   labs(
-    title = "Observed vs. Simulated log(Emissions) - Minimum"
+    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - Minimum")
     , subtitle = paste0(
         "*Bayesian P value = "
         , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_min")) %>% mean() %>% scales::comma(accuracy = 0.01)
@@ -2523,10 +2508,10 @@ ggplot(data = .) +
     ) 
     , breaks = scales::extended_breaks(n=10)
   ) +
-  xlab("SSE Observed log(Emissions)") +
-  ylab("SSE Simulated log(Emissions)") +
+  xlab(latex2exp::TeX("SSE Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  ylab(latex2exp::TeX("SSE Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
   labs(
-    title = "Observed vs. Simulated log(Emissions) - Sum of Squared Errors"
+    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - Sum of Squared Errors")
     , subtitle = paste0(
         "*Bayesian P value = "
         , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)
@@ -2538,45 +2523,52 @@ ggplot(data = .) +
 
 \textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the discrepancy statistic of $\textrm{N} _2 \textrm{O}$ emissions.
 
+### Posterior predictive check - Sum of Squared Errors
+
+Overlay the posterior distribution of the simulated data on the histogram of the real data (density on y axis, not frequency). What do you conclude? Is there any indication of lack of fit? Enough to discard the model?
 
 ```{r}
 # extract data
-temp_dta <- MCMCvis::MCMCchains(zm, params = c("a", "b", "p_x10", "p_x20", "diff_x10_x20")) %>% 
-  as.data.frame()
-temp_hdi <- HDInterval::hdi(temp_dta$diff_x10_x20, credMass = 0.95)
-temp_p_gt0 <- 1 - ecdf(temp_dta$diff_x10_x20)(0)
+dta_temp <- MCMCvis::MCMCchains(zc_pooled_check, params = c("log.emission_sim")) %>% 
+  c() %>% # convert matrix to vector
+  as.data.frame() %>%
+  dplyr::rename(log.emission_sim = 1)
+# temp_hdi <- HDInterval::hdi(dta_temp$diff_x10_x20, credMass = 0.95)
 
-# the marginal posterior density of the difference
+# posterior distribution of the simulated data vs. the real data
   # plot
-  ggplot(data = temp_dta, mapping = aes(x = diff_x10_x20)) +
+  ggplot() +
   geom_histogram(
-    aes(y = ..density..)
-    , bins = 100
-    , fill = "navy"
+    data = BayesNSF::N2OEmission %>% dplyr::mutate(log.emission = as.double(log(emission)))
+    , mapping = aes(x = log.emission,y = ..density.., fill = "observed data")
+    , bins = 50
     , alpha = 0.8
-    , color = "gray25"
   ) +
   geom_density(
-    aes(y = ..density..)
+    data = dta_temp
+    , mapping = aes(x = log.emission_sim, y = ..density.., color = "simulated data")
     , linetype = 2
     , lwd = 1.2
-    , color = "gray10"
-  ) +
-  geom_vline(
-    xintercept = temp_hdi
-    , color = "firebrick"
-    , linetype = "dashed"
-    , lwd = 1.1
   ) +
   scale_x_continuous(breaks = scales::extended_breaks(n=9)) +
-  xlab("difference in Pr(occupancy) at PA = 10 vs. PA = 20") +
+  scale_color_manual(values = c("orangered")) +
+  scale_fill_manual(values = c("navy")) +
+  xlab(latex2exp::TeX("$\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
   ylab("Density") +
   labs(
-    title = "Difference in Pr(occupancy)"
-    , subtitle = "Perimeter-Area ratio = 10 vs. Perimeter-Area ratio = 20"
-    , caption = "95% highest posterior density interval shown in red"
+    title = "Posterior distribution of simulated data versus observed data"
+    , subtitle = latex2exp::TeX("$\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - Pooled Model")
   ) +
-  theme_bw()
+  theme_bw() + 
+  theme(
+    legend.position = "top"
+    , legend.title = element_blank()
+    , legend.direction = "horizontal"
+    , legend.margin = margin(0,0,0,0)
+    , legend.text = element_text(size = 8)
+    , panel.border = element_blank()
+  ) 
   
 ```
 
+\textcolor{violet}{Based on the distribution of the observed data compared to the distribution of the simulated data, there is not a significant indication of lack of fit. The largest discrepancy between the observed data and the simulated data is at the low end of $\textrm{N} _2 \textrm{O}$ emissions.}
