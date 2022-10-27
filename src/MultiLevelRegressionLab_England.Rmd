@@ -2467,20 +2467,20 @@ ggplot(data = .) +
     , color = "firebrick"
     , alpha = 0.2
   ) +
-  scale_y_continuous(
-    limits = c(
-      min(data$log.emission)*0.95
-      , mean(data$log.emission)+(sd(data$log.emission)*1)
-    ) 
-    , breaks = scales::extended_breaks(n=10)
-  ) +
-  scale_x_continuous(
-    limits = c(
-      min(data$log.emission)*0.95
-      , mean(data$log.emission)+(sd(data$log.emission)*1)
-    ) 
-    , breaks = scales::extended_breaks(n=10)
-  ) +
+  # scale_y_continuous(
+  #   limits = c(
+  #     -11.5
+  #     , -5
+  #   ) 
+  #   , breaks = scales::extended_breaks(n=10)
+  # ) +
+  # scale_x_continuous(
+  #   limits = c(
+  #     -11.5
+  #     , -5
+  #   ) 
+  #   , breaks = scales::extended_breaks(n=10)
+  # ) +
   xlab("Minimum Observed log(Emissions)") +
   ylab("Minimum Simulated log(Emissions)") +
   labs(
@@ -2494,7 +2494,7 @@ ggplot(data = .) +
   
 ```
 
-\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_sd")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the standard deviation of $\textrm{N} _2 \textrm{O}$ emissions. If the p-value were very large or very small (i.e., close to 1 or 0), it would indicate lack of fit.}
+\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_min")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates poor fit for the minimum of $\textrm{N} _2 \textrm{O}$ emissions. This is probably acceptable because the minimum value is an extreme value on the distribution.}
 
 ### Posterior predictive check - Sum of Squared Errors
 
@@ -2531,6 +2531,50 @@ ggplot(data = .) +
         "*Bayesian P value = "
         , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)
       )
+  ) +
+  theme_bw()
+  
+```
+
+\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the discrepancy statistic of $\textrm{N} _2 \textrm{O}$ emissions.
+
+
+```{r}
+# extract data
+temp_dta <- MCMCvis::MCMCchains(zm, params = c("a", "b", "p_x10", "p_x20", "diff_x10_x20")) %>% 
+  as.data.frame()
+temp_hdi <- HDInterval::hdi(temp_dta$diff_x10_x20, credMass = 0.95)
+temp_p_gt0 <- 1 - ecdf(temp_dta$diff_x10_x20)(0)
+
+# the marginal posterior density of the difference
+  # plot
+  ggplot(data = temp_dta, mapping = aes(x = diff_x10_x20)) +
+  geom_histogram(
+    aes(y = ..density..)
+    , bins = 100
+    , fill = "navy"
+    , alpha = 0.8
+    , color = "gray25"
+  ) +
+  geom_density(
+    aes(y = ..density..)
+    , linetype = 2
+    , lwd = 1.2
+    , color = "gray10"
+  ) +
+  geom_vline(
+    xintercept = temp_hdi
+    , color = "firebrick"
+    , linetype = "dashed"
+    , lwd = 1.1
+  ) +
+  scale_x_continuous(breaks = scales::extended_breaks(n=9)) +
+  xlab("difference in Pr(occupancy) at PA = 10 vs. PA = 20") +
+  ylab("Density") +
+  labs(
+    title = "Difference in Pr(occupancy)"
+    , subtitle = "Perimeter-Area ratio = 10 vs. Perimeter-Area ratio = 20"
+    , caption = "95% highest posterior density interval shown in red"
   ) +
   theme_bw()
   
