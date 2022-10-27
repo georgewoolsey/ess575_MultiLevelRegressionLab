@@ -444,7 +444,7 @@ $$
 
 What is the hypothesis represented by this model?
 
-\textcolor{violet}{fill this in!!!!}
+\textcolor{violet}{The hypothesis represented by this model is that relationship between emissions and fertilizer application rate is the same for all sites and fertilizer types. That is we are not allowing the relationship between emissions and fertilizer application rate to vary across sites or fertilizer types.}
 
 ## Visualizing the data
 
@@ -2523,7 +2523,7 @@ ggplot(data = .) +
 
 \textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the discrepancy statistic of $\textrm{N} _2 \textrm{O}$ emissions.
 
-### Posterior predictive check - Sum of Squared Errors
+### Posterior predictive check - Simulated vs. Observed data
 
 Overlay the posterior distribution of the simulated data on the histogram of the real data (density on y axis, not frequency). What do you conclude? Is there any indication of lack of fit? Enough to discard the model?
 
