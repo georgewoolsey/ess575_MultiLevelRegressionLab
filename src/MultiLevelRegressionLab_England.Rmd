@@ -773,6 +773,7 @@ $$
 \times \; {\sf uniform}\bigr(\varsigma_{\alpha} \mid 0, 100 \bigl)
 \end{aligned}
 $$
+
 ### Fitting the random intercepts model with JAGS
 
 Now you will implement the random-intercepts model that allows the intercept $\alpha_{j}$ to vary by site, where each intercept is drawn from a common distribution. Use the `data` and initial values for JAGS provided below to allow you to concentrate on writing JAGS code for the model. 
@@ -1174,9 +1175,8 @@ gc()
 
 Why do the intercepts differ for some sites between the no-pool model and the random-intercepts model? Is this behavior consistent?
 
-\textcolor{violet}{The intercepts differ for some sites between the no-pool model and the random-intercepts model due to borrowing strength. Hierarchical modelling is able to produce estimates of the intercepts from sites with few observations by integrating information from sites with larger data sets (Hobbs and Hooten 2015). In this example, sites with fewer observations (e.g. site #51) have an estimated intercept that is closer to the overall mean while sites with more observations and less variance (e.g. site #56) have an estimated intercept that is less influenced by the overall mean.}
+\textcolor{violet}{The intercepts differ for some sites between the no-pool model and the random-intercepts model due to borrowing strength. Hierarchical modelling is able to produce estimates of the intercepts from sites with few observations by integrating information from sites with larger data sets (}[Hobbs and Hooten 2015](https://www.jstor.org/stable/j.ctt1dr36kz) \textcolor{violet}{). In this example, sites with fewer observations (e.g. site 51) have an estimated intercept that is closer to the overall mean while sites with more observations and less variance (e.g. site 56) have an estimated intercept that is less influenced by the overall mean.}
 
-[Hobbs and Hooten, 2015](https://www.jstor.org/stable/j.ctt1dr36kz)
 
 ## Diagramming and writing the random intercepts, group-level effect model
 
