@@ -983,7 +983,7 @@ gc()
 
 Modify code from the pooled and no-pool models to visualize the model predictions. For the site-level predictions, add a dotted line showing the posterior median of $\textrm{N} _2 \textrm{O}$ emission from the no-pool model. What do you notice about the uncertainty of predicted log emissions from the random intercept model you fit here compared to the predictions of the pooled model you did in problem 1? Explain the difference.
 
-#### Pooled 
+#### Overall model predictions
 
 ```{r}
 # HDI
@@ -1049,9 +1049,9 @@ gc()
 
 What do you notice about the uncertainty of predicted log emissions from the random intercept model you fit here compared to the predictions of the pooled model you did in problem 1? Explain the difference.
 
-\textcolor{violet}{fill this in!!!!}
+\textcolor{violet}{Compared to the predictions of the pooled model shown above (*Visualizing the pooled model predictions*), the predicted log emissions from the random intercept model have much greater uncertainty as shown by the wide confidence bands. The random intercept model treats the site intercepts as partially pooled wheras the pooled model completely ignored site-level effects on the intercepts.}
 
-#### Non-Pooled
+#### Site-level model predictions
 
 Plot the predictions
 
@@ -1167,7 +1167,8 @@ gc()
 
 Why do the intercepts differ for some sites between the no-pool model and the random-intercepts model? Is this behavior consistent?
 
-\textcolor{violet}{fill this in!!!! borrowing strength, cnt data obs between sites}
+\textcolor{violet}{The intercepts differ for some sites between the no-pool model and the random-intercepts model due to borrowing strength. Hierarchical modelling is able to produce estimates of the intercepts from sites with few observations by integrating information from sites with larger data sets ([Hobbs and Hooten 2015](https://www.jstor.org/stable/j.ctt1dr36kz)). In this example, sites with few observations have an estimated intercept that is closer to the overall mean while sites with more observations and less variance have estimated intercepts that are less influenced by the overall mean.}
+
 
 ## Diagramming and writing the random intercepts, group-level effect model
 
