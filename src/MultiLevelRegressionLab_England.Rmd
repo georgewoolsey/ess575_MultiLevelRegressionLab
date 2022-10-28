@@ -622,10 +622,17 @@ MCMCvis::MCMCtrace(zc_nopooled, params = c("beta", "sigma"), pdf = FALSE)
 MCMCvis::MCMCsummary(zc_nopooled, params = c("alpha", "beta", "sigma")) %>% 
   data.frame() %>% 
   dplyr::slice_tail(n = 6)
+```
 
+Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
+
+\textcolor{violet}{There is evidence of sufficient convergence of the $\beta$ and $\sigma$ parameters. The values for Rhat near 1 in the summary table suggest convergence ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).}
+
+Caterpillar plot for parameters.
+
+```{r}
 # Caterpillar plots
 MCMCvis::MCMCplot(zc_nopooled, params = c("beta", "sigma"), xlim = c(-0.5,1.5) )
-
 ```
 
 ```{r, echo=FALSE, eval = FALSE}
@@ -633,9 +640,6 @@ MCMCvis::MCMCplot(zc_nopooled, params = c("beta", "sigma"), xlim = c(-0.5,1.5) )
 coda::heidel.diag(zc_nopooled)
 ```
 
-Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
-
-\textcolor{violet}{fill this in!!!!}
 
 Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
@@ -931,15 +935,21 @@ MCMCvis::MCMCtrace(zc_randomintrcpts, params = c("beta", "sigma", "mu_alpha", "v
 
 # summary
 MCMCvis::MCMCsummary(zc_randomintrcpts, params = c("beta", "sigma", "mu_alpha", "varsigma"))
+```
 
+
+Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
+
+\textcolor{violet}{There is evidence of sufficient convergence of the $\beta$, $\sigma$, $mu_{\alpha}$, and $\varsigma_{\alpha}$ parameters. The values for Rhat near 1 in the summary table suggest convergence ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).}
+
+Caterpillar plot for parameters.
+
+```{r}
 # Caterpillar plots
 MCMCvis::MCMCplot(zc_randomintrcpts, params = c("beta", "sigma", "mu_alpha", "varsigma"), xlim = c(-0.5,1.5) )
 
 ```
 
-Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why?
-
-\textcolor{violet}{fill this in!!!!}
 
 Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
@@ -1367,15 +1377,19 @@ MCMCvis::MCMCtrace(zc_randomintrcpts_alpha, params = c("beta", "sigma", "kappa",
 
 # summary
 MCMCvis::MCMCsummary(zc_randomintrcpts_alpha, params = c("beta", "sigma", "kappa", "eta", "varsigma"))
+```
 
+Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
+
+\textcolor{violet}{There is evidence of sufficient convergence of the $\beta$, $\sigma$, $\kappa$, $\eta$, and $\varsigma_{\alpha}$ parameters. The values for Rhat near 1 in the summary table suggest convergence ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).}
+
+Caterpillar plot for parameters.
+
+```{r}
 # Caterpillar plots
 MCMCvis::MCMCplot(zc_randomintrcpts_alpha, params = c("beta", "sigma", "kappa", "eta", "varsigma"), xlim = c(-0.5,1.5) )
 
 ```
-
-Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why?
-
-\textcolor{violet}{fill this in!!!!}
 
 Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
@@ -1698,7 +1712,16 @@ MCMCvis::MCMCsummary(zc_randomcoeffs, params = c(
     , "varsigma_beta"
   )
 )
+```
 
+
+Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
+
+\textcolor{violet}{There is evidence of sufficient convergence of the $\sigma$, $\kappa$, $\eta$, $\mu_{\beta}$, $\varsigma_{\beta}$, and $\varsigma_{\alpha}$ parameters. The values for Rhat near 1 in the summary table suggest convergence ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).}
+
+Caterpillar plot for parameters.
+
+```{r}
 # Caterpillar plots
 MCMCvis::MCMCplot(zc_randomcoeffs, params = c(
     "sigma"
@@ -1713,9 +1736,6 @@ MCMCvis::MCMCplot(zc_randomcoeffs, params = c(
 
 ```
 
-Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why?
-
-\textcolor{violet}{fill this in!!!!}
 
 Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
@@ -2045,7 +2065,16 @@ MCMCvis::MCMCsummary(zc_randomcoeffs_fnl, params = c(
     , "varsigma_beta"
   )
 )
+```
 
+
+Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
+
+\textcolor{violet}{There is evidence of sufficient convergence of the $\rho$, $\sigma$, $\mu_{\alpha}$, $\mu_{\beta}$, $\varsigma_{\alpha}$, and $\varsigma_{\beta}$ parameters. The values for Rhat near 1 in the summary table suggest convergence ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).}
+
+Caterpillar plot for parameters.
+
+```{r}
 # Caterpillar plots
 MCMCvis::MCMCplot(zc_randomcoeffs_fnl, params = c(
     "rho"
@@ -2060,9 +2089,6 @@ MCMCvis::MCMCplot(zc_randomcoeffs_fnl, params = c(
 
 ```
 
-Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why?
-
-\textcolor{violet}{fill this in!!!!}
 
 Make a horizontal caterpillar plot for the $\boldsymbol{\alpha}$.
 
