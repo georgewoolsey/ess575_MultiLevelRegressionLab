@@ -36,6 +36,7 @@ knitr::opts_chunk$set(
   , fig.height = 5
   , fig.width = 7
   , eval = TRUE
+  , fig.align='center'
 )
 ```
 
@@ -2461,7 +2462,11 @@ dta_temp <- MCMCvis::MCMCchains(zc_pooled_check, params = c("log.emission_sim"))
 
 ### Additional posterior predicitve check figures
 
-#### Posterior predictive check - mean plot
+
+### Posterior predictive check - mean plot
+
+Posterior predictive check - mean plot
+
 
 ```{r}
 # PLOT
@@ -2501,9 +2506,14 @@ ggplot(data = .) +
   
 ```
 
+
 \textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_mean")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the $\textrm{N} _2 \textrm{O}$ emissions. If the p-value were very large or very small (i.e., close to 1 or 0), it would indicate lack of fit.}
 
-#### Posterior predictive check - SD plot
+
+### Posterior predictive check - SD plot
+
+Posterior predictive check - SD plot
+
 
 ```{r}
 # PLOT
@@ -2545,7 +2555,11 @@ ggplot(data = .) +
 
 \textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_sd")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the standard deviation of $\textrm{N} _2 \textrm{O}$ emissions. If the p-value were very large or very small (i.e., close to 1 or 0), it would indicate lack of fit.}
 
-#### Posterior predictive check - Minimum plot
+
+### Posterior predictive check - Minimum plot
+
+Posterior predictive check - Minimum plot
+
 
 ```{r}
 # PLOT
@@ -2573,7 +2587,11 @@ ggplot(data = .) +
 
 \textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_min")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates poor fit for the minimum of $\textrm{N} _2 \textrm{O}$ emissions.}
 
-#### Posterior predictive check - Sum of Squared Errors
+
+### Posterior predictive check - Sum of Squared Errors
+
+Posterior predictive check - Sum of Squared Errors
+
 
 ```{r}
 # PLOT
@@ -2613,5 +2631,5 @@ ggplot(data = .) +
   
 ```
 
-\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the discrepancy statistic of $\textrm{N} _2 \textrm{O}$ emissions.
+\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the discrepancy statistic of $\textrm{N} _2 \textrm{O}$ emissions.}
 
