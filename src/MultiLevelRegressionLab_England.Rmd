@@ -631,7 +631,7 @@ MCMCvis::MCMCsummary(zc_nopooled, params = c("alpha", "beta", "sigma")) %>%
 
 Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
 
-\textcolor{violet}{There is evidence of sufficient convergence of the $\beta$ and $\sigma$ parameters. The values for Rhat near 1 in the summary table suggest convergence ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).}
+\textcolor{violet}{There is evidence of sufficient convergence of the $\beta$ and $\sigma$ parameters. The values for Rhat near 1 in the summary table suggest convergence } ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).
 
 Caterpillar plot for parameters.
 
@@ -947,7 +947,7 @@ MCMCvis::MCMCsummary(zc_randomintrcpts, params = c("beta", "sigma", "mu_alpha", 
 
 Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
 
-\textcolor{violet}{There is evidence of sufficient convergence of the $\beta$, $\sigma$, $mu_{\alpha}$, and $\varsigma_{\alpha}$ parameters. The values for Rhat near 1 in the summary table suggest convergence ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).}
+\textcolor{violet}{There is evidence of sufficient convergence of the $\beta$, $\sigma$, $\mu_{\alpha}$, and $\varsigma_{\alpha}$ parameters. The values for Rhat near 1 in the summary table suggest convergence } ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).
 
 Caterpillar plot for parameters.
 
@@ -1174,7 +1174,7 @@ gc()
 
 Why do the intercepts differ for some sites between the no-pool model and the random-intercepts model? Is this behavior consistent?
 
-\textcolor{violet}{The intercepts differ for some sites between the no-pool model and the random-intercepts model due to borrowing strength. Hierarchical modelling is able to produce estimates of the intercepts from sites with few observations by integrating information from sites with larger data sets ([Hobbs and Hooten 2015](https://www.jstor.org/stable/j.ctt1dr36kz)). In this example, sites with fewer observations (e.g. site #51) have an estimated intercept that is closer to the overall mean while sites with more observations and less variance (e.g. site #56) have an estimated intercept that is less influenced by the overall mean.}
+\textcolor{violet}{The intercepts differ for some sites between the no-pool model and the random-intercepts model due to borrowing strength. Hierarchical modelling is able to produce estimates of the intercepts from sites with few observations by integrating information from sites with larger data sets (} [Hobbs and Hooten 2015](https://www.jstor.org/stable/j.ctt1dr36kz)  \textcolor{violet}{). In this example, sites with fewer observations (e.g. site #51) have an estimated intercept that is closer to the overall mean while sites with more observations and less variance (e.g. site #56) have an estimated intercept that is less influenced by the overall mean.}
 
 
 ## Diagramming and writing the random intercepts, group-level effect model
@@ -1389,7 +1389,7 @@ MCMCvis::MCMCsummary(zc_randomintrcpts_alpha, params = c("beta", "sigma", "kappa
 
 Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
 
-\textcolor{violet}{There is evidence of sufficient convergence of the $\beta$, $\sigma$, $\kappa$, $\eta$, and $\varsigma_{\alpha}$ parameters. The values for Rhat near 1 in the summary table suggest convergence ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).}
+\textcolor{violet}{There is evidence of sufficient convergence of the $\beta$, $\sigma$, $\kappa$, $\eta$, and $\varsigma_{\alpha}$ parameters. The values for Rhat near 1 in the summary table suggest convergence } ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).
 
 Caterpillar plot for parameters.
 
@@ -1728,7 +1728,7 @@ MCMCvis::MCMCsummary(zc_randomcoeffs, params = c(
 
 Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
 
-\textcolor{violet}{There is evidence of sufficient convergence of the $\sigma$, $\kappa$, $\eta$, $\mu_{\beta}$, $\varsigma_{\beta}$, and $\varsigma_{\alpha}$ parameters. The values for Rhat near 1 in the summary table suggest convergence ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).}
+\textcolor{violet}{There is evidence of sufficient convergence of the $\sigma$, $\kappa$, $\eta$, $\mu_{\beta}$, $\varsigma_{\beta}$, and $\varsigma_{\alpha}$ parameters. The values for Rhat near 1 in the summary table suggest convergence } ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).
 
 Caterpillar plot for parameters.
 
@@ -2081,7 +2081,7 @@ MCMCvis::MCMCsummary(zc_randomcoeffs_fnl, params = c(
 
 Assess convergence and look at the effective sample sizes for each of these parameters. Do you think any of the chains need to be run for longer and if so why? 
 
-\textcolor{violet}{There is evidence of sufficient convergence of the $\rho$, $\sigma$, $\mu_{\alpha}$, $\mu_{\beta}$, $\varsigma_{\alpha}$, and $\varsigma_{\beta}$ parameters. The values for Rhat near 1 in the summary table suggest convergence ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).}
+\textcolor{violet}{There is evidence of sufficient convergence of the $\rho$, $\sigma$, $\mu_{\alpha}$, $\mu_{\beta}$, $\varsigma_{\alpha}$, and $\varsigma_{\beta}$ parameters. The values for Rhat near 1 in the summary table suggest convergence } ([Brooks and Gelman 1998](https://www2.stat.duke.edu/~scs/Courses/Stat376/Papers/ConvergeDiagnostics/BrooksGelman.pdf)).
 
 Caterpillar plot for parameters.
 
