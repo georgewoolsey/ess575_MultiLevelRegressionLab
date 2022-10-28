@@ -39,6 +39,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+\newpage
+
 # Preliminaries
 
 ## Motivation
@@ -87,6 +89,8 @@ library(reshape2)
 set.seed(10)
 ```
  
+\newpage
+
 # Pooled
 
 ## Diagramming and writing the pooled model
@@ -393,8 +397,9 @@ g4 <- g2 +
 gridExtra::grid.arrange(g3, g4, nrow = 1)
 ```
 
-# Non-Pooled
+\newpage
 
+# Non-Pooled
 
 ## Diagramming and writing the no-pool model
 
@@ -444,7 +449,7 @@ $$
 
 What is the hypothesis represented by this model?
 
-\textcolor{violet}{The hypothesis represented by this model is that relationship between emissions and fertilizer application rate is the same for all sites and fertilizer types. That is we are not allowing the relationship between emissions and fertilizer application rate to vary across sites or fertilizer types.}
+\textcolor{violet}{The hypothesis represented by this model is that relationship between emissions and fertilizer application rate is the same for all sites and fertilizer types. That is, we are not allowing the relationship between emissions and fertilizer application rate to vary across sites or fertilizer types.}
 
 ## Visualizing the data
 
@@ -724,6 +729,8 @@ remove(list = ls()[stringr::str_starts(ls(), "pred")])
 remove(list = ls()[stringr::str_starts(ls(), "lpred")])
 gc()
 ```
+
+\newpage
 
 # Random Intercepts
 
@@ -1167,7 +1174,7 @@ gc()
 
 Why do the intercepts differ for some sites between the no-pool model and the random-intercepts model? Is this behavior consistent?
 
-\textcolor{violet}{The intercepts differ for some sites between the no-pool model and the random-intercepts model due to borrowing strength. Hierarchical modelling is able to produce estimates of the intercepts from sites with few observations by integrating information from sites with larger data sets ([Hobbs and Hooten 2015](https://www.jstor.org/stable/j.ctt1dr36kz)). In this example, sites with few observations have an estimated intercept that is closer to the overall mean while sites with more observations and less variance have estimated intercepts that are less influenced by the overall mean.}
+\textcolor{violet}{The intercepts differ for some sites between the no-pool model and the random-intercepts model due to borrowing strength. Hierarchical modelling is able to produce estimates of the intercepts from sites with few observations by integrating information from sites with larger data sets ([Hobbs and Hooten 2015](https://www.jstor.org/stable/j.ctt1dr36kz)). In this example, sites with fewer observations (e.g. site #51) have an estimated intercept that is closer to the overall mean while sites with more observations and less variance (e.g. site #56) have an estimated intercept that is less influenced by the overall mean.}
 
 
 ## Diagramming and writing the random intercepts, group-level effect model
@@ -1447,7 +1454,7 @@ lpred.randomintrcpts_alpha.df <- dplyr::bind_cols(
 
 Plot the predictions
 
-```{r, fig.cap="Pooled - random intercepts, group-level effect model", fig.height=5, fig.width=7}
+```{r, fig.cap="Overall - random intercepts, group-level effect model", fig.height=4, fig.width=6}
 g7 <- g1 +
   geom_line(
     data = pred.randomintrcpts_alpha.df
@@ -1475,19 +1482,22 @@ g8 <- g2 +
 gridExtra::grid.arrange(g7, g8, nrow = 1)
 ```
 
-```{r, fig.cap="Pooled - random intercepts, No group-level effect model", fig.height=5, fig.width=7}
+```{r, fig.cap="Overall - random intercepts, No group-level effect model", fig.height=4, fig.width=6}
 gridExtra::grid.arrange(g5, g6, nrow = 1)
 ```
 
 Compared to the random effects model, how does modeling site soil carbon affect the uncertainty in predicting $\textrm{N} _2 \textrm{O}$ emissions for new sites?
 
-\textcolor{violet}{fill this in!!!!}
+\textcolor{violet}{Compared to the random effects model, modeling the intercept using site soil carbon does not have much affect on the uncertainty in predicting emissions. This means that allowing the intercept to vary across site based on soil carbon does not result in a significant change in the predicted site-level intercept versus the random effects model which modeled site-level intercepts without being informed by soil carbon.}
+
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
 remove(list = ls()[stringr::str_starts(ls(), "pred")])
 remove(list = ls()[stringr::str_starts(ls(), "lpred")])
 gc()
 ```
+
+\newpage
 
 # Random Coefficients
 
@@ -2133,6 +2143,8 @@ MCMCvis::MCMCplot(
 
 ```
 
+\newpage
+
 # Model checking
 
 All statistical inference is based on some type of statistical model. A truly fundamental requirement for reliable inference is that the statistical model is capable of giving rise to the data. If this requirement is not met, you have *no* basis for inference. Statistical theory will not back you up. You are flying blind, proceeding bravely, perhaps foolishly, on your own. These truths motivate the need for model checking. Models that fail checks should be discarded at the outset. (This is *not* model selection. More about that later.)
@@ -2396,160 +2408,6 @@ MCMCvis::MCMCsummary(zc_pooled_check, params = c(
   )
 ```
 
-### Posterior predictive check - mean plot
-
-```{r}
-# PLOT
-MCMCvis::MCMCchains(zc_pooled_check, params = c("mean_y", "mean_y_sim")) %>%
-  data.frame() %>%
-ggplot(data = .) +
-  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
-  geom_point(
-    mapping  = aes(x = mean_y, y = mean_y_sim)
-    , color = "navy"
-    , alpha = 0.2
-  ) +
-  scale_y_continuous(
-    limits = c(
-      mean(data$log.emission)-(sd(data$log.emission)*1)
-      , mean(data$log.emission)+(sd(data$log.emission)*1)
-    ) 
-    , breaks = scales::extended_breaks(n=10)
-  ) +
-  scale_x_continuous(
-    limits = c(
-      mean(data$log.emission)-(sd(data$log.emission)*1)
-      , mean(data$log.emission)+(sd(data$log.emission)*1)
-    ) 
-    , breaks = scales::extended_breaks(n=10)
-  ) +
-  xlab(latex2exp::TeX("Mean Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
-  ylab(latex2exp::TeX("Mean Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
-  labs(
-    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - Mean")
-    , subtitle = paste0(
-        "*Bayesian P value = "
-        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_mean")) %>% mean() %>% scales::comma(accuracy = 0.01)
-      )
-  ) +
-  theme_bw()
-  
-```
-
-\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_mean")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the $\textrm{N} _2 \textrm{O}$ emissions. If the p-value were very large or very small (i.e., close to 1 or 0), it would indicate lack of fit.}
-
-### Posterior predictive check - SD plot
-
-```{r}
-# PLOT
-MCMCvis::MCMCchains(zc_pooled_check, params = c("sd_y", "sd_y_sim")) %>%
-  data.frame() %>%
-ggplot(data = .) +
-  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
-  geom_point(
-    mapping  = aes(x = sd_y, y = sd_y_sim)
-    , color = "steelblue"
-    , alpha = 0.2
-  ) +
-  scale_y_continuous(
-    limits = c(
-      mean(data$log.emission)-(sd(data$log.emission)*1)
-      , max(data$log.emission)*1.05
-    ) 
-    , breaks = scales::extended_breaks(n=10)
-  ) +
-  scale_x_continuous(
-    limits = c(
-      mean(data$log.emission)-(sd(data$log.emission)*1)
-      , max(data$log.emission)*1.05
-    ) 
-    , breaks = scales::extended_breaks(n=10)
-  ) +
-  xlab(latex2exp::TeX("St. Dev. Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
-  ylab(latex2exp::TeX("St. Dev. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
-  labs(
-    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - St. Dev.")
-    , subtitle = paste0(
-        "*Bayesian P value = "
-        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_sd")) %>% mean() %>% scales::comma(accuracy = 0.01)
-      )
-  ) +
-  theme_bw()
-  
-```
-
-\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_sd")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the standard deviation of $\textrm{N} _2 \textrm{O}$ emissions. If the p-value were very large or very small (i.e., close to 1 or 0), it would indicate lack of fit.}
-
-### Posterior predictive check - Minimum plot
-
-```{r}
-# PLOT
-MCMCvis::MCMCchains(zc_pooled_check, params = c("min_y", "min_y_sim")) %>%
-  data.frame() %>%
-ggplot(data = .) +
-  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
-  geom_point(
-    mapping  = aes(x = min_y, y = min_y_sim)
-    , color = "firebrick"
-    , alpha = 0.2
-  ) +
-  xlab(latex2exp::TeX("Minimum Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
-  ylab(latex2exp::TeX("Minimum Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
-  labs(
-    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - Minimum")
-    , subtitle = paste0(
-        "*Bayesian P value = "
-        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_min")) %>% mean() %>% scales::comma(accuracy = 0.01)
-      )
-  ) +
-  theme_bw()
-  
-```
-
-\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_min")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates poor fit for the minimum of $\textrm{N} _2 \textrm{O}$ emissions. This is probably acceptable because the minimum value is an extreme value on the distribution.}
-
-### Posterior predictive check - Sum of Squared Errors
-
-```{r}
-# PLOT
-MCMCvis::MCMCchains(zc_pooled_check, params = c("fit_y", "fit_y_sim")) %>%
-  data.frame() %>%
-ggplot(data = .) +
-  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
-  geom_point(
-    mapping  = aes(x = fit_y, y = fit_y_sim)
-    , color = "gray60"
-    , alpha = 0.2
-  ) +
-  scale_y_continuous(
-    limits = c(
-      1100
-      , 2200
-    ) 
-    , breaks = scales::extended_breaks(n=10)
-  ) +
-  scale_x_continuous(
-    limits = c(
-      1100
-      , 2200
-    ) 
-    , breaks = scales::extended_breaks(n=10)
-  ) +
-  xlab(latex2exp::TeX("SSE Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
-  ylab(latex2exp::TeX("SSE Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
-  labs(
-    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - Sum of Squared Errors")
-    , subtitle = paste0(
-        "*Bayesian P value = "
-        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)
-      )
-  ) +
-  theme_bw()
-  
-```
-
-\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the discrepancy statistic of $\textrm{N} _2 \textrm{O}$ emissions.
-
 ### Posterior predictive check - Simulated vs. Observed data
 
 Overlay the posterior distribution of the simulated data on the histogram of the real data (density on y axis, not frequency). What do you conclude? Is there any indication of lack of fit? Enough to discard the model?
@@ -2599,3 +2457,160 @@ dta_temp <- MCMCvis::MCMCchains(zc_pooled_check, params = c("log.emission_sim"))
 ```
 
 \textcolor{violet}{Based on the distribution of the observed data compared to the distribution of the simulated data, there is not a significant indication of lack of fit. The largest discrepancy between the observed data and the simulated data is at the low end of $\textrm{N} _2 \textrm{O}$ emissions.}
+
+### Additional posterior predicitve check figures
+
+#### Posterior predictive check - mean plot
+
+```{r}
+# PLOT
+MCMCvis::MCMCchains(zc_pooled_check, params = c("mean_y", "mean_y_sim")) %>%
+  data.frame() %>%
+ggplot(data = .) +
+  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
+  geom_point(
+    mapping  = aes(x = mean_y, y = mean_y_sim)
+    , color = "navy"
+    , alpha = 0.2
+  ) +
+  scale_y_continuous(
+    limits = c(
+      mean(data$log.emission)-(sd(data$log.emission)*1)
+      , mean(data$log.emission)+(sd(data$log.emission)*1)
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  scale_x_continuous(
+    limits = c(
+      mean(data$log.emission)-(sd(data$log.emission)*1)
+      , mean(data$log.emission)+(sd(data$log.emission)*1)
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  xlab(latex2exp::TeX("Mean Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  ylab(latex2exp::TeX("Mean Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  labs(
+    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - Mean")
+    , subtitle = paste0(
+        "*Bayesian P value = "
+        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_mean")) %>% mean() %>% scales::comma(accuracy = 0.01)
+      )
+  ) +
+  theme_bw()
+  
+```
+
+\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_mean")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the $\textrm{N} _2 \textrm{O}$ emissions. If the p-value were very large or very small (i.e., close to 1 or 0), it would indicate lack of fit.}
+
+#### Posterior predictive check - SD plot
+
+```{r}
+# PLOT
+MCMCvis::MCMCchains(zc_pooled_check, params = c("sd_y", "sd_y_sim")) %>%
+  data.frame() %>%
+ggplot(data = .) +
+  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
+  geom_point(
+    mapping  = aes(x = sd_y, y = sd_y_sim)
+    , color = "steelblue"
+    , alpha = 0.2
+  ) +
+  scale_y_continuous(
+    limits = c(
+      mean(data$log.emission)-(sd(data$log.emission)*1)
+      , max(data$log.emission)*1.05
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  scale_x_continuous(
+    limits = c(
+      mean(data$log.emission)-(sd(data$log.emission)*1)
+      , max(data$log.emission)*1.05
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  xlab(latex2exp::TeX("St. Dev. Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  ylab(latex2exp::TeX("St. Dev. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  labs(
+    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - St. Dev.")
+    , subtitle = paste0(
+        "*Bayesian P value = "
+        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_sd")) %>% mean() %>% scales::comma(accuracy = 0.01)
+      )
+  ) +
+  theme_bw()
+  
+```
+
+\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_sd")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the standard deviation of $\textrm{N} _2 \textrm{O}$ emissions. If the p-value were very large or very small (i.e., close to 1 or 0), it would indicate lack of fit.}
+
+#### Posterior predictive check - Minimum plot
+
+```{r}
+# PLOT
+MCMCvis::MCMCchains(zc_pooled_check, params = c("min_y", "min_y_sim")) %>%
+  data.frame() %>%
+ggplot(data = .) +
+  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
+  geom_point(
+    mapping  = aes(x = min_y, y = min_y_sim)
+    , color = "firebrick"
+    , alpha = 0.2
+  ) +
+  xlab(latex2exp::TeX("Minimum Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  ylab(latex2exp::TeX("Minimum Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  labs(
+    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - Minimum")
+    , subtitle = paste0(
+        "*Bayesian P value = "
+        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_min")) %>% mean() %>% scales::comma(accuracy = 0.01)
+      )
+  ) +
+  theme_bw()
+  
+```
+
+\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_min")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates poor fit for the minimum of $\textrm{N} _2 \textrm{O}$ emissions.}
+
+#### Posterior predictive check - Sum of Squared Errors
+
+```{r}
+# PLOT
+MCMCvis::MCMCchains(zc_pooled_check, params = c("fit_y", "fit_y_sim")) %>%
+  data.frame() %>%
+ggplot(data = .) +
+  geom_abline(intercept = 0, slope = 1, lwd = 1, color = "gray20") +
+  geom_point(
+    mapping  = aes(x = fit_y, y = fit_y_sim)
+    , color = "gray60"
+    , alpha = 0.2
+  ) +
+  scale_y_continuous(
+    limits = c(
+      1100
+      , 2200
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  scale_x_continuous(
+    limits = c(
+      1100
+      , 2200
+    ) 
+    , breaks = scales::extended_breaks(n=10)
+  ) +
+  xlab(latex2exp::TeX("SSE Observed $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  ylab(latex2exp::TeX("SSE Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions)")) +
+  labs(
+    title = latex2exp::TeX("Observed vs. Simulated $\\log(\\textrm{N} _2 \\textrm{O}$ emissions) - Sum of Squared Errors")
+    , subtitle = paste0(
+        "*Bayesian P value = "
+        , MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)
+      )
+  ) +
+  theme_bw()
+  
+```
+
+\textcolor{violet}{The Bayesian p-value of `r MCMCvis::MCMCchains(zc_pooled_check, params = c("p_val_fit")) %>% mean() %>% scales::comma(accuracy = 0.01)` indicates good fit for the discrepancy statistic of $\textrm{N} _2 \textrm{O}$ emissions.
+
